@@ -125,7 +125,7 @@ const route=useRouter()
             mb: "1.65rem",
             height: 44,
           }}
-          onClick={()=>route.push('/prfoile')}
+          onClick={()=>route.push('/profile')}
         >
           Login
         </BazarButton>
