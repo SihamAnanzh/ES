@@ -4,6 +4,7 @@ import BazarButton from "components/BazarButton";
 import BazarTextField from "components/BazarTextField";
 import { H3, Small } from "components/Typography";
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 import * as yup from "yup";
 import EyeToggleButton from "./EyeToggleButton";
@@ -46,7 +47,7 @@ const Login = () => {
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
-
+const route=useRouter()
   const handleFormSubmit = async (values) => {
     console.log(values);
   };
@@ -124,6 +125,7 @@ const Login = () => {
             mb: "1.65rem",
             height: 44,
           }}
+          onClick={()=>route.push('/prfoile')}
         >
           Login
         </BazarButton>
