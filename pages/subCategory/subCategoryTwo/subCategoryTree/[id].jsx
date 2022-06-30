@@ -6,7 +6,7 @@ import { Span } from "components/Typography";
 import { renderProductCount } from "lib";
 import { useEffect, useState } from "react";
 import React from "react";
-import BackendManager from "../../../src/globalManager/BackendManager";
+import BackendManager from "../../../../src/globalManager/BackendManager";
 const Index = ({ data, singleCategoryData }) => {
   const productPerPage = 28;
   const [page, setPage] = useState(1);
