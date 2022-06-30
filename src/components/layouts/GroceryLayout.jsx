@@ -31,7 +31,7 @@ const GroceryLayout = (props) => {
         <GroceryHeader isFixed={isFixed} />
       </Sticky>
 
-      <Box
+      {/* <Box
         zIndex={1}
         position="relative"
         className="section-after-sticky"
@@ -40,7 +40,7 @@ const GroceryLayout = (props) => {
         }}
       >
         <Navbar />
-      </Box>
+      </Box> */}
 
       <Box
         position="relative"

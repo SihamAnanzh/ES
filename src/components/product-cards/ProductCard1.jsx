@@ -61,16 +61,17 @@ const ProductCard1 = ({
   title,
   price,
   imgUrl,
-  rating = 5,
-  hideRating,
   hoverEffect,
-  discount = 5,
   showProductSize,
+  discount,
+  newPrice,
+  haveIcon,
+  notProduct,
+  sub,
 }) => {
   const { state, dispatch } = useAppContext();
   const [isFavorite, setIsFavorite] = useState(false);
   const cartItem = state.cart.find((item) => item.id === id);
-
   const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
 
   const handleCartAmountChange = useCallback(
@@ -95,22 +96,32 @@ const ProductCard1 = ({
           <StyledChip color="primary" size="small" label={`${discount}% off`} />
         )}
 
-        <LoveIconWrapper>
-          <IconButton
-            sx={{
-              p: "6px",
-            }}
-            onClick={toggleIsFavorite}
-          >
-            {isFavorite ? (
-              <Favorite color="primary" fontSize="small" />
-            ) : (
-              <FavoriteBorder fontSize="small" />
-            )}
-          </IconButton>
-        </LoveIconWrapper>
+        {haveIcon && (
+          <LoveIconWrapper>
+            <IconButton
+              sx={{
+                p: "6px",
+              }}
+              onClick={toggleIsFavorite}
+            >
+              {isFavorite ? (
+                <Favorite color="primary" fontSize="small" />
+              ) : (
+                <FavoriteBorder fontSize="small" />
+              )}
+            </IconButton>
+          </LoveIconWrapper>
+        )}
 
-        <Link href={`/product/${id}`}>
+        <Link
+          href={
+            notProduct
+              ? sub
+                ? `/subCategory/subCategoryTwo/subCategorythree/${id}`
+                : `/subCategory/subCategoryTwo/${id}`
+              : `/product/${id}`
+          }
+        >
           <a>
             <LazyImage
               src={imgUrl}
@@ -126,7 +137,15 @@ const ProductCard1 = ({
       <ContentWrapper>
         <FlexBox>
           <Box flex="1 1 0" minWidth="0px" mr={1}>
-            <Link href={`/product/${id}`}>
+            <Link
+              href={
+                notProduct
+                  ? sub
+                    ? `/subCategory/subCategoryTwo/subCategorythree/${id}`
+                    : `/subCategory/subCategoryTwo/${id}`
+                  : `/product/${id}`
+              }
+            >
               <a>
                 <H3
                   mb={1}
@@ -141,65 +160,65 @@ const ProductCard1 = ({
               </a>
             </Link>
 
-            {!hideRating && (
-              <BazarRating value={rating || 0} color="warn" readOnly />
-            )}
-
+            {haveIcon && <BazarRating value={0 || 0} color="warn" readOnly />}
             {showProductSize && (
               <Span color="grey.600" mb={1} display="block">
                 300ml
               </Span>
             )}
-
-            <FlexBox alignItems="center" gap={1} mt={0.5}>
-              <Box fontWeight="600" color="primary.main">
-                ${(price - (price * discount) / 100).toFixed(2)}
-              </Box>
-
-              {!!discount && (
-                <Box color="grey.600" fontWeight="600">
-                  <del>{price?.toFixed(2)}</del>
+            {newPrice && (
+              <FlexBox alignItems="center" gap={1} mt={0.5}>
+                <Box fontWeight="600" color="primary.main">
+                  ${newPrice.toFixed(2)}
                 </Box>
-              )}
-            </FlexBox>
+
+                {price == newPrice && (
+                  <Box color="grey.600" fontWeight="600">
+                    <del>${price?.toFixed(2)}</del>
+                  </Box>
+                )}
+              </FlexBox>
+            )}
           </Box>
 
-          <FlexBox
-            width="30px"
-            alignItems="center"
-            className="add-cart"
-            flexDirection="column-reverse"
-            justifyContent={!!cartItem?.qty ? "space-between" : "flex-start"}
-          >
-            <Button
-              color="primary"
-              variant="outlined"
-              sx={{
-                padding: "3px",
-              }}
-              onClick={handleCartAmountChange((cartItem?.qty || 0) + 1)}
+          {haveIcon && (
+            <FlexBox
+              width="30px"
+              alignItems="center"
+              className="add-cart"
+              flexDirection="column-reverse"
+              justifyContent={!!cartItem?.qty ? "space-between" : "flex-start"}
             >
-              <Add fontSize="small" />
-            </Button>
+              <Button
+                color="primary"
+                variant="outlined"
+                sx={{
+                  padding: "3px",
+                }}
+                onClick={handleCartAmountChange((cartItem?.qty || 0) + 1)}
+              >
+                <Add fontSize="small" />
+              </Button>
 
-            {!!cartItem?.qty && (
-              <Fragment>
-                <Box color="text.primary" fontWeight="600">
-                  {cartItem?.qty}
-                </Box>
-                <Button
-                  color="primary"
-                  variant="outlined"
-                  sx={{
-                    padding: "3px",
-                  }}
-                  onClick={handleCartAmountChange(cartItem?.qty - 1)}
-                >
-                  <Remove fontSize="small" />
-                </Button>
-              </Fragment>
-            )}
-          </FlexBox>
+              {!!cartItem?.qty && (
+                <Fragment>
+                  <Box color="text.primary" fontWeight="600">
+                    {cartItem?.qty}
+                  </Box>
+                  <Button
+                    color="primary"
+                    variant="outlined"
+                    sx={{
+                      padding: "3px",
+                    }}
+                    onClick={handleCartAmountChange(cartItem?.qty - 1)}
+                  >
+                    <Remove fontSize="small" />
+                  </Button>
+                </Fragment>
+              )}
+            </FlexBox>
+          )}
         </FlexBox>
       </ContentWrapper>
     </StyledBazarCard>

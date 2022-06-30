@@ -12,6 +12,9 @@ import MuiTheme from "theme/MuiTheme";
 import GoogleAnalytics from "utils/GoogleAnalytics";
 import OpenGraphTags from "utils/OpenGraphTags";
 import "../src/fake-db";
+import { appWithTranslation, useTranslation } from "next-i18next";
+import { getSession, SessionProvider, useSession } from "next-auth/react";
+
 //Binding events.
 Router.events.on("routeChangeStart", () => nProgress.start());
 Router.events.on("routeChangeComplete", () => nProgress.done());
@@ -40,14 +43,15 @@ const App = ({ Component, pageProps }) => {
         <GoogleAnalytics />
         <OpenGraphTags />
       </Head>
-
-      <SettingsProvider>
-        <AppProvider>
-          <MuiTheme>
-            <RTL>{getLayout(<Component {...pageProps} />)}</RTL>
-          </MuiTheme>
-        </AppProvider>
-      </SettingsProvider>
+      <SessionProvider session={pageProps.session}>
+        <SettingsProvider>
+          <AppProvider>
+            <MuiTheme>
+              <RTL>{getLayout(<Component {...pageProps} />)}</RTL>
+            </MuiTheme>
+          </AppProvider>
+        </SettingsProvider>
+      </SessionProvider>
     </Fragment>
   );
 }; // Only uncomment this method if you have blocking data requirements for
@@ -61,4 +65,4 @@ const App = ({ Component, pageProps }) => {
 //   return { ...appProps };
 // };
 
-export default App;
+export default appWithTranslation(App);

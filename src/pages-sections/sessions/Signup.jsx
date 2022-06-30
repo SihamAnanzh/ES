@@ -1,4 +1,5 @@
 import { Checkbox, FormControlLabel } from "@mui/material";
+import axios from "axios";
 import BazarButton from "components/BazarButton";
 import BazarTextField from "components/BazarTextField";
 import { FlexBox } from "components/flex-box";
@@ -9,16 +10,51 @@ import * as yup from "yup";
 import EyeToggleButton from "./EyeToggleButton";
 import { Wrapper } from "./Login";
 import SocialButtons from "./SocialButtons";
+import { useEffect } from "react";
+import { getSession, useSession, signIn } from "next-auth/react";
 
 const Signup = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
-
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = (values) => {
     console.log(values);
+    axios
+      .post(process.env.endPoint + "/user/register", {
+        username: values.email,
+        first_name: values.name,
+        phone: values.phone,
+        password: values.password,
+        device_id: "123123",
+      })
+      .then(async (response) => {
+        console.log(response);
+        if (response && response.data.status.code === 200) {
+          const res = await signIn("xp-login-auth", {
+            redirect: false,
+            username: values.email,
+            password: values.password,
+            callbackUrl: `/`,
+          });
+          if (res?.error) {
+            swal(response.data.status.message);
+          } else {
+            console.log(response);
+
+            if (res.url) route.push(res.url);
+          }
+        } else {
+          console.log(response);
+        }
+      });
   };
+  const session = useSession();
+
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
@@ -28,7 +64,12 @@ const Signup = () => {
     });
   return (
     <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <H3 textAlign="center" mb={1}>
           Create Your Account
         </H3>
@@ -68,10 +109,25 @@ const Signup = () => {
           onBlur={handleBlur}
           value={values.email}
           onChange={handleChange}
-          label="Email or Phone Number"
-          placeholder="exmple@mail.com"
+          label="Email "
+          placeholder="email"
           error={!!touched.email && !!errors.email}
           helperText={touched.email && errors.email}
+        />
+        <BazarTextField
+          mb={1.5}
+          fullWidth
+          name="phone"
+          size="small"
+          type="phone"
+          variant="outlined"
+          onBlur={handleBlur}
+          value={values.phone}
+          onChange={handleChange}
+          label="Phone Number"
+          placeholder="Phone Number"
+          error={!!touched.Phone && !!errors.Phone}
+          helperText={touched.Phone && errors.Phone}
         />
 
         <BazarTextField
@@ -173,11 +229,22 @@ const initialValues = {
   email: "",
   password: "",
   re_password: "",
+  phone: "",
   agreement: false,
 };
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
 const formSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   email: yup.string().email("invalid email").required("Email is required"),
+  phone: yup
+    .string()
+    .matches(phoneRegExp, "Phone number is not valid")
+    .min(10, "to short")
+    .max(10, "to long")
+    .required("Pone is required"),
+
   password: yup.string().required("Password is required"),
   re_password: yup
     .string()

@@ -4,7 +4,12 @@ import createEmotionServer from "@emotion/server/create-instance";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 import React from "react";
 import createEmotionCache from "../src/createEmotionCache";
-export default class Bazar extends Document {
+
+
+
+
+
+export default class Bazar extends Component {
   render() {
     return (
       <Html lang="en">
@@ -18,7 +23,7 @@ export default class Bazar extends Document {
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
           />
         </Head>
-
+  
         <body>
           <Main />
           <NextScript />
@@ -26,7 +31,11 @@ export default class Bazar extends Document {
       </Html>
     );
   }
-} // `getInitialProps` belongs to `_document` (instead of `_app`),
+}
+
+
+
+// `getInitialProps` belongs to `_document` (instead of `_app`),
 // it's compatible with static-site generation (SSG).
 
 Bazar.getInitialProps = async (ctx) => {

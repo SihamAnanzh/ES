@@ -4,8 +4,9 @@ import CustomerDashboardNavigation from "components/layouts/customer-dashboard/N
 import DashboardPageHeader from "components/layouts/DashboardPageHeader";
 import OrderList from "pages-sections/orders/OrderList";
 import React from "react";
-
-const Orders = () => {
+import { getSession } from "next-auth/react";
+import BackEndManager from "../../src/globalManager/BackendManager";
+const Orders = ({}) => {
   return (
     <CustomerDashboardLayout>
       <DashboardPageHeader
@@ -20,3 +21,13 @@ const Orders = () => {
 };
 
 export default Orders;
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  // const orderList = BackEndManager.getUserOrders(session.user);
+
+  return {
+    props: {},
+  };
+}

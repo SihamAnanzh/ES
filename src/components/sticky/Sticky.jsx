@@ -12,6 +12,7 @@ export const StyledBox = styled(
     zIndex: 2,
     boxShadow: "none",
     position: "relative",
+    background: "#fff",
   },
   "& .fixed": {
     left: 0,

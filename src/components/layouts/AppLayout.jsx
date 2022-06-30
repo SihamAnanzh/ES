@@ -30,8 +30,7 @@ const AppLayout = ({
         <Header isFixed={isFixed} />
       </Sticky>
 
-  
-{children}
+      {children}
       {/* <MobileNavigationBar /> */}
       <Footer />
     </Fragment>

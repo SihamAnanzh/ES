@@ -23,6 +23,9 @@ import productDatabase from "data/product-database";
 import { format } from "date-fns";
 import useWindowSize from "hooks/useWindowSize";
 import React, { Fragment } from "react";
+import { getSession } from "next-auth/react";
+import BackEndManager from "../../src/globalManager/BackendManager";
+
 const StyledFlexbox = styled(FlexBetween)(({ theme }) => ({
   flexWrap: "wrap",
   marginTop: "2rem",
@@ -53,7 +56,7 @@ const OrderDetails = () => {
   console.log(theme.breakpoints.up("md"));
   return (
     <CustomerDashboardLayout>
-      <DashboardPageHeader
+      {/* <DashboardPageHeader
         icon={ShoppingBag}
         title="Order Details"
         navigation={<CustomerDashboardNavigation />}
@@ -136,7 +139,7 @@ const OrderDetails = () => {
             Estimated Delivery Date <b>4th October</b>
           </Typography>
         </FlexBox>
-      </Card>
+      </Card> */}
 
       <Card
         sx={{
@@ -220,7 +223,7 @@ const OrderDetails = () => {
       </Card>
 
       <Grid container spacing={3}>
-        <Grid item lg={6} md={6} xs={12}>
+        {/* <Grid item lg={6} md={6} xs={12}>
           <Card
             sx={{
               p: "20px 30px",
@@ -234,7 +237,7 @@ const OrderDetails = () => {
               Kelly Williams 777 Brockton Avenue, Abington MA 2351
             </Paragraph>
           </Card>
-        </Grid>
+        </Grid> */}
 
         <Grid item lg={6} md={6} xs={12}>
           <Card
@@ -287,3 +290,12 @@ const OrderDetails = () => {
 };
 
 export default OrderDetails;
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  let id = context.query.id;
+  // const orderDetails = await BackEndManager.getOrderById(session.user, id);
+  return {
+    props: {},
+  };
+}

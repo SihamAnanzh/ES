@@ -1,4 +1,5 @@
 import { Divider } from "@mui/material";
+import axios from "axios";
 import Footer from "components/footer/Footer";
 import Header from "components/header/Header";
 import BabyFeeder from "components/icons/BabyFeeder";
@@ -16,10 +17,17 @@ import MobileNavigationBar from "components/mobile-navigation/MobileNavigationBa
 import SaleNavbar from "components/navbar/SaleNavbar";
 import Sticky from "components/sticky/Sticky";
 import Topbar from "components/topbar/Topbar";
+import BackendManager from "globalManager/BackendManager";
 import Head from "next/head";
-import React, { Fragment } from "react";
+import { useRouter } from "next/router";
+import React, { Fragment, useEffect } from "react";
+import { useState } from "react";
 
-const SaleLayout2 = ({ children, title = "Multivendor Ecommerce | Sale" }) => {
+const SaleLayout2 = ({
+  list,
+  children,
+  title = "Multivendor Ecommerce | Sale",
+}) => {
   return (
     <Fragment>
       <Head>
@@ -32,7 +40,7 @@ const SaleLayout2 = ({ children, title = "Multivendor Ecommerce | Sale" }) => {
       {/* <Divider /> */}
 
       <Sticky fixedOn={0}>
-          <SaleNavbar saleCategoryList={saleCategoryList} />
+        <SaleNavbar saleCategoryList={list} />
       </Sticky>
 
       {/* <div className="section-after-sticky">{children}</div> */}

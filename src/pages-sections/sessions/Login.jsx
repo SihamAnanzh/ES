@@ -9,6 +9,8 @@ import React, { useCallback, useState } from "react";
 import * as yup from "yup";
 import EyeToggleButton from "./EyeToggleButton";
 import SocialButtons from "./SocialButtons";
+import { getSession, useSession, signIn } from "next-auth/react";
+
 const fbStyle = {
   background: "#3B5998",
   color: "white",
@@ -42,15 +44,31 @@ export const Wrapper = styled(({ children, passwordVisibility, ...rest }) => (
   },
 }));
 
-const Login = () => {
+const Login = ({ csrfToken }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
-const route=useRouter()
+  const route = useRouter();
+  const callbackUrl = route.query;
   const handleFormSubmit = async (values) => {
-    console.log(values);
+    route.push("/profile");
+    // const res = await signIn("xpress-login-auth", {
+    //   redirect: false,
+    //   username: values.email,
+    //   password: values.password,
+    //   callbackUrl: route.query,
+    //   deviceId: "123",
+    // });
+    // if (res?.error) {
+    // } else {
+    //   if (res.url) {
+    //     route.push("/profile");
+    //   }
+    // }
   };
+  const session = useSession();
+  console.log(session);
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
@@ -60,7 +78,14 @@ const route=useRouter()
     });
   return (
     <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
-      <form onSubmit={handleSubmit}>
+      <form
+        method="post"
+        action="/api/auth/callback/xpress-login-auth"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <H3 textAlign="center" mb={1}>
           Welcome To Ecommerce
         </H3>
@@ -74,8 +99,10 @@ const route=useRouter()
         >
           Log in with email & password
         </Small>
+        <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
 
         <BazarTextField
+          id="email"
           mb={1.5}
           fullWidth
           name="email"
@@ -86,12 +113,13 @@ const route=useRouter()
           value={values.email}
           onChange={handleChange}
           label="Email or Phone Number"
-          placeholder="exmple@mail.com"
+          placeholder="Phone Number"
           error={!!touched.email && !!errors.email}
           helperText={touched.email && errors.email}
         />
 
         <BazarTextField
+          id="password"
           mb={2}
           fullWidth
           size="small"
@@ -125,9 +153,8 @@ const route=useRouter()
             mb: "1.65rem",
             height: 44,
           }}
-          onClick={()=>route.push('/profile')}
         >
-          Login
+          login
         </BazarButton>
       </form>
 
@@ -137,8 +164,8 @@ const route=useRouter()
 };
 
 const initialValues = {
-  email: "",
-  password: "",
+  email: "sihamananzh@outlook.sa",
+  password: "123",
 };
 const formSchema = yup.object().shape({
   password: yup.string().required("Password is required"),

@@ -13,10 +13,19 @@ import { Formik } from "formik";
 import Link from "next/link";
 import React from "react";
 import * as yup from "yup";
+import BackendManager from "../../src/globalManager/BackendManager";
 
 const ProfileEditor = () => {
   const handleFormSubmit = async (values) => {
-    console.log(values);
+    let data = {
+      username: values.email,
+      first_name: values.first_name,
+      last_name: values.last_name,
+      phone: values.contact,
+    };
+    let response = await BackendManager.updateUserProfile(token, data);
+
+    alert(response);
   };
 
   return (
@@ -143,32 +152,6 @@ const ProfileEditor = () => {
                       helperText={touched.contact && errors.contact}
                     />
                   </Grid>
-                  <Grid item md={6} xs={12}>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <DateTimePicker
-                        label="Birth Date"
-                        maxDate={new Date()}
-                        value={values.birth_date}
-                        inputFormat="dd MMMM, yyyy"
-                        shouldDisableTime={() => false}
-                        renderInput={(props) => (
-                          <TextField
-                            fullWidth
-                            size="small"
-                            helperText={touched.birth_date && errors.birth_date}
-                            error={
-                              (!!touched.birth_date && !!errors.birth_date) ||
-                              props.error
-                            }
-                            {...props}
-                          />
-                        )}
-                        onChange={(newValue) =>
-                          setFieldValue("birth_date", newValue)
-                        }
-                      />
-                    </LocalizationProvider>
-                  </Grid>
                 </Grid>
               </Box>
 
@@ -188,13 +171,11 @@ const initialValues = {
   last_name: "",
   email: "",
   contact: "",
-  birth_date: new Date(),
 };
 const checkoutSchema = yup.object().shape({
   first_name: yup.string().required("required"),
   last_name: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
   contact: yup.string().required("required"),
-  birth_date: yup.date().required("invalid date"),
 });
 export default ProfileEditor;

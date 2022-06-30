@@ -9,7 +9,9 @@ import BazarMenu from "components/BazarMenu";
 import { FlexBox } from "components/flex-box";
 import NavLink from "components/nav-link/NavLink";
 import { Span } from "components/Typography";
+import BackendManager from "globalManager/BackendManager";
 import Link from "next/link";
+import { title } from "process";
 import React, { useEffect, useState } from "react";
 import { layoutConstant } from "utils/constants";
 const TopbarWrapper = styled("div")(({ theme }) => ({
@@ -66,11 +68,11 @@ const TopbarWrapper = styled("div")(({ theme }) => ({
 }));
 
 const Topbar = () => {
-  const [currency, setCurrency] = useState(currencyList[0]);
+  const [country, setCountry] = useState({ title: "Kuwait", imgUrl: "" });
   const [language, setLanguage] = useState(languageList[0]);
-
-  const handleCurrencyClick = (curr) => () => {
-    setCurrency(curr);
+  const [countryList, setCountrylist] = useState([]);
+  const handleCountryClick = (curr) => () => {
+    setCountry(curr);
   };
 
   const handleLanguageClick = (lang) => () => {
@@ -78,9 +80,12 @@ const Topbar = () => {
     setLanguage(lang);
   };
 
+  const getCountry = async () => {
+    const country = await BackendManager.getCountryList();
+    setCountrylist(country);
+  };
   useEffect(() => {
-    // get language from browser
-    // console.log(navigator.language);
+    getCountry();
   }, []);
   return (
     <TopbarWrapper>
@@ -115,17 +120,14 @@ const Topbar = () => {
         </FlexBox>
 
         <FlexBox className="topbarRight" alignItems="center">
-          <NavLink className="link" href="/faq">
-            Theme FAQ&quot;s
-          </NavLink>
-          <NavLink className="link" href="/help">
+          {/* <NavLink className="link" href="/help">
             Need Help?
-          </NavLink>
+          </NavLink> */}
 
           <BazarMenu
             handler={
               <TouchRipple className="handler marginRight">
-                <Span className="menuTitle">{language.title}</Span>
+                <Span className="menuTitle">{language.title} </Span>
                 <ExpandMore fontSize="inherit" />
               </TouchRipple>
             }
@@ -145,16 +147,16 @@ const Topbar = () => {
             direction="right"
             handler={
               <TouchRipple className="handler">
-                <Span className="menuTitle">{currency.title}</Span>
+                <Span className="menuTitle">{country.title}</Span>
                 <ExpandMore fontSize="inherit" />
               </TouchRipple>
             }
           >
-            {currencyList.map((item) => (
+            {countryList.map((item) => (
               <MenuItem
                 className="menuItem"
                 key={item.title}
-                onClick={handleCurrencyClick(item)}
+                onClick={handleCountryClick(item)}
               >
                 <Span className="menuTitle">{item.title}</Span>
               </MenuItem>
@@ -171,31 +173,11 @@ const languageList = [
     title: "EN",
     imgUrl: "/assets/images/flags/usa.png",
   },
+
   {
-    title: "BN",
-    imgUrl: "/assets/images/flags/bd.png",
-  },
-  {
-    title: "HN",
+    title: "Ar",
     imgUrl: "/assets/images/flags/in.png",
   },
 ];
-const currencyList = [
-  {
-    title: "USD",
-    imgUrl: "/assets/images/flags/usa.png",
-  },
-  {
-    title: "EUR",
-    imgUrl: "/assets/images/flags/uk.png",
-  },
-  {
-    title: "BDT",
-    imgUrl: "/assets/images/flags/bd.png",
-  },
-  {
-    title: "INR",
-    imgUrl: "/assets/images/flags/in.png",
-  },
-];
+
 export default Topbar;

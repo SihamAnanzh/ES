@@ -2,7 +2,7 @@ import { Pagination } from "@mui/material";
 import { FlexBox } from "components/flex-box";
 import TableRow from "components/TableRow";
 import { H5 } from "components/Typography";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import OrderRow from "./OrderRow"; // ============================================================
 
 // ============================================================
@@ -56,39 +56,12 @@ const OrderList = () => {
 
 const orderList = [
   {
-    orderNo: "1050017AS",
+    orderNo: "109",
     status: "Pending",
-    purchaseDate: new Date(),
+    purchaseDate: "30/06/2022 13:51",
     price: 350,
-    href: "/orders/5452423",
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Processing",
-    purchaseDate: new Date(),
-    price: 500,
-    href: "/orders/5452423",
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Delivered",
-    purchaseDate: "2020/12/23",
-    price: 700,
-    href: "/orders/5452423",
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Delivered",
-    purchaseDate: "2020/12/23",
-    price: 700,
-    href: "/orders/5452423",
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Cancelled",
-    purchaseDate: "2020/12/15",
-    price: 300,
-    href: "/orders/5452423",
+    href: "/orders/109",
   },
 ];
+
 export default OrderList;

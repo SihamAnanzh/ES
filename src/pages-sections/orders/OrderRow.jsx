@@ -55,7 +55,7 @@ const OrderRow = ({ item }) => {
             />
           </Box>
           <Typography className="pre" m={0.75} textAlign="left">
-            {format(new Date(item.purchaseDate), "MMM dd, yyyy")}
+            {item.purchaseDate}
           </Typography>
           <Typography m={0.75} textAlign="left">
             ${item.price.toFixed(2)}
