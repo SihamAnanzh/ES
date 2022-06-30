@@ -40,22 +40,19 @@ const Index = ({ data, singleCategoryData }) => {
           {singleCategory.map(
             (item, ind) =>
               item.items &&
-              item.items.map(
-                (data) => (
-                  console.log(data),
-                  (
-                    <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
-                      <ProductCard1
-                        id={data.id}
-                        title={data.title}
-                        imgUrl={data.images[0].image_url}
-                        haveIcon={true}
-                        notProduct={false}
-                      />
-                    </Grid>
-                  )
-                )
-              )
+              item.items.map((data) => (
+                <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
+                  <ProductCard1
+                    id={data.id}
+                    title={data.title}
+                    imgUrl={data.images[0].image_url}
+                    haveIcon={true}
+                    notProduct={false}
+                    newPrice={data.new_price}
+                    price={data.price}
+                  />
+                </Grid>
+              ))
           )}
         </Grid>
 

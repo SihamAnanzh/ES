@@ -51,6 +51,7 @@ const Index = ({ data, singleCategoryData }) => {
                         imgUrl={data.images[0].image_url}
                         haveIcon={true}
                         notProduct={false}
+                        newPrice={data.new_price}
                       />
                     </Grid>
                   )

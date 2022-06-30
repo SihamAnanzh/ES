@@ -33,6 +33,8 @@ const Index = ({ data, singleCategoryData }) => {
                       haveIcon={false}
                       notProduct={true}
                       sub={true}
+                      newPrice={data.new_price}
+                      price={data.price}
                     />
                   </Grid>
                 ))
