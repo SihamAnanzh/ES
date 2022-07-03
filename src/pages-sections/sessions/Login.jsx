@@ -51,24 +51,22 @@ const Login = ({ csrfToken }) => {
   }, []);
   const route = useRouter();
   const callbackUrl = route.query;
+
   const handleFormSubmit = async (values) => {
-    route.push("/profile");
-    // const res = await signIn("xpress-login-auth", {
-    //   redirect: false,
-    //   username: values.email,
-    //   password: values.password,
-    //   callbackUrl: route.query,
-    //   deviceId: "123",
-    // });
-    // if (res?.error) {
-    // } else {
-    //   if (res.url) {
-    //     route.push("/profile");
-    //   }
-    // }
+    console.log(values);
+    const res = await signIn("xpress-login-auth", {
+      redirect: false,
+      username: values.email,
+      password: values.password,
+      deviceId: "",
+    });
+    if (res?.error) {
+      console.log(res);
+    } else {
+      route.push("/profile");
+    }
   };
   const session = useSession();
-  console.log(session);
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
@@ -79,8 +77,7 @@ const Login = ({ csrfToken }) => {
   return (
     <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
       <form
-        method="post"
-        action="/api/auth/callback/xpress-login-auth"
+        method="POST"
         onSubmit={async (e) => {
           e.preventDefault();
           handleSubmit();
@@ -164,8 +161,8 @@ const Login = ({ csrfToken }) => {
 };
 
 const initialValues = {
-  email: "sihamananzh@outlook.sa",
-  password: "123",
+  email: "",
+  password: "",
 };
 const formSchema = yup.object().shape({
   password: yup.string().required("Password is required"),

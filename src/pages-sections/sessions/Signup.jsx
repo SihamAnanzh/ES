@@ -27,7 +27,6 @@ const Signup = () => {
         first_name: values.name,
         phone: values.phone,
         password: values.password,
-        device_id: "123123",
       })
       .then(async (response) => {
         console.log(response);
@@ -36,25 +35,16 @@ const Signup = () => {
             redirect: false,
             username: values.email,
             password: values.password,
-            callbackUrl: `/`,
           });
           if (res?.error) {
-            swal(response.data.status.message);
+            console.log(res);
           } else {
-            console.log(response);
-
-            if (res.url) route.push(res.url);
+            route.push("/profile");
           }
-        } else {
-          console.log(response);
         }
       });
   };
   const session = useSession();
-
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({

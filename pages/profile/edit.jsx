@@ -14,8 +14,11 @@ import Link from "next/link";
 import React from "react";
 import * as yup from "yup";
 import BackendManager from "../../src/globalManager/BackendManager";
+import { getSession, useSession } from "next-auth/react";
 
 const ProfileEditor = () => {
+  const session = useSession();
+  console.log(session);
   const handleFormSubmit = async (values) => {
     let data = {
       username: values.email,
@@ -23,7 +26,10 @@ const ProfileEditor = () => {
       last_name: values.last_name,
       phone: values.contact,
     };
-    let response = await BackendManager.updateUserProfile(token, data);
+    let response = await BackendManager.updateUserProfile(
+      session.data.user,
+      data
+    );
 
     alert(response);
   };

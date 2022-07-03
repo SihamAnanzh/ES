@@ -25,6 +25,7 @@ import useWindowSize from "hooks/useWindowSize";
 import React, { Fragment } from "react";
 import { getSession } from "next-auth/react";
 import BackEndManager from "../../src/globalManager/BackendManager";
+import BackendManager from "../../src/globalManager/BackendManager";
 
 const StyledFlexbox = styled(FlexBetween)(({ theme }) => ({
   flexWrap: "wrap",
@@ -45,7 +46,7 @@ const StyledFlexbox = styled(FlexBetween)(({ theme }) => ({
   },
 }));
 
-const OrderDetails = () => {
+const OrderDetails = ({ orderDetails, deliverd, orderId }) => {
   const orderStatus = "shipping";
   const orderStatusList = ["packaging", "shipping", "delivering", "complete"];
   const stepIconList = [PackageBox, TruckFilled, Delivery];
@@ -159,66 +160,67 @@ const OrderDetails = () => {
             <Typography fontSize={14} color="grey.600" mr={0.5}>
               Order ID:
             </Typography>
-            <Typography fontSize={14}>9001997718074513</Typography>
+            <Typography fontSize={14}>{orderId}</Typography>
           </FlexBox>
 
           <FlexBox className="pre" m={0.75} alignItems="center">
-            <Typography fontSize={14} color="grey.600" mr={0.5}>
-              Placed on:
-            </Typography>
-            <Typography fontSize={14}>
-              {format(new Date(), "dd MMM, yyyy")}
-            </Typography>
+            <Typography fontSize={14} color="grey.600" mr={0.5}></Typography>
+            <Typography fontSize={14}></Typography>
           </FlexBox>
 
           <FlexBox className="pre" m={0.75} alignItems="center">
             <Typography fontSize={14} color="grey.600" mr={0.5}>
               Delivered on:
             </Typography>
-            <Typography fontSize={14}>
-              {format(new Date(), "dd MMM, yyyy")}
-            </Typography>
+            <Typography fontSize={14}>{deliverd}</Typography>
           </FlexBox>
         </TableRow>
 
         <Box py={1}>
-          {productDatabase.slice(179, 182).map((item) => (
-            <FlexBox
-              px={2}
-              py={1}
-              flexWrap="wrap"
-              alignItems="center"
-              key={item.id}
-            >
-              <FlexBox flex="2 2 260px" m={0.75} alignItems="center">
-                <Avatar
-                  src={item.imgUrl}
-                  sx={{
-                    height: 64,
-                    width: 64,
-                  }}
-                />
-                <Box ml={2.5}>
-                  <H6 my="0px">{item.title}</H6>
-                  <Typography fontSize="14px" color="grey.600">
-                    ${item.price} x 1
-                  </Typography>
-                </Box>
-              </FlexBox>
+          {orderDetails.map(
+            (item) => (
+              console.log(item),
+              (
+                <FlexBox
+                  px={2}
+                  py={1}
+                  flexWrap="wrap"
+                  alignItems="center"
+                  key={item.id}
+                >
+                  <FlexBox flex="2 2 260px" m={0.75} alignItems="center">
+                    <Avatar
+                      src={item.imgUrl}
+                      sx={{
+                        height: 64,
+                        width: 64,
+                      }}
+                    />
+                    <Box ml={2.5}>
+                      <H6 my="0px">{item.title}</H6>
+                      <Typography fontSize="14px" color="grey.600">
+                        ${item.price} x 1
+                      </Typography>
+                    </Box>
+                  </FlexBox>
 
-              <FlexBox flex="1 1 260px" m={0.75} alignItems="center">
-                <Typography fontSize="14px" color="grey.600">
-                  Product properties: Black, L
-                </Typography>
-              </FlexBox>
+                  <FlexBox flex="1 1 260px" m={0.75} alignItems="center">
+                    <Typography fontSize="14px" color="grey.600">
+                      description : {item.description}
+                    </Typography>
+                  </FlexBox>
 
-              <FlexBox flex="160px" m={0.75} alignItems="center">
-                <Button variant="text" color="primary">
-                  <Typography fontSize="14px">Write a Review</Typography>
-                </Button>
-              </FlexBox>
-            </FlexBox>
-          ))}
+                  <FlexBox flex="160px" m={0.75} alignItems="center">
+                    <Button variant="text" color="primary">
+                      <Typography fontSize="14px">
+                        Codes :{item.codes.map((data) => data.serial)}
+                      </Typography>
+                    </Button>
+                  </FlexBox>
+                </FlexBox>
+              )
+            )
+          )}
         </Box>
       </Card>
 
@@ -293,9 +295,23 @@ export default OrderDetails;
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
+  let orderDetails = [];
   let id = context.query.id;
-  // const orderDetails = await BackEndManager.getOrderById(session.user, id);
+  const order = await BackendManager.getOrderById(session.user, id);
+  let deliverd = order.date_string;
+  order.details.map((data) => {
+    orderDetails.push({
+      title: data.title,
+      id: data.id,
+      price: data.price,
+      imgUrl: data.images[0].image_url,
+      quantity: data.quantity,
+      codes: data.codes,
+      description: data.description,
+    });
+  });
+
   return {
-    props: {},
+    props: { orderDetails, orderId: id, deliverd },
   };
 }

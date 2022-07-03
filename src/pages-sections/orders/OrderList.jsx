@@ -6,7 +6,8 @@ import React, { Fragment, useEffect } from "react";
 import OrderRow from "./OrderRow"; // ============================================================
 
 // ============================================================
-const OrderList = () => {
+const OrderList = ({ orderList }) => {
+  console.log(orderList);
   return (
     <Fragment>
       <TableRow
@@ -53,15 +54,5 @@ const OrderList = () => {
     </Fragment>
   );
 };
-
-const orderList = [
-  {
-    orderNo: "109",
-    status: "Pending",
-    purchaseDate: "30/06/2022 13:51",
-    price: 350,
-    href: "/orders/109",
-  },
-];
 
 export default OrderList;

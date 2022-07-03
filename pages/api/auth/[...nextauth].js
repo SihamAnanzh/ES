@@ -14,12 +14,14 @@ export default NextAuth({
           data: {
             username: credentials.username,
             password: credentials.password,
-            deviceId: "123",
+            deviceId: "",
           },
         });
         if (res) {
           console.log("RESPONSE IS : ", res.data);
           if (res.data.status.code !== 200) {
+            console.log(res);
+
             return null;
           } else {
             const user = {
@@ -27,7 +29,6 @@ export default NextAuth({
               name: "user",
               email: res.data.results.username,
               token: res.data.results.token,
-              userId: res.data.resuls.first_name,
             };
             return user;
           }

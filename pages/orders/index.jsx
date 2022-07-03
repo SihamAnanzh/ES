@@ -6,7 +6,7 @@ import OrderList from "pages-sections/orders/OrderList";
 import React from "react";
 import { getSession } from "next-auth/react";
 import BackEndManager from "../../src/globalManager/BackendManager";
-const Orders = ({}) => {
+const Orders = ({ orderList }) => {
   return (
     <CustomerDashboardLayout>
       <DashboardPageHeader
@@ -15,7 +15,7 @@ const Orders = ({}) => {
         navigation={<CustomerDashboardNavigation />}
       />
 
-      <OrderList />
+      <OrderList orderList={orderList} />
     </CustomerDashboardLayout>
   );
 };
@@ -24,10 +24,20 @@ export default Orders;
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
+  const orderList = [];
+  const lists = await BackEndManager.getUserOrders(session.user);
 
-  // const orderList = BackEndManager.getUserOrders(session.user);
+  lists.map((list, ind) => {
+    orderList.push({
+      orderNo: list.id,
+      status: list.order_status.title,
+      purchaseDate: list.date_string,
+      price: list.total,
+      href: "/orders/" + list.id,
+    });
+  });
 
   return {
-    props: {},
+    props: { orderList },
   };
 }

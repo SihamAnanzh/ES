@@ -53,20 +53,19 @@ BackendManager.getCountryList = async () => {
 BackendManager.getUserProfile = async (token) => {
   const res = await axios({
     method: "GET",
-    url: url + "user/profile",
+    url: url + "/user/profile",
     headers: {
       lang: "en",
       Authorization: token,
     },
   });
-
   return res.data.results;
 };
 
 BackendManager.updateUserProfile = async (token, updatedData) => {
   const res = await axios({
-    method: "PSOT",
-    url: url + "/user/update_account",
+    method: "Post",
+    url: url + "/user/update_account/",
     headers: {
       lang: "en",
       Authorization: token,
@@ -74,13 +73,13 @@ BackendManager.updateUserProfile = async (token, updatedData) => {
     data: updatedData,
   });
 
-  return res.data.results;
+  return res.data.status.message;
 };
 
 BackendManager.getUserOrders = async (token) => {
   const res = await axios({
     method: "GET",
-    url: url + "/user/orders/list",
+    url: url + "/user/orders/ongoing/list",
     headers: {
       lang: "en",
       Authorization: token,
@@ -91,6 +90,7 @@ BackendManager.getUserOrders = async (token) => {
 };
 
 BackendManager.getOrderById = async (token, id) => {
+  console.log(id);
   const res = await axios({
     method: "GET",
     url: url + "/user/orders/" + id,
@@ -99,8 +99,8 @@ BackendManager.getOrderById = async (token, id) => {
       Authorization: token,
     },
   });
-
-  return res.data.results.details;
+  console.log(res.data.results.date_string);
+  return res.data.results;
 };
 
 export default BackendManager;

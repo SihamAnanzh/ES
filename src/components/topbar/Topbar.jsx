@@ -10,10 +10,12 @@ import { FlexBox } from "components/flex-box";
 import NavLink from "components/nav-link/NavLink";
 import { Span } from "components/Typography";
 import BackendManager from "globalManager/BackendManager";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { title } from "process";
 import React, { useEffect, useState } from "react";
 import { layoutConstant } from "utils/constants";
+
 const TopbarWrapper = styled("div")(({ theme }) => ({
   background: theme.palette.secondary.main,
   color: theme.palette.secondary.contrastText,
@@ -71,9 +73,11 @@ const Topbar = () => {
   const [country, setCountry] = useState({ title: "Kuwait", imgUrl: "" });
   const [language, setLanguage] = useState(languageList[0]);
   const [countryList, setCountrylist] = useState([]);
+  const [logOut, setLogOut] = useState(false);
   const handleCountryClick = (curr) => () => {
     setCountry(curr);
   };
+  const session = useSession();
 
   const handleLanguageClick = (lang) => () => {
     console.log(lang);
@@ -87,6 +91,9 @@ const Topbar = () => {
   useEffect(() => {
     getCountry();
   }, []);
+  useEffect(() => {
+    setLogOut(!!session.data ? true : false);
+  }, [session]);
   return (
     <TopbarWrapper>
       <Container
@@ -123,7 +130,15 @@ const Topbar = () => {
           {/* <NavLink className="link" href="/help">
             Need Help?
           </NavLink> */}
-
+          {logOut && (
+            <BazarMenu
+              handler={
+                <TouchRipple className="handler marginRight" onClick={signOut}>
+                  <Span className="menuTitle">logout</Span>
+                </TouchRipple>
+              }
+            ></BazarMenu>
+          )}
           <BazarMenu
             handler={
               <TouchRipple className="handler marginRight">

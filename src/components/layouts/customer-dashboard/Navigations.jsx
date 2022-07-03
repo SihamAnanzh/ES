@@ -61,7 +61,6 @@ const linkList = [
         href: "/profile",
         title: "Profile Info",
         icon: Person,
-        count: 3,
       },
       {
         href: "/orders",

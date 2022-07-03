@@ -13,7 +13,9 @@ import Category from "components/icons/Category";
 import ShoppingBagOutlined from "components/icons/ShoppingBagOutlined";
 import MiniCart from "components/mini-cart/MiniCart";
 import { useAppContext } from "contexts/AppContext";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import Login from "pages-sections/sessions/Login";
 import { useState } from "react";
 import { layoutConstant } from "utils/constants";
@@ -37,8 +39,17 @@ const Header = ({ isFixed, className }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sidenavOpen, setSidenavOpen] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const session = useSession();
+  const route = useRouter();
 
-  const toggleDialog = () => setDialogOpen(!dialogOpen);
+  const toggleDialog = () => {
+    //check if there is a session
+    if (!session.data) {
+      setDialogOpen(true);
+    } else {
+      route.push("/profile");
+    }
+  };
 
   const toggleSidenav = () => setSidenavOpen(!sidenavOpen);
 
