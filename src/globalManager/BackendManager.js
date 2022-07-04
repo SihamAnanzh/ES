@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 const BackendManager = {};
 
-BackendManager.getCategoryList = async () => {
+BackendManager.getCategoryList = async (id) => {
   const res = await axios({
     method: "GET",
     url: url + "/category/list",
@@ -11,8 +11,9 @@ BackendManager.getCategoryList = async () => {
       lang: "en",
       limit: 11,
     },
+    data: { country_id: id },
   });
-  return res.data;
+  return res.data.results;
 };
 
 BackendManager.getProdcutsList = async () => {
@@ -143,6 +144,17 @@ BackendManager.resetPassword = async (email) => {
     data: { username: email },
   });
   console.log(res.data);
+  return res.data.results;
+};
+
+BackendManager.getCountryById = async (id) => {
+  const res = await axios({
+    method: "get",
+    url: url + "/country/" + id,
+    headers: {
+      lang: "en",
+    },
+  });
   return res.data.results;
 };
 

@@ -50,6 +50,7 @@ const Login = ({ csrfToken, providers }) => {
   }, []);
 
   const route = useRouter();
+  const { callbackurl } = route.query;
 
   const handleFormSubmit = async (values) => {
     console.log(values);
@@ -57,14 +58,15 @@ const Login = ({ csrfToken, providers }) => {
       redirect: false,
       username: values.email,
       password: values.password,
-      deviceId: "",
     });
     if (res?.error) {
       console.log(res);
     } else {
+      console.log(res);
       route.push("/profile");
     }
   };
+
   const session = useSession();
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
@@ -76,7 +78,8 @@ const Login = ({ csrfToken, providers }) => {
   return (
     <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
       <form
-        method="POST"
+        method="post"
+        action="/api/auth/callback/xpress-login-auth"
         onSubmit={async (e) => {
           e.preventDefault();
           handleSubmit();

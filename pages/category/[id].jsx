@@ -13,7 +13,6 @@ const Index = ({ data, singleCategoryData }) => {
   const [productList, setProductList] = useState([]);
   const [singleCategory, setSingleCategory] = useState([singleCategoryData]);
   const handlePageChange = (_, page) => setPage(page);
-  console.log(singleCategory);
   return (
     <SaleLayout2 list={data}>
       <Container
@@ -84,17 +83,14 @@ export default Index;
 export async function getServerSideProps(context) {
   let data = [{}];
   let id = context.query.id;
+  const { cookies } = context.req;
 
   const [categoryList, singleCategoryData] = await Promise.all([
-    BackendManager.getCategoryList(),
+    BackendManager.getCategoryList(cookies.countryId ? cookies.countryId : "1"),
     BackendManager.getCategoryById(id),
   ]);
 
-  categoryList.results.map((res) => {
-    data.push({ title: res.title, icon: res.logo_url, id: res.id });
-  });
-
   return {
-    props: { data, singleCategoryData },
+    props: { data: categoryList, singleCategoryData },
   };
 }

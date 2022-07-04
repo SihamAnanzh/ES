@@ -127,7 +127,6 @@ const MiniCart = ({ toggleSidenav }) => {
                 />
               </a>
             </Link>
-            {console.log(item.price)}
             <Box flex="1 1 0">
               <Link href={`/product/${item.id}`}>
                 <a>
@@ -162,7 +161,7 @@ const MiniCart = ({ toggleSidenav }) => {
 
       {!!cartList.length && (
         <Box p={2.5}>
-          <Link href="/checkout-alternative" passHref>
+          <Link href="/checkout" passHref>
             <BazarButton
               variant="contained"
               color="primary"

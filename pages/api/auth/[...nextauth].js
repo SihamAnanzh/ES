@@ -71,16 +71,14 @@ export default NextAuth({
     async signIn(user, account, profile) {
       if (
         user.account.provider === "google" ||
-        user.account.provider === "facebook" ||
-        user.account.provider === "apple"
+        user.account.provider === "facebook"
       ) {
-        const endpoint = process.env.endPoint + "user/login";
+        const endpoint = process.env.endPoint + "/user/login";
         const response = await axios({
           method: "post",
           url: endpoint,
           data: {
             social_media_id: user.account.providerAccountId,
-
             social_media_type_id: user.account.provider == "facebook" ? 1 : 2,
           },
           headers: { "Content-Type": "application/json" },

@@ -9,8 +9,10 @@ import BazarMenu from "components/BazarMenu";
 import { FlexBox } from "components/flex-box";
 import NavLink from "components/nav-link/NavLink";
 import { Span } from "components/Typography";
-import BackendManager from "globalManager/BackendManager";
+import { getCookie, setCookie, setCookies } from "cookies-next";
+import BackendManager from "../../../src/globalManager/BackendManager";
 import { signOut, useSession } from "next-auth/react";
+import { getCookieParser } from "next/dist/server/api-utils";
 import Link from "next/link";
 import { title } from "process";
 import React, { useEffect, useState } from "react";
@@ -70,13 +72,26 @@ const TopbarWrapper = styled("div")(({ theme }) => ({
 }));
 
 const Topbar = () => {
-  const [country, setCountry] = useState({ title: "Kuwait", imgUrl: "" });
+  const [country, setCountry] = useState({
+    title: setCookie("country"),
+    imgUrl: "",
+  });
   const [language, setLanguage] = useState(languageList[0]);
   const [countryList, setCountrylist] = useState([]);
   const [logOut, setLogOut] = useState(false);
-  const handleCountryClick = (curr) => () => {
+
+  const handleCountryClick = (curr, id) => () => {
     setCountry(curr);
+    setCookie("countryId", id);
   };
+
+  useEffect(() => {
+    let id = getCookie("countryId");
+    console.log(id);
+    BackendManager.getCountryById(getCookie("countryId")).then((res) => {
+      setCountry(res);
+    });
+  }, []);
   const session = useSession();
 
   const handleLanguageClick = (lang) => () => {
@@ -171,7 +186,7 @@ const Topbar = () => {
               <MenuItem
                 className="menuItem"
                 key={item.title}
-                onClick={handleCountryClick(item)}
+                onClick={handleCountryClick(item, item.id)}
               >
                 <Span className="menuTitle">{item.title}</Span>
               </MenuItem>

@@ -40,7 +40,7 @@ const CheckoutForm = () => {
         setFieldValue,
       }) => (
         <form onSubmit={handleSubmit}>
-          <Card1
+          {/* <Card1
             sx={{
               mb: 4,
             }}
@@ -187,7 +187,7 @@ const CheckoutForm = () => {
                 />
               </Grid>
             </Grid>
-          </Card1>
+          </Card1> */}
 
           <Card1
             sx={{

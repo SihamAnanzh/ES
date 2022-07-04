@@ -8,9 +8,13 @@ import { useCallback, useEffect, useState } from "react";
 import BackendManager from "../src/globalManager/BackendManager";
 import { useAppContext } from "contexts/AppContext";
 import { signOut, useSession } from "next-auth/react";
-import { getCookie, setCookie } from "cookies-next";
-
-const SalePage2 = ({ data, product }) => {
+import {
+  getCsrfToken,
+  getSession,
+  getProviders,
+  providers,
+} from "next-auth/react";
+const SalePage2 = ({ categoryList, product, csrfToken, providers }) => {
   const productPerPage = 28;
   const [page, setPage] = useState(1);
   const [productList, setProductList] = useState([]);
@@ -35,7 +39,6 @@ const SalePage2 = ({ data, product }) => {
 
   useEffect(() => {
     let items = JSON.parse(localStorage.getItem("cart"));
-    console.log("items", items);
 
     items.map(async (data) => {
       let res = await BackendManager.getItemById(data.id);
@@ -56,7 +59,11 @@ const SalePage2 = ({ data, product }) => {
   }, [state.cart]);
 
   return (
-    <SaleLayout2 list={data}>
+    <SaleLayout2
+      csrfToken={csrfToken}
+      providers={providers}
+      list={categoryList}
+    >
       <Container
         sx={{
           mt: 4,
@@ -83,13 +90,13 @@ const SalePage2 = ({ data, product }) => {
             {renderProductCount(page, productPerPage, product.length)}
           </Span>
 
-          <Pagination
+          {/* <Pagination
             page={page}
             color="primary"
             variant="outlined"
             onChange={handlePageChange}
             count={Math.ceil(product.length / productPerPage)}
-          />
+          /> */}
         </FlexBetween>
       </Container>
     </SaleLayout2>
@@ -99,16 +106,16 @@ const SalePage2 = ({ data, product }) => {
 export default SalePage2;
 
 export async function getServerSideProps(context) {
-  let data = [{}];
+  const { cookies } = context.req;
+
   const [categoryList, product] = await Promise.all([
-    BackendManager.getCategoryList(),
+    BackendManager.getCategoryList(cookies.countryId ? cookies.countryId : "1"),
     BackendManager.getProdcutsList(),
   ]);
 
-  categoryList.results.map((res) => {
-    data.push({ title: res.title, icon: res.logo_url, id: res.id });
-  });
+  let csrfToken = await getCsrfToken(context);
+  const providers = await getProviders();
   return {
-    props: { data, product: product.results }, // will be passed to the page component as props
-  };
+    props: { categoryList, product: product.results, providers, csrfToken },
+  }; // will be passed to the page component as props
 }

@@ -10,6 +10,7 @@ import {
 
 const LoginPage = ({ csrfToken, providers }) => {
   console.log(providers);
+  console.log("login page");
   return (
     <FlexRowCenter flexDirection="column" minHeight="100vh">
       <Login csrfToken={csrfToken} providers={providers} />
@@ -20,9 +21,7 @@ const LoginPage = ({ csrfToken, providers }) => {
 export default LoginPage;
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
   const providers = await getProviders();
-  console.log(providers);
   return {
     props: {
       csrfToken: await getCsrfToken(context),

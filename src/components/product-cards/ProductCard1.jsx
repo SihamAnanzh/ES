@@ -11,7 +11,7 @@ import Link from "next/link";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { FlexBox } from "../flex-box";
 const StyledBazarCard = styled(BazarCard)(() => ({
-  height: "100%",
+  height: "max-content",
   margin: "auto",
   display: "flex",
   overflow: "hidden",
@@ -157,7 +157,7 @@ const ProductCard1 = ({
                   ${newPrice.toFixed(2)}
                 </Box>
 
-                {price == newPrice && (
+                {price !== newPrice && (
                   <Box color="grey.600" fontWeight="600">
                     <del>${price?.toFixed(2)}</del>
                   </Box>

@@ -8,6 +8,7 @@ import React, { Fragment, useCallback, useEffect, useState } from "react"; // ==
 
 // ===================================================
 const AppLayout = ({
+  list,
   navbar,
   children,
   title = "React Next.js Ecommerce Template",

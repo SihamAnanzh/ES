@@ -73,7 +73,7 @@ const SaleNavbar = ({ saleCategoryList, onChange }) => {
                   width={40}
                   height={30}
                   style={{ objectFit: "cover" }}
-                  src={item.icon}
+                  src={item.logo_url}
                   alt=""
                 />
                 <Title selected={ind === selected}>{item.title}</Title>

@@ -46,31 +46,6 @@ const Cart = () => {
               }}
             />
 
-            <FlexBox alignItems="center" columnGap={1} mb={2}>
-              <Span fontWeight="600">Additional Comments</Span>
-
-              <Span
-                p="6px 10px"
-                fontSize={12}
-                lineHeight="1"
-                borderRadius="3px"
-                color="primary.main"
-                bgcolor="primary.light"
-              >
-                Note
-              </Span>
-            </FlexBox>
-
-            <TextField
-              variant="outlined"
-              rows={6}
-              fullWidth
-              multiline
-              sx={{
-                mb: 2,
-              }}
-            />
-
             <Divider
               sx={{
                 mb: 2,
@@ -102,64 +77,6 @@ const Cart = () => {
                 mb: 2,
               }}
             />
-
-            <Span fontWeight={600} mb={2} display="block">
-              Shipping Estimates
-            </Span>
-
-            <Autocomplete
-              fullWidth
-              sx={{
-                mb: 2,
-              }}
-              options={countryList} // getOptionLabel={(option) => option.label}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  size="small"
-                  label="Country"
-                  variant="outlined"
-                  placeholder="Select Country"
-                />
-              )}
-            />
-
-            <TextField
-              select
-              fullWidth
-              size="small"
-              label="State"
-              variant="outlined"
-              placeholder="Select State"
-            >
-              {stateList.map((item) => (
-                <MenuItem value={item.value} key={item.label}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              fullWidth
-              size="small"
-              label="Zip Code"
-              placeholder="3100"
-              variant="outlined"
-              sx={{
-                mt: 2,
-              }}
-            />
-
-            <Button
-              variant="outlined"
-              color="primary"
-              fullWidth
-              sx={{
-                my: 2,
-              }}
-            >
-              Calculate Shipping
-            </Button>
 
             <Link href="/checkout" passHref>
               <Button variant="contained" color="primary" fullWidth>

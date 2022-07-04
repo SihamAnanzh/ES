@@ -33,7 +33,7 @@ export const HeaderWrapper = styled(Box)(({ theme }) => ({
 })); // ==============================================================
 
 // ==============================================================
-const Header = ({ isFixed, className }) => {
+const Header = ({ isFixed, className, csrfToken, providers, list }) => {
   const theme = useTheme();
   const { state } = useAppContext();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -111,7 +111,7 @@ const Header = ({ isFixed, className }) => {
         </FlexBox>
 
         <FlexBox justifyContent="center" flex="1 1 0">
-          <SearchBox />
+          <SearchBox list={list} />
         </FlexBox>
 
         <FlexBox
@@ -142,7 +142,7 @@ const Header = ({ isFixed, className }) => {
           scroll="body"
           onClose={toggleDialog}
         >
-          <Login />
+          <Login providers={providers} csrfToken={csrfToken} />
         </Dialog>
 
         <Drawer open={sidenavOpen} anchor="right" onClose={toggleSidenav}>

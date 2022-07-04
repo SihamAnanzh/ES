@@ -79,13 +79,12 @@ const Index = ({ data, singleCategoryData }) => {
 export default Index;
 export async function getServerSideProps(context) {
   let data = [{}];
+
   const categoryList = await BackendManager.getCategoryList();
-  categoryList.results.map((res) => {
-    data.push({ title: res.title, icon: res.logo_url, id: res.id });
-  });
+
   let id = context.query.id;
   let singleCategoryData = await BackendManager.getCategoryById(id);
   return {
-    props: { data, singleCategoryData },
+    props: { data: categoryList, singleCategoryData },
   };
 }

@@ -7,6 +7,8 @@ import { styled } from "@mui/material/styles";
 import { debounce } from "@mui/material/utils";
 import BazarMenu from "components/BazarMenu";
 import { FlexBox } from "components/flex-box";
+import { getCookie } from "cookies-next";
+import BackendManager from "globalManager/BackendManager";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react"; // styled components
 // also used in the GrocerySearchBox component
@@ -34,15 +36,23 @@ const DropDownHandler = styled(FlexBox)(({ theme }) => ({
   },
 }));
 
-const SearchBox = () => {
+const SearchBox = ({ list }) => {
   const [category, setCategory] = useState("All Categories");
+  const [categoryId, setCategoryId] = useState(0);
   const [resultList, setResultList] = useState([]);
+  const [listItem, setListItem] = useState([]);
   const parentRef = useRef();
 
-  const handleCategoryChange = (cat) => () => {
+  const handleCategoryChange = (cat, id) => () => {
     setCategory(cat);
+    setCategoryId(id);
   };
 
+  useEffect(() => {
+    BackendManager.getCategoryList(getCookie("countyId")).then((res) => {
+      console.log(res);
+    });
+  }, []);
   const search = debounce((e) => {
     const value = e.target?.value;
     if (!value) setResultList([]);
@@ -63,6 +73,12 @@ const SearchBox = () => {
       window.removeEventListener("click", handleDocumentClick);
     };
   }, []);
+
+  useEffect(() => {}, []);
+
+  const categories = list.map((item) => {
+    listItem.push({ title: item.title, id: item.id });
+  });
   const categoryDropdown = (
     <BazarMenu
       direction="left"
@@ -80,13 +96,14 @@ const SearchBox = () => {
         </DropDownHandler>
       }
     >
-      {categories.map((item) => (
-        <MenuItem key={item} onClick={handleCategoryChange(item)}>
-          {item}
-        </MenuItem>
-      ))}
+      {/* {listItem.map((item, ind) => (
+      <MenuItem key={ind} onClick={handleCategoryChange(item.title, item.id)}>
+        {item.title}
+      </MenuItem>
+    ))} */}
     </BazarMenu>
   );
+
   return (
     <Box
       position="relative"
@@ -131,16 +148,6 @@ const SearchBox = () => {
   );
 };
 
-const categories = [
-  "All Categories",
-  "Car",
-  "Clothes",
-  "Electronics",
-  "Laptop",
-  "Desktop",
-  "Camera",
-  "Toys",
-];
 const dummySearchResult = [
   "Macbook Air 13",
   "Asus K555LA",

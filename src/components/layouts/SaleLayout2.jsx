@@ -24,6 +24,8 @@ import React, { Fragment, useEffect } from "react";
 import { useState } from "react";
 
 const SaleLayout2 = ({
+  csrfToken,
+  providers,
   list,
   children,
   title = "Multivendor Ecommerce | Sale",
@@ -36,7 +38,7 @@ const SaleLayout2 = ({
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Topbar />
-      <Header />
+      <Header list={list} providers={providers} csrfToken={csrfToken} />
       {/* <Divider /> */}
 
       <Sticky fixedOn={0}>

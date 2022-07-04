@@ -51,7 +51,6 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
     []
   );
 
-  console.log(items);
   return (
     <Box width="100%">
       <Grid container spacing={3} justifyContent="space-around">

@@ -17,14 +17,14 @@ const CheckoutSummary = () => {
           </Typography>
         </FlexBox>
       </FlexBetween>
-      <FlexBetween mb={1}>
+      {/* <FlexBetween mb={1}>
         <Typography color="grey.600">Shipping:</Typography>
         <FlexBox alignItems="flex-end">
           <Typography fontSize="18px" fontWeight="600" lineHeight="1">
             -
           </Typography>
         </FlexBox>
-      </FlexBetween>
+      </FlexBetween> */}
       <FlexBetween mb={1}>
         <Typography color="grey.600">Tax:</Typography>
         <FlexBox alignItems="flex-end">
