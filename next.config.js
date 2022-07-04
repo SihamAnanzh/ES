@@ -14,6 +14,7 @@ module.exports = {
   },
   env: {
     endPoint: "https://staging.xprestores.com/api",
+
     JWT_SECRET: {
       kty: "EC",
       kid: "BwmGsjvRehScmi5OmP0o1fx6_OoFlfYlhjirnlIv-k4",

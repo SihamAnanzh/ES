@@ -5,14 +5,15 @@ import Image from "components/BazarImage";
 import { FlexBox, FlexRowCenter } from "components/flex-box";
 import { H6 } from "components/Typography";
 import BackendManager from "globalManager/BackendManager";
-import { signIn } from "next-auth/react";
+
 import Link from "next/link";
 import React, { Fragment } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useSession, getSession, signIn, providers } from "next-auth/react";
 
 const SocialButtons = (props) => {
-  const { redirect = "/login", redirectText = "Login", providers = [] } = props;
+  const { redirect = "/login", redirectText = "Login", providers } = props;
 
   return (
     <Fragment>
@@ -27,32 +28,47 @@ const SocialButtons = (props) => {
           </Box>
         </FlexBox>
       </Box>
-      {Object.values(providers)
-        .filter((q) => q.type !== "credentials")
-        .map((provider) => (
-          <BazarButton
-            onClick={() => {
-              signIn(provider.id);
-            }}
-            key={provider.name}
-            className={
-              provider.name == "Google" ? "googleButton" : "facebookButton"
-            }
-            size="medium"
-            fullWidth
-            sx={{
-              height: 44,
-            }}
-          >
-            <Image
-              src="/assets/images/icons/facebook-filled-white.svg"
-              alt="facebook"
-            />
-            <Box fontSize="12px" ml={1}>
-              Continue with Facebook
-            </Box>
-          </BazarButton>
-        ))}
+      {providers &&
+        Object.values(providers)
+          .filter((q) => q.type !== "credentials")
+          .map(
+            (provider) => (
+              console.log(provider.id),
+              (
+                <BazarButton
+                  onClick={() => {
+                    signIn(provider.id);
+                  }}
+                  key={provider.name}
+                  className={
+                    provider.name == "Facebook"
+                      ? "facebookButton"
+                      : "googleButton"
+                  }
+                  size="medium"
+                  fullWidth
+                  sx={{
+                    mb: 2,
+                    height: 44,
+                  }}
+                >
+                  <Image
+                    src={
+                      provider.name == "Facebook"
+                        ? "/assets/images/icons/facebook-filled-white.svg"
+                        : "/assets/images/icons/google.svg"
+                    }
+                    alt="facebook"
+                  />
+                  <Box fontSize="12px" ml={1}>
+                    Continue with
+                    {provider.id == "facebook" && " Facebook"}
+                    {provider.id == "google" && " Google"}
+                  </Box>
+                </BazarButton>
+              )
+            )
+          )}
 
       <FlexRowCenter my="1.25rem">
         <Box>Don&apos;t have account?</Box>

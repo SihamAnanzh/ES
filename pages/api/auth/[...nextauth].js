@@ -49,7 +49,7 @@ export default NextAuth({
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRE,
     }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_CLIENT_ID,

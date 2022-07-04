@@ -9,8 +9,7 @@ import React, { useCallback, useState } from "react";
 import * as yup from "yup";
 import EyeToggleButton from "./EyeToggleButton";
 import SocialButtons from "./SocialButtons";
-import { getSession, useSession, signIn } from "next-auth/react";
-
+import { useSession, getSession, signIn, providers } from "next-auth/react";
 const fbStyle = {
   background: "#3B5998",
   color: "white",
@@ -156,6 +155,9 @@ const Login = ({ csrfToken, providers }) => {
       </form>
 
       <SocialButtons
+        sx={{
+          mb: "2.65rem",
+        }}
         providers={providers}
         redirect="/signup"
         redirectText="Sign Up"

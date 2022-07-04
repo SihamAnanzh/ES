@@ -13,7 +13,7 @@ import SocialButtons from "./SocialButtons";
 import { useEffect } from "react";
 import { getSession, useSession, signIn } from "next-auth/react";
 
-const Signup = () => {
+const Signup = ({ providers }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   const togglePasswordVisibility = useCallback(() => {
@@ -209,7 +209,11 @@ const Signup = () => {
         </BazarButton>
       </form>
 
-      <SocialButtons redirect="/login" redirectText="Login" />
+      <SocialButtons
+        providers={providers}
+        redirect="/login"
+        redirectText="Login"
+      />
     </Wrapper>
   );
 };
