@@ -105,6 +105,8 @@
 
 import React from "react";
 
-export const Index = () => {
-  return <div>index</div>;
+const Index = () => {
+  return <div>Index</div>;
 };
+
+export default Index;
