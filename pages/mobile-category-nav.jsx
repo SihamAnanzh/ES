@@ -9,7 +9,7 @@ import { Box, Divider, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
 
-const MobileCategoryNav = () => {
+const MobileCategoryNav = ({}) => {
   const [category, setCategory] = useState(null);
   const [suggestedList, setSuggestedList] = useState([]);
   const [subCategoryList, setSubCategoryList] = useState([]);
@@ -164,3 +164,8 @@ const suggestion = [
   },
 ];
 export default MobileCategoryNav;
+export async function getServerSideProps(context) {
+  return {
+    props: {},
+  }; // will be passed to the page component as props
+}

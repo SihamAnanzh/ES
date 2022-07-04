@@ -74,11 +74,9 @@ const SearchBox = ({ list }) => {
     };
   }, []);
 
-  useEffect(() => {}, []);
-
-  const categories = list.map((item) => {
-    listItem.push({ title: item.title, id: item.id });
-  });
+  // const categories = list.map((item) => {
+  //   listItem.push({ title: item.title, id: item.id });
+  // });
   const categoryDropdown = (
     <BazarMenu
       direction="left"
