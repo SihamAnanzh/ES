@@ -7,7 +7,7 @@ import DashboardPageHeader from "components/layouts/DashboardPageHeader";
 import TableRow from "components/TableRow";
 import { H3, H5, Small } from "components/Typography";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { getSession, useSession } from "next-auth/react";
 import BackendManager from "../../src/globalManager/BackendManager";
 

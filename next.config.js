@@ -1,11 +1,11 @@
-process.env.NEXTAUTH_URL = "http://localhost:3000/";
+// process.env.NEXTAUTH_URL = "http://localhost:3000/";
 process.env.NEXTAUTH_URL = "https://store-zeta-three.vercel.app/";
 module.exports = {
   devIndicators: {
     autoPrerender: false,
   },
   images: {
-    domains: ["staging.xprestores.com"],
+    domains: ["staging.xprestores.com", "pay-it.mobi"],
   },
 
   publicRuntimeConfig: {

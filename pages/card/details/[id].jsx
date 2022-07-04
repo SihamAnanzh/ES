@@ -10,10 +10,11 @@ import { H2 } from "components/Typography";
 import bazarReactDatabase from "data/bazar-react-database";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-
+import CardIIntro from "../../../src/components/product-cards/CardIntro";
 import { getSession, useSession } from "next-auth/react";
 
-import BackendManager from "../../src/globalManager/BackendManager";
+import BackendManager from "../../../src/globalManager/BackendManager";
+import CardIntro from "../../../src/components/product-cards/CardIntro";
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   minHeight: 0,
   marginTop: 80,
@@ -28,7 +29,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
 
 // ===============================================================
 const ProductDetails = (props) => {
-  const { data, popularProducts, relatedProducts } = props;
+  const { data, relatedProducts } = props;
 
   const router = useRouter();
   const { id } = router.query;
@@ -50,32 +51,13 @@ const ProductDetails = (props) => {
 
   return (
     <NavbarLayout>
-      <ProductIntro
-        images={data.images}
-        price={data.price}
+      <CardIntro
+        imgGroup={data.logo_url}
         title={data.title}
         id={data.id}
-        mainCatigory={data.main_category.title}
+        mainCatigory={data.title}
+        items={data.items}
       />
-      {/* {product ? : <H2>Loading...</H2>} */}
-      {/* 
-      <StyledTabs
-        textColor="primary"
-        value={selectedOption}
-        indicatorColor="primary"
-        onChange={handleOptionClick}
-      >
-        <Tab className="inner-tab" label="Description" />
-      </StyledTabs>
-
-      <Box mb={6}>
-        {selectedOption === 0 && <ProductDescription />}
-        {selectedOption === 1 && <ProductReview />}
-      </Box> */}
-
-      {/* <FrequentlyBought productsData={frequentlyBought} /> */}
-
-      {/* <AvailableShops /> */}
 
       <RelatedProducts productsData={relatedProducts} />
     </NavbarLayout>
@@ -91,7 +73,7 @@ export async function getServerSideProps(context) {
 
   const [relatedProducts, res] = await Promise.all([
     BackendManager.getRelatedProducts(id),
-    BackendManager.getItemById(id),
+    BackendManager.getCategoryById(id),
   ]);
 
   return {

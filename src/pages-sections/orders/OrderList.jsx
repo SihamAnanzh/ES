@@ -44,12 +44,12 @@ const OrderList = ({ orderList }) => {
       ))}
 
       <FlexBox justifyContent="center" mt={5}>
-        <Pagination
+        {/* <Pagination
           count={5}
           color="primary"
           variant="outlined"
           onChange={(data) => console.log(data)}
-        />
+        /> */}
       </FlexBox>
     </Fragment>
   );

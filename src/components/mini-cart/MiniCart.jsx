@@ -13,12 +13,13 @@ import LazyImage from "components/LazyImage";
 import { H5, Tiny } from "components/Typography";
 import { useAppContext } from "contexts/AppContext";
 import Link from "next/link";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 
 const MiniCart = ({ toggleSidenav }) => {
   const { palette } = useTheme();
   const { state, dispatch } = useAppContext();
   const cartList = state.cart;
+
   const handleCartAmountChange = useCallback(
     (amount, product) => () => {
       dispatch({
@@ -126,7 +127,7 @@ const MiniCart = ({ toggleSidenav }) => {
                 />
               </a>
             </Link>
-
+            {console.log(item.price)}
             <Box flex="1 1 0">
               <Link href={`/product/${item.id}`}>
                 <a>

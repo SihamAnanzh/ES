@@ -90,7 +90,6 @@ BackendManager.getUserOrders = async (token) => {
 };
 
 BackendManager.getOrderById = async (token, id) => {
-  console.log(id);
   const res = await axios({
     method: "GET",
     url: url + "/user/orders/" + id,
@@ -99,7 +98,51 @@ BackendManager.getOrderById = async (token, id) => {
       Authorization: token,
     },
   });
-  console.log(res.data.results.date_string);
+  return res.data.results;
+};
+
+BackendManager.getItemById = async (id) => {
+  const res = await axios({
+    method: "GET",
+    url: url + "/item/details/" + id,
+    headers: {
+      lang: "en",
+    },
+  });
+  return res.data.results;
+};
+
+BackendManager.getRelatedProducts = async (id) => {
+  const res = await axios({
+    method: "GET",
+    url: url + "/items/similar/" + id,
+    headers: {
+      lang: "en",
+    },
+  });
+  return res.data.results;
+};
+BackendManager.getPopularProducts = async (id) => {
+  const res = await axios({
+    method: "GET",
+    url: url + "/items/popular/list" + id,
+    headers: {
+      lang: "en",
+    },
+  });
+  return res.data.results;
+};
+
+BackendManager.resetPassword = async (email) => {
+  const res = await axios({
+    method: "POST",
+    url: url + "/user/forget_password",
+    headers: {
+      lang: "en",
+    },
+    data: { username: email },
+  });
+  console.log(res.data);
   return res.data.results;
 };
 

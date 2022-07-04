@@ -37,22 +37,28 @@ const Title = styled(H5)(({ selected, theme }) => ({
 const SaleNavbar = ({ saleCategoryList, onChange }) => {
   const [selected, setSelected] = useState(1);
   const route = useRouter();
-  const handleCategoryClick = useCallback(
-    (categoryIndex, id) => () => {
-      setSelected(categoryIndex);
-      if (onChange) onChange(saleCategoryList[categoryIndex]);
-      console.log("this is catgeroy id" + id);
-    },
-    []
-  );
+  // const handleCategoryClick = useCallback(
+  //   (categoryIndex, id) => () => {
+  //     setSelected(categoryIndex);
+  //     if (onChange) onChange(saleCategoryList[categoryIndex]);
+  //     console.log("this is catgeroy id" + id);
+  //   },
+  //   []
+  // );
 
   return (
     <Wrapper autoHide={false}>
       {saleCategoryList.map((item, ind) => (
-        <Link key={ind} href={`/subCategory/${item.id}`}>
+        <Link
+          key={ind}
+          href={
+            item.from_og == true
+              ? `/telecom/${item.id}`
+              : `/category/${item.id}`
+          }
+        >
           <FlexRowCenter
             key={ind}
-            onClick={handleCategoryClick(item.id, ind)}
             sx={{
               cursor: "pointer",
               minWidth: "100px",
@@ -60,22 +66,21 @@ const SaleNavbar = ({ saleCategoryList, onChange }) => {
               background: ind === selected ? "primary.light" : "transparent",
             }}
           >
-            {/* <Tshirt
-            sx={{
-              fontSize: "1.75rem",
-            }}
-            color={ind === selected ? "primary" : "secondary"}
-          /> */}
-            <img
-              key={ind}
-              width={30}
-              height={30}
-              style={{ objectFit: "cover" }}
-              src={item.icon}
-              alt=""
-            />
-
-            <Title selected={ind === selected}>{item.title}</Title>
+            {ind !== 0 ? (
+              <>
+                <img
+                  key={ind}
+                  width={40}
+                  height={30}
+                  style={{ objectFit: "cover" }}
+                  src={item.icon}
+                  alt=""
+                />
+                <Title selected={ind === selected}>{item.title}</Title>
+              </>
+            ) : (
+              ""
+            )}
           </FlexRowCenter>
         </Link>
       ))}

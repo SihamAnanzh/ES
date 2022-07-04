@@ -44,45 +44,17 @@ export const Wrapper = styled(({ children, passwordVisibility, ...rest }) => (
   },
 }));
 
-const Login = ({ csrfToken, providers }) => {
+const ResetPassword = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
 
-  const route = useRouter();
-
-  const handleFormSubmit = async (values) => {
-    console.log(values);
-    const res = await signIn("xpress-login-auth", {
-      redirect: false,
-      username: values.email,
-      password: values.password,
-      deviceId: "",
-    });
-    if (res?.error) {
-      console.log(res);
-    } else {
-      route.push("/profile");
-    }
-  };
   const session = useSession();
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
-      initialValues,
-      onSubmit: handleFormSubmit,
-      validationSchema: formSchema,
-    });
   return (
     <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
-      <form
-        method="POST"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
+      <form>
         <H3 textAlign="center" mb={1}>
           Welcome To Ecommerce
         </H3>
@@ -94,9 +66,8 @@ const Login = ({ csrfToken, providers }) => {
           color="grey.800"
           textAlign="center"
         >
-          Log in with email & password
+          Enter your email
         </Small>
-        <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
 
         <BazarTextField
           id="email"
@@ -115,32 +86,6 @@ const Login = ({ csrfToken, providers }) => {
           helperText={touched.email && errors.email}
         />
 
-        <BazarTextField
-          id="password"
-          mb={2}
-          fullWidth
-          size="small"
-          name="password"
-          label="Password"
-          autoComplete="on"
-          variant="outlined"
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.password}
-          placeholder="*********"
-          type={passwordVisibility ? "text" : "password"}
-          error={!!touched.password && !!errors.password}
-          helperText={touched.password && errors.password}
-          InputProps={{
-            endAdornment: (
-              <EyeToggleButton
-                show={passwordVisibility}
-                click={togglePasswordVisibility}
-              />
-            ),
-          }}
-        />
-
         <BazarButton
           fullWidth
           type="submit"
@@ -151,25 +96,11 @@ const Login = ({ csrfToken, providers }) => {
             height: 44,
           }}
         >
-          login
+          Reset
         </BazarButton>
       </form>
-
-      <SocialButtons
-        providers={providers}
-        redirect="/signup"
-        redirectText="Sign Up"
-      />
     </Wrapper>
   );
 };
 
-const initialValues = {
-  email: "",
-  password: "",
-};
-const formSchema = yup.object().shape({
-  password: yup.string().required("Password is required"),
-  email: yup.string().email("invalid email").required("Email is required"),
-});
-export default Login;
+export default ResetPassword;

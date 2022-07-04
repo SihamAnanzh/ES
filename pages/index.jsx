@@ -4,8 +4,12 @@ import SaleLayout2 from "components/layouts/SaleLayout2";
 import ProductCard1 from "components/product-cards/ProductCard1";
 import { Span } from "components/Typography";
 import { renderProductCount } from "lib";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import BackendManager from "../src/globalManager/BackendManager";
+import { useAppContext } from "contexts/AppContext";
+import { signOut, useSession } from "next-auth/react";
+import { getCookie, setCookie } from "cookies-next";
+
 const SalePage2 = ({ data, product }) => {
   const productPerPage = 28;
   const [page, setPage] = useState(1);
@@ -18,6 +22,39 @@ const SalePage2 = ({ data, product }) => {
   //     product.slice(page * productPerPage, (page + 1) * productPerPage)
   //   );
   // }, [page]);
+  const session = useSession();
+
+  const { state, dispatch } = useAppContext();
+
+  const handleCartAmountChange = (product, amount) => {
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { ...product, qty: amount },
+    });
+  };
+
+  useEffect(() => {
+    let items = JSON.parse(localStorage.getItem("cart"));
+    console.log("items", items);
+
+    items.map(async (data) => {
+      let res = await BackendManager.getItemById(data.id);
+      handleCartAmountChange(
+        {
+          name: res.title,
+          qty: data.qty,
+          price: res.new_price,
+          imgUrl: res.images[0].image_url,
+          id: res.id,
+        },
+        data.qty
+      );
+    });
+  }, []);
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(state.cart));
+  }, [state.cart]);
+
   return (
     <SaleLayout2 list={data}>
       <Container
@@ -33,7 +70,8 @@ const SalePage2 = ({ data, product }) => {
                 price={item.price}
                 imgUrl={item.images[0].image_url}
                 newPrice={item.new_price}
-                haveIcon={true}
+                haveIcon={false}
+                notProduct={false}
                 {...item}
               />
             </Grid>
@@ -62,12 +100,14 @@ export default SalePage2;
 
 export async function getServerSideProps(context) {
   let data = [{}];
-  const categoryList = await BackendManager.getCategoryList();
+  const [categoryList, product] = await Promise.all([
+    BackendManager.getCategoryList(),
+    BackendManager.getProdcutsList(),
+  ]);
+
   categoryList.results.map((res) => {
     data.push({ title: res.title, icon: res.logo_url, id: res.id });
   });
-  const product = await BackendManager.getProdcutsList();
-
   return {
     props: { data, product: product.results }, // will be passed to the page component as props
   };

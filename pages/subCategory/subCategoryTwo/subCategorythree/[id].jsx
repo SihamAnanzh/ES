@@ -52,7 +52,7 @@ const Index = ({ data, singleCategoryData }) => {
                         id={data.id}
                         title={data.title}
                         imgUrl={data.images[0].image_url}
-                        haveIcon={true}
+                        haveIcon={false}
                         notProduct={false}
                         sub={true}
                       />

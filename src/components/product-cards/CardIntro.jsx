@@ -14,51 +14,44 @@ import ImageViewer from "react-simple-image-viewer";
 import { FlexBox, FlexRowCenter } from "../flex-box"; // ================================================================
 
 // ================================================================
-const ProductIntro = ({ images, price, title, id, mainCatigory }) => {
+const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
   const router = useRouter();
   const routerId = router.query.id;
   const [selectedImage, setSelectedImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const { state, dispatch } = useAppContext();
+  const [amount, setAmount] = useState(1);
+  const [dataObjects, setObjects] = useState([]);
   const cartList = state.cart;
+
   const cartItem = cartList.find(
     (item) => item.id === id || item.id === routerId
   );
 
-  let imgGroup = [];
-  images.map((img) => {
-    imgGroup.push(img.image_url);
-  });
-  const handleImageClick = (ind) => () => {
-    setSelectedImage(ind);
-  };
-
-  const openImageViewer = useCallback((index) => {
-    setCurrentImage(index);
-    setIsViewerOpen(true);
-  }, []);
-
-  const closeImageViewer = () => {
-    setCurrentImage(0);
-    setIsViewerOpen(false);
-  };
+  //   let imgGroup = [];
+  //   images.map((img) => {
+  //     imgGroup.push(img.image_url);
+  //   });
 
   const handleCartAmountChange = useCallback(
-    (amount) => () => {
+    (amount, product) => () => {
       dispatch({
         type: "CHANGE_CART_AMOUNT",
-        payload: {
-          price,
-          qty: amount,
-          name: title,
-          imgUrl: imgGroup[0],
-          id: id || routerId,
-        },
+        // payload: {
+        //   price,
+        //   qty: amount,
+        //   name: title,
+        //   imgUrl: imgGroup,
+        //   id: id || routerId,
+        // },
+        payload: { ...product, qty: amount },
       });
     },
     []
   );
+
+  console.log(items);
   return (
     <Box width="100%">
       <Grid container spacing={3} justifyContent="space-around">
@@ -70,12 +63,9 @@ const ProductIntro = ({ images, price, title, id, mainCatigory }) => {
               height={300}
               loading="eager"
               objectFit="contain"
-              src={imgGroup[selectedImage]}
-              onClick={() =>
-                openImageViewer(imgGroup.indexOf(imgGroup[selectedImage]))
-              }
+              src={imgGroup}
             />
-            {isViewerOpen && (
+            {/* {isViewerOpen && (
               <ImageViewer
                 src={imgGroup}
                 onClose={closeImageViewer}
@@ -85,11 +75,11 @@ const ProductIntro = ({ images, price, title, id, mainCatigory }) => {
                   zIndex: 1501,
                 }}
               />
-            )}
+            )} */}
           </FlexBox>
 
           <FlexBox overflow="auto">
-            {imgGroup.map((url, ind) => (
+            {/* {imgGroup.map((url, ind) => (
               <FlexRowCenter
                 key={ind}
                 width={64}
@@ -110,7 +100,7 @@ const ProductIntro = ({ images, price, title, id, mainCatigory }) => {
               >
                 <BazarAvatar src={url} variant="square" height={40} />
               </FlexRowCenter>
-            ))}
+            ))} */}
           </FlexBox>
         </Grid>
 
@@ -131,19 +121,56 @@ const ProductIntro = ({ images, price, title, id, mainCatigory }) => {
           </FlexBox> */}
 
           <Box mb={3}>
-            <H2 color="primary.main" mb={0.5} lineHeight="1">
-              ${price.toFixed(2)}
-            </H2>
-            <Box color="inherit">Stock Available</Box>
+            {/* <H2 color="primary.main" mb={0.5} lineHeight="1">
+              pick one
+            </H2> */}
+            {items &&
+              items.map((item) => (
+                <BazarButton
+                  key={item.id}
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => {
+                    console.log(item),
+                      setObjects({
+                        price: item.new_price,
+                        qty: item.qty,
+                        name: item.title,
+                        id: item.id,
+                        imgUrl: imgGroup,
+                      });
+                  }}
+                  sx={{
+                    m: 1,
+                    px: "rem",
+                    height: 40,
+                  }}
+                >
+                  {item.title}
+                </BazarButton>
+              ))}
           </Box>
-
-          {!cartItem?.qty ? (
+          <Box mb={3}>
             <BazarButton
               color="primary"
               variant="contained"
-              onClick={handleCartAmountChange(1)}
+              onClick={handleCartAmountChange(amount, dataObjects)}
               sx={{
-                mb: 4.5,
+                ml: 1.1,
+                px: "1.75rem",
+                height: 40,
+              }}
+            >
+              Add to Cart
+            </BazarButton>
+          </Box>
+          {/* {!cartItem?.qty ? (
+            <BazarButton
+              color="primary"
+              variant="contained"
+              onClick={1}
+              sx={{
+                m: 0.5,
                 px: "1.75rem",
                 height: 40,
               }}
@@ -180,7 +207,7 @@ const ProductIntro = ({ images, price, title, id, mainCatigory }) => {
                 <Add fontSize="small" />
               </BazarButton>
             </FlexBox>
-          )}
+          )} */}
 
           {/* <FlexBox alignItems="center" mb={2}>
             <Box>Sold By:</Box>
@@ -196,4 +223,4 @@ const ProductIntro = ({ images, price, title, id, mainCatigory }) => {
   );
 };
 
-export default ProductIntro;
+export default CardIntro;

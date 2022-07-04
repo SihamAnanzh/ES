@@ -57,7 +57,7 @@ const ProfileEditor = () => {
 
       <Card1>
         <FlexBox alignItems="flex-end" mb={3}>
-          <Avatar
+          {/* <Avatar
             src="/assets/images/faces/ralph.png"
             sx={{
               height: 64,
@@ -80,7 +80,7 @@ const ProfileEditor = () => {
                 <CameraEnhance fontSize="small" />
               </Button>
             </label>
-          </Box>
+          </Box> */}
 
           <Box display="none">
             <input

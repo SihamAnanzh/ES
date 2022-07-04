@@ -11,7 +11,15 @@ const RelatedProducts = ({ productsData }) => {
       <Grid container spacing={8}>
         {productsData.map((item, ind) => (
           <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
-            <ProductCard1 {...item} hoverEffect />
+            <ProductCard1
+              id={item.id}
+              price={item.price}
+              imgUrl={item.images[0].image_url}
+              newPrice={item.new_price}
+              haveIcon={false}
+              notProduct={false}
+              hoverEffect
+            />
           </Grid>
         ))}
       </Grid>

@@ -11,7 +11,7 @@ import Link from "next/link";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { FlexBox } from "../flex-box";
 const StyledBazarCard = styled(BazarCard)(() => ({
-  height: "100%",
+  height: "80%",
   margin: "auto",
   display: "flex",
   overflow: "hidden",
@@ -56,7 +56,7 @@ const ContentWrapper = styled(Box)(() => ({
 })); // ========================================================
 
 // ========================================================
-const ProductCard1 = ({
+const Card = ({
   id,
   title,
   price,
@@ -66,30 +66,10 @@ const ProductCard1 = ({
   discount,
   newPrice,
   haveIcon,
-  notProduct,
-  sub,
   isCard,
 }) => {
   const { state, dispatch } = useAppContext();
   const [isFavorite, setIsFavorite] = useState(false);
-  const cartItem = state.cart.find((item) => item.id === id);
-  const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
-
-  const handleCartAmountChange = useCallback(
-    (amount) => () => {
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: {
-          name: title,
-          qty: amount,
-          price,
-          imgUrl,
-          id,
-        },
-      });
-    },
-    []
-  );
 
   return (
     <StyledBazarCard hoverEffect={hoverEffect}>
@@ -115,7 +95,7 @@ const ProductCard1 = ({
           </LoveIconWrapper>
         )}
 
-        <Link href={isCard ? `/card/${id}` : `/subCategory/${id}`}>
+        <Link href={`/card/details/${id}`}>
           <a>
             <LazyImage
               src={imgUrl}
@@ -131,7 +111,7 @@ const ProductCard1 = ({
       <ContentWrapper>
         <FlexBox>
           <Box flex="1 1 0" minWidth="0px" mr={1}>
-            <Link href={isCard ? `/card/${id}` : `/subCategory/${id}`}>
+            <Link href={`/card/details/${id}`}>
               <a>
                 <H3
                   mb={1}
@@ -165,49 +145,10 @@ const ProductCard1 = ({
               </FlexBox>
             )}
           </Box>
-
-          {!notProduct && (
-            <FlexBox
-              width="30px"
-              alignItems="center"
-              className="add-cart"
-              flexDirection="column-reverse"
-              justifyContent={!!cartItem?.qty ? "space-between" : "flex-start"}
-            >
-              <Button
-                color="primary"
-                variant="outlined"
-                sx={{
-                  padding: "3px",
-                }}
-                onClick={handleCartAmountChange((cartItem?.qty || 0) + 1)}
-              >
-                <Add fontSize="small" />
-              </Button>
-
-              {!!cartItem?.qty && (
-                <Fragment>
-                  <Box color="text.primary" fontWeight="600">
-                    {cartItem?.qty}
-                  </Box>
-                  <Button
-                    color="primary"
-                    variant="outlined"
-                    sx={{
-                      padding: "3px",
-                    }}
-                    onClick={handleCartAmountChange(cartItem?.qty - 1)}
-                  >
-                    <Remove fontSize="small" />
-                  </Button>
-                </Fragment>
-              )}
-            </FlexBox>
-          )}
         </FlexBox>
       </ContentWrapper>
     </StyledBazarCard>
   );
 };
 
-export default ProductCard1;
+export default Card;

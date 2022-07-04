@@ -56,7 +56,7 @@ const ContentWrapper = styled(Box)(() => ({
 })); // ========================================================
 
 // ========================================================
-const ProductCard1 = ({
+const ServiceCard = ({
   id,
   title,
   price,
@@ -210,4 +210,4 @@ const ProductCard1 = ({
   );
 };
 
-export default ProductCard1;
+export default ServiceCard;

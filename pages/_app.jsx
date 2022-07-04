@@ -5,7 +5,7 @@ import Head from "next/head";
 import Router from "next/router";
 import nProgress from "nprogress";
 import "nprogress/nprogress.css";
-import { Fragment, useEffect } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 // import "react-quill/dist/quill.snow.css";
 import "simplebar/dist/simplebar.min.css";
 import MuiTheme from "theme/MuiTheme";
@@ -14,6 +14,9 @@ import OpenGraphTags from "utils/OpenGraphTags";
 import "../src/fake-db";
 import { appWithTranslation, useTranslation } from "next-i18next";
 import { getSession, SessionProvider, useSession } from "next-auth/react";
+import { useAppContext } from "contexts/AppContext";
+import BackendManager from "../src/globalManager/BackendManager";
+import { getCookie } from "cookies-next";
 
 //Binding events.
 Router.events.on("routeChangeStart", () => nProgress.start());
@@ -26,6 +29,9 @@ nProgress.configure({
 
 const App = ({ Component, pageProps }) => {
   const getLayout = Component.getLayout ?? ((page) => page);
+  const { state, dispatch } = useAppContext();
+
+  const cartList = state.cart;
 
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -35,6 +41,7 @@ const App = ({ Component, pageProps }) => {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
+
   return (
     <Fragment>
       <Head>

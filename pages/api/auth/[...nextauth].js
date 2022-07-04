@@ -1,5 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 import axios from "axios";
 
 export default NextAuth({
@@ -45,6 +47,14 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+    }),
   ],
   secret: process.env.SECRET,
   session: {
@@ -58,6 +68,36 @@ export default NextAuth({
     signIn: "/profile",
   },
   callbacks: {
+    async signIn(user, account, profile) {
+      if (
+        user.account.provider === "google" ||
+        user.account.provider === "facebook" ||
+        user.account.provider === "apple"
+      ) {
+        const endpoint = process.env.endPoint + "user/login";
+        const response = await axios({
+          method: "post",
+          url: endpoint,
+          data: {
+            social_media_id: user.account.providerAccountId,
+
+            social_media_type_id: user.account.provider == "facebook" ? 1 : 2,
+          },
+          headers: { "Content-Type": "application/json" },
+        });
+        if (response.data.status.code === 200) {
+          user.user.token = response.data.results.token;
+        } else {
+          user = undefined;
+        }
+      }
+
+      if (user !== undefined) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     jwt: ({ user, token }) => {
       if (user) {
         token.id = user.token;

@@ -46,7 +46,7 @@ const StyledFlexbox = styled(FlexBetween)(({ theme }) => ({
   },
 }));
 
-const OrderDetails = ({ orderDetails, deliverd, orderId }) => {
+const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
   const orderStatus = "shipping";
   const orderStatusList = ["packaging", "shipping", "delivering", "complete"];
   const stepIconList = [PackageBox, TruckFilled, Delivery];
@@ -170,7 +170,7 @@ const OrderDetails = ({ orderDetails, deliverd, orderId }) => {
 
           <FlexBox className="pre" m={0.75} alignItems="center">
             <Typography fontSize={14} color="grey.600" mr={0.5}>
-              Delivered on:
+              Date of purchase:
             </Typography>
             <Typography fontSize={14}>{deliverd}</Typography>
           </FlexBox>
@@ -205,9 +205,7 @@ const OrderDetails = ({ orderDetails, deliverd, orderId }) => {
                   </FlexBox>
 
                   <FlexBox flex="1 1 260px" m={0.75} alignItems="center">
-                    <Typography fontSize="14px" color="grey.600">
-                      description : {item.description}
-                    </Typography>
+                    <Typography fontSize="14px" color="grey.600"></Typography>
                   </FlexBox>
 
                   <FlexBox flex="160px" m={0.75} alignItems="center">
@@ -251,7 +249,7 @@ const OrderDetails = ({ orderDetails, deliverd, orderId }) => {
               Total Summary
             </H5>
 
-            <FlexBetween mb={1}>
+            {/* <FlexBetween mb={1}>
               <Typography fontSize={14} color="grey.600">
                 Subtotal:
               </Typography>
@@ -270,7 +268,7 @@ const OrderDetails = ({ orderDetails, deliverd, orderId }) => {
                 Discount:
               </Typography>
               <H6 my="0px">-$30</H6>
-            </FlexBetween>
+            </FlexBetween> */}
 
             <Divider
               sx={{
@@ -280,7 +278,7 @@ const OrderDetails = ({ orderDetails, deliverd, orderId }) => {
 
             <FlexBetween mb={2}>
               <H6 my="0px">Total</H6>
-              <H6 my="0px">$315</H6>
+              <H6 my="0px">{total}</H6>
             </FlexBetween>
 
             <Typography fontSize={14}>Paid by Credit/Debit Card</Typography>
@@ -299,6 +297,7 @@ export async function getServerSideProps(context) {
   let id = context.query.id;
   const order = await BackendManager.getOrderById(session.user, id);
   let deliverd = order.date_string;
+  let total = order.total;
   order.details.map((data) => {
     orderDetails.push({
       title: data.title,
@@ -312,6 +311,6 @@ export async function getServerSideProps(context) {
   });
 
   return {
-    props: { orderDetails, orderId: id, deliverd },
+    props: { orderDetails, orderId: id, deliverd, total },
   };
 }

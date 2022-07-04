@@ -4,7 +4,7 @@ import MobileNavigationBar from "components/mobile-navigation/MobileNavigationBa
 import Sticky from "components/sticky/Sticky";
 import Topbar from "components/topbar/Topbar";
 import Head from "next/head";
-import React, { Fragment, useCallback, useState } from "react"; // ===================================================
+import React, { Fragment, useCallback, useEffect, useState } from "react"; // ===================================================
 
 // ===================================================
 const AppLayout = ({
@@ -16,6 +16,7 @@ const AppLayout = ({
   const toggleIsFixed = useCallback((fixed) => {
     setIsFixed(fixed);
   }, []);
+
   return (
     <Fragment>
       <Head>

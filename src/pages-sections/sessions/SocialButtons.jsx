@@ -1,13 +1,19 @@
 import { Box, Divider } from "@mui/material";
+import axios from "axios";
 import BazarButton from "components/BazarButton";
 import Image from "components/BazarImage";
 import { FlexBox, FlexRowCenter } from "components/flex-box";
 import { H6 } from "components/Typography";
+import BackendManager from "globalManager/BackendManager";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React, { Fragment } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const SocialButtons = (props) => {
-  const { redirect = "/login", redirectText = "Login" } = props;
+  const { redirect = "/login", redirectText = "Login", providers = [] } = props;
+
   return (
     <Fragment>
       <Box mb={2} mt={3.3}>
@@ -21,37 +27,32 @@ const SocialButtons = (props) => {
           </Box>
         </FlexBox>
       </Box>
-
-      <BazarButton
-        className="facebookButton"
-        size="medium"
-        fullWidth
-        sx={{
-          height: 44,
-        }}
-      >
-        <Image
-          src="/assets/images/icons/facebook-filled-white.svg"
-          alt="facebook"
-        />
-        <Box fontSize="12px" ml={1}>
-          Continue with Facebook
-        </Box>
-      </BazarButton>
-
-      <BazarButton
-        className="googleButton"
-        size="medium"
-        fullWidth
-        sx={{
-          height: 44,
-        }}
-      >
-        <Image src="/assets/images/icons/google-1.svg" alt="facebook" />
-        <Box fontSize="12px" ml={1}>
-          Continue with Google
-        </Box>
-      </BazarButton>
+      {Object.values(providers)
+        .filter((q) => q.type !== "credentials")
+        .map((provider) => (
+          <BazarButton
+            onClick={() => {
+              signIn(provider.id);
+            }}
+            key={provider.name}
+            className={
+              provider.name == "Google" ? "googleButton" : "facebookButton"
+            }
+            size="medium"
+            fullWidth
+            sx={{
+              height: 44,
+            }}
+          >
+            <Image
+              src="/assets/images/icons/facebook-filled-white.svg"
+              alt="facebook"
+            />
+            <Box fontSize="12px" ml={1}>
+              Continue with Facebook
+            </Box>
+          </BazarButton>
+        ))}
 
       <FlexRowCenter my="1.25rem">
         <Box>Don&apos;t have account?</Box>
@@ -71,9 +72,16 @@ const SocialButtons = (props) => {
         py={2.5}
       >
         Forgot your password?
-        <Link href="/">
+        <Link href="/resetPassword">
           <a>
-            <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
+            <H6
+              ml={1}
+              borderBottom="1px solid"
+              borderColor="grey.900"
+              // onClick={async () => {
+              //   alert(await BackendManager.resetPassword());
+              // }}
+            >
               Reset It
             </H6>
           </a>

@@ -66,7 +66,6 @@ const linkList = [
         href: "/orders",
         title: "Orders",
         icon: ShoppingBagOutlined,
-        count: 5,
       },
     ],
   },

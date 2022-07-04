@@ -14,7 +14,6 @@ const Orders = ({ orderList }) => {
         icon={ShoppingBag}
         navigation={<CustomerDashboardNavigation />}
       />
-
       <OrderList orderList={orderList} />
     </CustomerDashboardLayout>
   );
@@ -25,6 +24,14 @@ export default Orders;
 export async function getServerSideProps(context) {
   const session = await getSession(context);
   const orderList = [];
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
   const lists = await BackEndManager.getUserOrders(session.user);
 
   lists.map((list, ind) => {

@@ -49,11 +49,10 @@ const Index = ({ data, singleCategoryData }) => {
                         id={data.id}
                         title={data.title}
                         imgUrl={data.images[0].image_url}
-                        haveIcon={true}
+                        haveIcon={false}
                         notProduct={false}
                         newPrice={data.new_price}
                         price={data.price}
-
                       />
                     </Grid>
                   )
@@ -83,12 +82,17 @@ const Index = ({ data, singleCategoryData }) => {
 export default Index;
 export async function getServerSideProps(context) {
   let data = [{}];
-  const categoryList = await BackendManager.getCategoryList();
+  let id = context.query.id;
+
+  const [categoryList, singleCategoryData] = await Promise.all([
+    BackendManager.getCategoryList(),
+    BackendManager.getCategoryById(id),
+  ]);
+
   categoryList.results.map((res) => {
     data.push({ title: res.title, icon: res.logo_url, id: res.id });
   });
-  let id = context.query.id;
-  let singleCategoryData = await BackendManager.getCategoryById(id);
+
   return {
     props: { data, singleCategoryData },
   };
