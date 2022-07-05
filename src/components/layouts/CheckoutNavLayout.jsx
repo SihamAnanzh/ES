@@ -60,13 +60,7 @@ const CheckoutNavLayout = ({ children }) => {
       >
         <Box mb={3}>
           <Grid container spacing={3}>
-            <Grid item lg={8} md={8} xs={12}>
-              <Stepper
-                stepperList={stepperList}
-                selectedStep={selectedStep}
-                onChange={handleStepChange}
-              />
-            </Grid>
+            <Grid item lg={8} md={8} xs={12}></Grid>
           </Grid>
         </Box>
         {children}

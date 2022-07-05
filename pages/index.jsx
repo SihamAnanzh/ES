@@ -39,6 +39,23 @@ const SalePage2 = ({ categoryList, product, csrfToken, providers }) => {
   };
 
   useEffect(() => {
+    let items = JSON.parse(localStorage.getItem("cart"));
+
+    items.map(async (data) => {
+      let res = await BackendManager.getItemById(data.id);
+      handleCartAmountChange(
+        {
+          name: res.title,
+          qty: data.qty,
+          price: res.new_price,
+          imgUrl: res.images[0].image_url,
+          id: res.id,
+        },
+        data.qty
+      );
+    });
+  }, []);
+  useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(state.cart));
   }, [state.cart]);
 

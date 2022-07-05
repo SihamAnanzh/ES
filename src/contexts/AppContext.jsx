@@ -33,6 +33,7 @@ const initialState = {
     //   qty: 1,
     // },
   ],
+  customCart: [],
 };
 const AppContext = createContext({
   state: initialState,

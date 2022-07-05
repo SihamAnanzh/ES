@@ -52,7 +52,7 @@ const ProductDetails = ({ data }) => {
         <TelecomIntro
           imgGroup={data.imageUrl}
           title={data.serviceName}
-          id={data.id}
+          id={data.serviceID}
           mainCatigory={data.serCategory}
           items={data.denominations}
           serviceType={data.serviceType}

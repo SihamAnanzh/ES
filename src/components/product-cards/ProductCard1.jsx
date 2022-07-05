@@ -115,7 +115,7 @@ const ProductCard1 = ({
           </LoveIconWrapper>
         )}
 
-        <Link href={isCard ? `/card/${id}` : `/subCategory/${id}`}>
+        <Link href={isCard ? `/card/details/${id}` : `/category/${id}`}>
           <a>
             <LazyImage
               src={imgUrl}
@@ -131,7 +131,7 @@ const ProductCard1 = ({
       <ContentWrapper>
         <FlexBox>
           <Box flex="1 1 0" minWidth="0px" mr={1}>
-            <Link href={isCard ? `/card/${id}` : `/subCategory/${id}`}>
+            <Link href={isCard ? `/card/details/${id}` : `/category/${id}`}>
               <a>
                 <H3
                   mb={1}

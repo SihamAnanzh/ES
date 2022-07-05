@@ -92,7 +92,7 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
               <Image
                 height={28}
                 mb={0.5}
-                src="/assets/images/logo2.svg"
+                src="/assets/images/logo.png"
                 alt="logo"
               />
             </a>

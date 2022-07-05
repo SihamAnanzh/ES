@@ -11,20 +11,27 @@ import CustomerDashboardNavigation from "components/layouts/customer-dashboard/N
 import DashboardPageHeader from "components/layouts/DashboardPageHeader";
 import { Formik } from "formik";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import * as yup from "yup";
 import BackendManager from "../../src/globalManager/BackendManager";
 import { getSession, useSession } from "next-auth/react";
+import { useState } from "react";
 
 const ProfileEditor = () => {
   const session = useSession();
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [emailRquired, setEmailRqueired] = useState(false);
   console.log(session);
-  const handleFormSubmit = async (values) => {
+
+  const handleFormSubmit = async () => {
     let data = {
-      username: values.email,
-      first_name: values.first_name,
-      last_name: values.last_name,
-      phone: values.contact,
+      username: email,
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone,
     };
     let response = await BackendManager.updateUserProfile(
       session.data.user,
@@ -33,6 +40,21 @@ const ProfileEditor = () => {
 
     alert(response);
   };
+
+  useEffect(() => {
+    if (session.data) {
+      BackendManager.getUserProfile(session.data.user).then((res) => {
+        setFirstName(res.first_name);
+        setLastName(res.last_name);
+        setEmail(res.username);
+        setPhone(res.phone);
+      });
+
+      if (email == "") {
+        setEmail(true);
+      }
+    }
+  }, [session]);
 
   return (
     <CustomerDashboardLayout>
@@ -56,128 +78,67 @@ const ProfileEditor = () => {
       />
 
       <Card1>
-        <FlexBox alignItems="flex-end" mb={3}>
-          {/* <Avatar
-            src="/assets/images/faces/ralph.png"
-            sx={{
-              height: 64,
-              width: 64,
-            }}
-          />
+        <FlexBox alignItems="flex-end" mb={3}></FlexBox>
 
-          <Box ml={-2.5}>
-            <label htmlFor="profile-image">
-              <Button
-                component="span"
-                color="secondary"
-                sx={{
-                  p: "8px",
-                  height: "auto",
-                  bgcolor: "grey.300",
-                  borderRadius: "50%",
-                }}
-              >
-                <CameraEnhance fontSize="small" />
-              </Button>
-            </label>
-          </Box> */}
-
-          <Box display="none">
-            <input
-              onChange={(e) => console.log(e.target.files)}
-              id="profile-image"
-              accept="image/*"
-              type="file"
-            />
+        <Box>
+          <Box mb={4}>
+            <Grid container spacing={3}>
+              <Grid item md={6} xs={12}>
+                <TextField
+                  fullWidth
+                  name="first_name"
+                  label="First Name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <TextField
+                  value={lastName}
+                  fullWidth
+                  name="last_name"
+                  label="Last Name"
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <TextField
+                  aria-readonly="true"
+                  value={email}
+                  fullWidth
+                  name="email"
+                  type="email"
+                  label="Email"
+                  onChange={(e) => {
+                    emailRquired && setEmail(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <TextField
+                  value={phone}
+                  fullWidth
+                  label="Phone"
+                  name="contact"
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </Grid>
+            </Grid>
           </Box>
-        </FlexBox>
 
-        <Formik
-          initialValues={initialValues}
-          validationSchema={checkoutSchema}
-          onSubmit={handleFormSubmit}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            setFieldValue,
-          }) => (
-            <form onSubmit={handleSubmit}>
-              <Box mb={4}>
-                <Grid container spacing={3}>
-                  <Grid item md={6} xs={12}>
-                    <TextField
-                      fullWidth
-                      name="first_name"
-                      label="First Name"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.first_name}
-                      error={!!touched.first_name && !!errors.first_name}
-                      helperText={touched.first_name && errors.first_name}
-                    />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                    <TextField
-                      fullWidth
-                      name="last_name"
-                      label="Last Name"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.last_name}
-                      error={!!touched.last_name && !!errors.last_name}
-                      helperText={touched.last_name && errors.last_name}
-                    />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                    <TextField
-                      fullWidth
-                      name="email"
-                      type="email"
-                      label="Email"
-                      onBlur={handleBlur}
-                      value={values.email}
-                      onChange={handleChange}
-                      error={!!touched.email && !!errors.email}
-                      helperText={touched.email && errors.email}
-                    />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                    <TextField
-                      fullWidth
-                      label="Phone"
-                      name="contact"
-                      onBlur={handleBlur}
-                      value={values.contact}
-                      onChange={handleChange}
-                      error={!!touched.contact && !!errors.contact}
-                      helperText={touched.contact && errors.contact}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-
-              <Button type="submit" variant="contained" color="primary">
-                Save Changes
-              </Button>
-            </form>
-          )}
-        </Formik>
+          <Button
+            variant="contained"
+            onClick={handleFormSubmit}
+            color="primary"
+          >
+            Save Changes
+          </Button>
+        </Box>
       </Card1>
     </CustomerDashboardLayout>
   );
 };
 
-const initialValues = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  contact: "",
-};
 const checkoutSchema = yup.object().shape({
   first_name: yup.string().required("required"),
   last_name: yup.string().required("required"),

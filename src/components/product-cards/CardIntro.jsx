@@ -24,7 +24,7 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
   const [amount, setAmount] = useState(1);
   const [dataObjects, setObjects] = useState([]);
   const cartList = state.cart;
-
+  let byNow = true;
   const cartItem = cartList.find(
     (item) => item.id === id || item.id === routerId
   );
@@ -35,7 +35,10 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
   //   });
 
   const handleCartAmountChange = useCallback(
-    (amount, product) => () => {
+    (amount, product, byNow) => () => {
+      if (product.length == 0) {
+        alert("choose amount");
+      }
       dispatch({
         type: "CHANGE_CART_AMOUNT",
         // payload: {
@@ -47,6 +50,9 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
         // },
         payload: { ...product, qty: amount },
       });
+      if (byNow) {
+        router.push("/cart");
+      }
     },
     []
   );
@@ -107,48 +113,26 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
           <H1 mb={2}>{title}</H1>
 
           <FlexBox alignItems="center" mb={2}>
-            <Box>Category</Box>
-            <H6 ml={1}>{mainCatigory}</H6>
+            <H2 color="primary.main" mb={0.5} lineHeight="1">
+              Ammounts :
+            </H2>
           </FlexBox>
 
           <Box mb={3}>
-            {/* <H2 color="primary.main" mb={0.5} lineHeight="1">
-              pick one
-            </H2> */}
             {items &&
-              items.map((item) => (
+              items.map((item, ind) => (
                 <BazarButton
+                  className={`btnAmount ${ind == 0 && "selected"} `}
                   key={item.id}
-                  color="secondary"
+                  color="inherit"
                   variant="contained"
-                  onClick={() => {
-                    setObjects({
-                      price: item.new_price,
-                      qty: item.qty,
-                      name: item.title,
-                      id: item.id,
-                      imgUrl: imgGroup,
-                    });
-                  }}
-                  sx={{
-                    m: 1,
-                    px: "rem",
-                    height: 40,
-                  }}
-                >
-                  {item.title}
-                </BazarButton>
-              ))}
-          </Box>
-
-          <Box mb={3}>
-            {items &&
-              items.map((item) => (
-                <BazarButton
-                  key={item.id}
-                  color="secondary"
-                  variant="contained"
-                  onClick={() => {
+                  onClick={(e) => {
+                    Array.from(document.querySelectorAll(".btnAmount")).map(
+                      (btn) => {
+                        btn.classList.remove("selected");
+                      }
+                    );
+                    e.target.classList.add("selected");
                     setObjects({
                       price: item.new_price,
                       qty: item.qty,
@@ -172,50 +156,30 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
             <H2 color="primary.main" mb={5.5} lineHeight="1">
               Quantity :
             </H2>
-            <BazarButton
-              color="inherit"
-              variant="contained"
-              sx={{
-                ml: 1.1,
-                px: "1.75rem",
-                height: 40,
-              }}
-            >
-              1{" "}
-            </BazarButton>
-            <BazarButton
-              color="inherit"
-              variant="contained"
-              sx={{
-                ml: 1.1,
-                px: "1.75rem",
-                height: 40,
-              }}
-            >
-              2{" "}
-            </BazarButton>
-            <BazarButton
-              color="inherit"
-              variant="contained"
-              sx={{
-                ml: 1.1,
-                px: "1.75rem",
-                height: 40,
-              }}
-            >
-              3{" "}
-            </BazarButton>
-            <BazarButton
-              color="inherit"
-              variant="contained"
-              sx={{
-                ml: 1.1,
-                px: "1.75rem",
-                height: 40,
-              }}
-            >
-              4{" "}
-            </BazarButton>
+
+            {[1, 2, 3, 4].map((qty, ind) => (
+              <BazarButton
+                className={`btnQuntity ${ind == 0 && "selectedAmount"} `}
+                color="inherit"
+                variant="contained"
+                onClick={(e) => {
+                  Array.from(document.querySelectorAll(".btnQuntity")).map(
+                    (btn) => {
+                      btn.classList.remove("selectedAmount");
+                    }
+                  );
+                  e.target.classList.add("selectedAmount");
+                  setAmount(qty);
+                }}
+                sx={{
+                  ml: 1.1,
+                  px: "1.75rem",
+                  height: 40,
+                }}
+              >
+                {qty}
+              </BazarButton>
+            ))}
           </Box>
 
           <Box mb={3}>
@@ -224,12 +188,28 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
               variant="contained"
               onClick={handleCartAmountChange(amount, dataObjects)}
               sx={{
+                mt: 1.1,
                 ml: 1.1,
                 px: "1.75rem",
                 height: 40,
+                width: "140px",
               }}
             >
               Add to Cart
+            </BazarButton>
+            <BazarButton
+              color="primary"
+              variant="contained"
+              onClick={handleCartAmountChange(amount, dataObjects, byNow)}
+              sx={{
+                mt: 1.1,
+                ml: 1.1,
+                px: "1.75rem",
+                height: 40,
+                width: "140px",
+              }}
+            >
+              By Now
             </BazarButton>
           </Box>
           {/* {!cartItem?.qty ? (

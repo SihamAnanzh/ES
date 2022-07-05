@@ -89,6 +89,7 @@ export async function getServerSideProps(context) {
     BackendManager.getCategoryList(cookies.countryId ? cookies.countryId : "1"),
     BackendManager.getCategoryById(id),
   ]);
+  console.log(singleCategoryData);
 
   return {
     props: { data: categoryList, singleCategoryData },

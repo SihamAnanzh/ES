@@ -88,9 +88,9 @@ const Topbar = () => {
 
   useEffect(() => {
     let id = getCookie("countryId");
+    console.log(getCookie("countryId"));
     BackendManager.getCountryById(getCookie("countryId")).then((res) => {
       console.log(res);
-
       setCountry(res);
     });
   }, []);
@@ -126,7 +126,7 @@ const Topbar = () => {
               <Image
                 display="block"
                 height="28px"
-                src="/assets/images/logo.svg"
+                src="/assets/images/logo.png"
                 alt="logo"
               />
             </Link>

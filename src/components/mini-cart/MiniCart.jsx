@@ -20,6 +20,18 @@ const MiniCart = ({ toggleSidenav }) => {
   const { state, dispatch } = useAppContext();
   const cartList = state.cart;
 
+  // const cartItemsList = cartList.forEach(async q=>{
+  //   const item = await getItemById(q.id);
+  //   item.cart_quantity = q.qty;
+  //   return {
+  //     id: item.id,
+  //     qty: item.cart_quantity,
+  //     title: item.title,
+  //     logo_url: item.image_url,
+  //     price: item.new_price
+  //   };
+  // });
+
   const handleCartAmountChange = useCallback(
     (amount, product) => () => {
       dispatch({
@@ -161,7 +173,7 @@ const MiniCart = ({ toggleSidenav }) => {
 
       {!!cartList.length && (
         <Box p={2.5}>
-          <Link href="/checkout" passHref>
+          <Link href="/cart" passHref>
             <BazarButton
               variant="contained"
               color="primary"

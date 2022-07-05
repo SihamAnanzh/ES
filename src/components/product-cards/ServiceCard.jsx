@@ -61,7 +61,7 @@ const ServiceCard = ({ isCard, id, imgUrl, title, newPrice, price }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const cartItem = state.cart.find((item) => item.id === id);
   const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
-
+  console.log(id);
   const handleCartAmountChange = useCallback(
     (amount) => () => {
       dispatch({
@@ -97,7 +97,7 @@ const ServiceCard = ({ isCard, id, imgUrl, title, newPrice, price }) => {
       <ContentWrapper>
         <FlexBox>
           <Box flex="1 1 0" minWidth="0px" mr={1}>
-            <Link href={isCard ? `/card/${id}` : `/subCategory/${id}`}>
+            <Link href={isCard ? `/telecomCard/${id}` : `/subCategory/${id}`}>
               <a>
                 <H3
                   mb={1}

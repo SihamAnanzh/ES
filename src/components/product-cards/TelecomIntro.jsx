@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Add, Remove } from "@mui/icons-material";
-import { Box, Checkbox, Grid, Radio } from "@mui/material";
+import { Box, Checkbox, Grid, Radio, TextField } from "@mui/material";
 import BazarAvatar from "components/BazarAvatar";
 import BazarButton from "components/BazarButton";
 import BazarRating from "components/BazarRating";
@@ -15,7 +15,7 @@ import { StyledTableCell } from "pages-sections/admin";
 import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
 import ImageViewer from "react-simple-image-viewer";
-import { FlexBox, FlexRowCenter } from "../flex-box"; // ================================================================
+import { FlexBetween, FlexBox, FlexRowCenter } from "../flex-box"; // ================================================================
 
 // ================================================================
 const TelecomIntro = ({
@@ -45,7 +45,7 @@ const TelecomIntro = ({
         setPhonNumber(res.phone);
       });
     }
-  }, []);
+  }, [session]);
   const handleOgPayment = async () => {
     if (!session.data) {
       alert("you need to login");
@@ -87,27 +87,84 @@ const TelecomIntro = ({
           </FlexBox>
         </Grid>
 
-        <Grid item md={6} xs={12} alignItems="center">
+        <Grid
+          item
+          md={6}
+          xs={12}
+          alignItems="flex-start"
+          justifyContent="flex-start"
+        >
           <H1 mb={2}>{title}</H1>
-
-          <FlexBox alignItems="center" mb={2}>
-            <Box>Category</Box>
-            <H6 ml={1}>{mainCatigory}</H6>
-          </FlexBox>
-          <FlexBox alignItems="center" mb={2}>
-            <Box>Service Type</Box>
-            <H6 ml={1}>{serviceType}</H6>
-          </FlexBox>
-
+          {console.log(id)}
+          {id == "6" ? (
+            <Box mb={3}>
+              <FlexBox alignItems="center">
+                <FlexBox justifyContent="center" m={2} mr={0.7}>
+                  Amount :
+                </FlexBox>
+                <FlexBox>
+                  <TextField
+                    value="20"
+                    m={2.6}
+                    onChange={(e) => {
+                      setAmount(e.target.value),
+                        setObjects({
+                          price: 3,
+                          id: id,
+                          value: amount,
+                          currency: "KWD",
+                          date: Date().toLocaleString(),
+                        });
+                    }}
+                  />
+                </FlexBox>
+              </FlexBox>
+              <FlexBox alignItems="center">
+                <FlexBox justifyContent="center" m={2} mr={1.8}>
+                  Phone :
+                </FlexBox>
+                <FlexBox>
+                  <TextField
+                    value={phoneNumner}
+                    m={2.6}
+                    onChange={(e) => setPhonNumber(e.target.value)}
+                  />
+                </FlexBox>
+              </FlexBox>
+            </Box>
+          ) : (
+            ""
+          )}
+          {id == "5" && (
+            <FlexBox alignItems="center">
+              <FlexBox justifyContent="center" m={2} mr={1.8}>
+                Phone :
+              </FlexBox>
+              <FlexBox>
+                <TextField
+                  value={phoneNumner}
+                  m={2.6}
+                  onChange={(e) => setPhonNumber(e.target.value)}
+                />
+              </FlexBox>
+            </FlexBox>
+          )}
           <Box mb={3}>
             {items &&
-              items.map((item) => (
+              items.map((item, ind) => (
                 <BazarButton
+                  className={`btnAmount ${ind == 0 && "selected"} `}
                   id={item.denominationID}
                   key={item.denominationID}
-                  color={aciveClass ? "primary" : "inherit"}
+                  color={"inherit"}
                   variant="outlined"
                   onClick={(e) => {
+                    Array.from(document.querySelectorAll(".btnAmount")).map(
+                      (btn) => {
+                        btn.classList.remove("selected");
+                      }
+                    );
+                    e.target.classList.add("selected");
                     setObjects({
                       price: item.sellingPrice,
                       id: item.denominationID,
@@ -122,38 +179,25 @@ const TelecomIntro = ({
                     height: " max-content",
                   }}
                 >
-                  <Radio />
-                  <div
-                    className=""
-                    style={{ display: "flex", flexDirection: "column" }}
-                  >
-                    <Span style={{ color: "red" }}>
-                      value : {item.denominationValue}
-                    </Span>
-                    <span>
-                      {" "}
-                      price: {item.denominationValue}{" "}
-                      <span>{item.sellingCurrency}</span>
-                    </span>
-                  </div>
+                  {item.denominationValue}__{item.denominationValue}{" "}
+                  {item.sellingCurrency}
                 </BazarButton>
               ))}
           </Box>
+
           <Box mb={3}>
-            {items.length > 0 && (
-              <BazarButton
-                color="primary"
-                variant="contained"
-                onClick={handleOgPayment}
-                sx={{
-                  ml: 1.1,
-                  px: "1.75rem",
-                  height: 40,
-                }}
-              >
-                By Now
-              </BazarButton>
-            )}
+            <BazarButton
+              color="primary"
+              variant="contained"
+              onClick={handleOgPayment}
+              sx={{
+                ml: 1.1,
+                px: "1.75rem",
+                height: 40,
+              }}
+            >
+              By Now
+            </BazarButton>
           </Box>
         </Grid>
       </Grid>

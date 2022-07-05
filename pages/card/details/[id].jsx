@@ -46,7 +46,7 @@ const ProductDetails = ({ data, list }) => {
   const handleOptionClick = (_, newValue) => {
     setSelectedOption(newValue);
   };
-
+  console.log(data.items);
   return (
     <NavbarLayout list={list}>
       {data && (

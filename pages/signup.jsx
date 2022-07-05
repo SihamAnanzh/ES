@@ -15,8 +15,16 @@ const SignUpPage = ({ providers }) => {
 export default SignUpPage;
 export async function getServerSideProps(context) {
   const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
   const providers = await getProviders();
-  console.log(providers);
   return {
     props: {
       csrfToken: await getCsrfToken(context),

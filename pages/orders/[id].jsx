@@ -26,6 +26,8 @@ import React, { Fragment } from "react";
 import { getSession } from "next-auth/react";
 import BackEndManager from "../../src/globalManager/BackendManager";
 import BackendManager from "../../src/globalManager/BackendManager";
+import BazarButton from "components/BazarButton";
+import { useRouter } from "next/router";
 
 const StyledFlexbox = styled(FlexBetween)(({ theme }) => ({
   flexWrap: "wrap",
@@ -54,6 +56,7 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
   const width = useWindowSize();
   const theme = useTheme();
   const breakpoint = 350;
+
   console.log(theme.breakpoints.up("md"));
   return (
     <CustomerDashboardLayout>
@@ -206,11 +209,11 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
               </FlexBox>
 
               <FlexBox flex="160px" m={0.75} alignItems="center">
-                <Button variant="text" color="primary">
+                <BazarButton variant="text" color="primary">
                   <Typography fontSize="14px">
                     Codes :{item.codes.map((data) => data.serial)}
                   </Typography>
-                </Button>
+                </BazarButton>
               </FlexBox>
             </FlexBox>
           ))}
@@ -276,7 +279,9 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
               <H6 my="0px">{total}</H6>
             </FlexBetween>
 
-            <Typography fontSize={14}>Paid by Credit/Debit Card</Typography>
+            <Typography mb={2} fontSize={14}>
+              Paid by Credit/Debit Card
+            </Typography>
           </Card>
         </Grid>
       </Grid>

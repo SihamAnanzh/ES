@@ -7,14 +7,49 @@ import ProductCard7 from "components/product-cards/ProductCard7";
 import { Span } from "components/Typography";
 import { useAppContext } from "contexts/AppContext";
 import countryList from "data/countryList";
+import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useEffect } from "react";
+import BackendManager from "../src/globalManager/BackendManager";
 
-const Cart = () => {
-  const { state } = useAppContext();
+const Cart = ({ userInfo }) => {
+  const { state, dispatch } = useAppContext();
+
   const cartList = state.cart;
 
   const getTotalPrice = () => {
     return cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
+  };
+
+  const paymentCheckout = () => {
+    Checkout(
+      {
+        id: null,
+        first_name: userInfo.first_name,
+        middle_name: " ",
+        last_name: userInfo.last_name,
+        email: userInfo.username,
+        phone: {
+          country_code: "965",
+          number: userInfo.phone,
+        },
+        address: "Address",
+      },
+      {
+        amount: getTotalPrice(),
+        currency: "KWD",
+        order: {
+          amount: getTotalPrice(),
+          currency: "KWD",
+          items: [],
+        },
+        shipping: null,
+        taxes: null,
+      },
+      // `${process.env.NEXTAUTH_URL}${route.locale}`
+      `http://localhost:3000/orders`
+    );
+    goSell.openLightBox();
   };
 
   return (
@@ -33,9 +68,36 @@ const Cart = () => {
             }}
           >
             <FlexBetween mb={2}>
+              <Span color="grey.600">Item:</Span>
+
+              <Span fontSize={13} fontWeight={200} lineHeight="1">
+                {cartList.length}
+              </Span>
+            </FlexBetween>
+
+            <FlexBetween mb={2}>
+              <Span color="grey.600">Email:</Span>
+
+              <Span fontSize={13} fontWeight={200} lineHeight="1">
+                {userInfo.username}
+              </Span>
+            </FlexBetween>
+            <FlexBetween mb={2}>
+              <Span color="grey.600">Phone:</Span>
+
+              <Span fontSize={13} fontWeight={200} lineHeight="1">
+                {userInfo.phone}
+              </Span>
+            </FlexBetween>
+            <Divider
+              sx={{
+                mb: 2,
+              }}
+            />
+            <FlexBetween mb={2}>
               <Span color="grey.600">Total:</Span>
 
-              <Span fontSize={18} fontWeight={600} lineHeight="1">
+              <Span fontSize={16} fontWeight={600} lineHeight="1">
                 ${getTotalPrice().toFixed(2)}
               </Span>
             </FlexBetween>
@@ -46,43 +108,14 @@ const Cart = () => {
               }}
             />
 
-            <Divider
-              sx={{
-                mb: 2,
-              }}
-            />
-
-            <TextField
-              fullWidth
-              size="small"
-              label="Voucher"
-              variant="outlined"
-              placeholder="Voucher"
-            />
-
             <Button
-              variant="outlined"
+              onClick={paymentCheckout}
+              variant="contained"
               color="primary"
               fullWidth
-              sx={{
-                mt: 2,
-                mb: 4,
-              }}
             >
-              Apply Voucher
+              Checkout Now
             </Button>
-
-            <Divider
-              sx={{
-                mb: 2,
-              }}
-            />
-
-            <Link href="/checkout" passHref>
-              <Button variant="contained" color="primary" fullWidth>
-                Checkout Now
-              </Button>
-            </Link>
           </Card>
         </Grid>
       </Grid>
@@ -90,14 +123,13 @@ const Cart = () => {
   );
 };
 
-const stateList = [
-  {
-    value: "New York",
-    label: "New York",
-  },
-  {
-    value: "Chicago",
-    label: "Chicago",
-  },
-];
 export default Cart;
+export async function getServerSideProps(context) {
+  let session = await getSession(context);
+  console.log(session.data);
+  let userInfo = await BackendManager.getUserProfile(session.user);
+
+  return {
+    props: { userInfo },
+  };
+}

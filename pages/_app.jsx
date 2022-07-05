@@ -1,3 +1,4 @@
+import "../styles/styles.css";
 import RTL from "components/RTL";
 import { AppProvider } from "contexts/AppContext";
 import SettingsProvider from "contexts/SettingContext";
@@ -47,6 +48,7 @@ const App = ({ Component, pageProps }) => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+
         <GoogleAnalytics />
         <OpenGraphTags />
       </Head>

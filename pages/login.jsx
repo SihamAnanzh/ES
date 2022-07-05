@@ -20,6 +20,16 @@ const LoginPage = ({ csrfToken, providers }) => {
 export default LoginPage;
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
   const providers = await getProviders();
   return {
     props: {

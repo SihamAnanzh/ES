@@ -18,11 +18,22 @@ export default class Bazar extends Component {
             rel="stylesheet"
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
           />
+          <link
+            href="https://goSellJSLib.b-cdn.net/v2.0.0/css/gosell.css"
+            rel="stylesheet"
+          />
+          <script
+            type="text/javascript"
+            src="https://goSellJSLib.b-cdn.net/v2.0.0/js/gosell.js"
+          ></script>
         </Head>
 
         <body>
           <Main />
           <NextScript />
+          <body id="body">
+            <script type="text/javascript" src="/js/goSellConfig.js"></script>
+          </body>
         </body>
       </Html>
     );
