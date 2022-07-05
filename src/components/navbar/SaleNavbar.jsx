@@ -35,7 +35,7 @@ const Title = styled(H5)(({ selected, theme }) => ({
 }));
 
 const SaleNavbar = ({ saleCategoryList, onChange }) => {
-  const [selected, setSelected] = useState(1);
+  const [selected, setSelected] = useState();
   const route = useRouter();
   // const handleCategoryClick = useCallback(
   //   (categoryIndex, id) => () => {
@@ -66,21 +66,17 @@ const SaleNavbar = ({ saleCategoryList, onChange }) => {
               background: ind === selected ? "primary.light" : "transparent",
             }}
           >
-            {ind !== 0 ? (
-              <>
-                <img
-                  key={ind}
-                  width={40}
-                  height={30}
-                  style={{ objectFit: "cover" }}
-                  src={item.logo_url}
-                  alt=""
-                />
-                <Title selected={ind === selected}>{item.title}</Title>
-              </>
-            ) : (
-              ""
-            )}
+            <>
+              <img
+                key={ind}
+                width={40}
+                height={30}
+                style={{ objectFit: "cover" }}
+                src={item.logo_url}
+                alt=""
+              />
+              <Title selected={ind === selected}>{item.title}</Title>
+            </>
           </FlexRowCenter>
         </Link>
       ))}

@@ -11,7 +11,7 @@ import Link from "next/link";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { FlexBox } from "../flex-box";
 const StyledBazarCard = styled(BazarCard)(() => ({
-  height: "100%",
+  height: "max-content",
   margin: "auto",
   display: "flex",
   overflow: "hidden",
@@ -56,20 +56,7 @@ const ContentWrapper = styled(Box)(() => ({
 })); // ========================================================
 
 // ========================================================
-const ServiceCard = ({
-  id,
-  title,
-  price,
-  imgUrl,
-  hoverEffect,
-  showProductSize,
-  discount,
-  newPrice,
-  haveIcon,
-  notProduct,
-  sub,
-  isCard,
-}) => {
+const ServiceCard = ({ isCard, id, imgUrl, title, newPrice, price }) => {
   const { state, dispatch } = useAppContext();
   const [isFavorite, setIsFavorite] = useState(false);
   const cartItem = state.cart.find((item) => item.id === id);
@@ -92,30 +79,9 @@ const ServiceCard = ({
   );
 
   return (
-    <StyledBazarCard hoverEffect={hoverEffect}>
+    <StyledBazarCard>
       <ImageWrapper>
-        {!!discount && (
-          <StyledChip color="primary" size="small" label={`${discount}% off`} />
-        )}
-
-        {haveIcon && (
-          <LoveIconWrapper>
-            <IconButton
-              sx={{
-                p: "6px",
-              }}
-              onClick={toggleIsFavorite}
-            >
-              {isFavorite ? (
-                <Favorite color="primary" fontSize="small" />
-              ) : (
-                <FavoriteBorder fontSize="small" />
-              )}
-            </IconButton>
-          </LoveIconWrapper>
-        )}
-
-        <Link href={isCard ? `/card/${id}` : `/subCategory/${id}`}>
+        <Link href={isCard ? `/telecomCard/${id}` : `/subCategory/${id}`}>
           <a>
             <LazyImage
               src={imgUrl}
@@ -146,11 +112,6 @@ const ServiceCard = ({
               </a>
             </Link>
 
-            {showProductSize && (
-              <Span color="grey.600" mb={1} display="block">
-                300ml
-              </Span>
-            )}
             {newPrice && (
               <FlexBox alignItems="center" gap={1} mt={0.5}>
                 <Box fontWeight="600" color="primary.main">
@@ -165,45 +126,6 @@ const ServiceCard = ({
               </FlexBox>
             )}
           </Box>
-
-          {!notProduct && (
-            <FlexBox
-              width="30px"
-              alignItems="center"
-              className="add-cart"
-              flexDirection="column-reverse"
-              justifyContent={!!cartItem?.qty ? "space-between" : "flex-start"}
-            >
-              <Button
-                color="primary"
-                variant="outlined"
-                sx={{
-                  padding: "3px",
-                }}
-                onClick={handleCartAmountChange((cartItem?.qty || 0) + 1)}
-              >
-                <Add fontSize="small" />
-              </Button>
-
-              {!!cartItem?.qty && (
-                <Fragment>
-                  <Box color="text.primary" fontWeight="600">
-                    {cartItem?.qty}
-                  </Box>
-                  <Button
-                    color="primary"
-                    variant="outlined"
-                    sx={{
-                      padding: "3px",
-                    }}
-                    onClick={handleCartAmountChange(cartItem?.qty - 1)}
-                  >
-                    <Remove fontSize="small" />
-                  </Button>
-                </Fragment>
-              )}
-            </FlexBox>
-          )}
         </FlexBox>
       </ContentWrapper>
     </StyledBazarCard>

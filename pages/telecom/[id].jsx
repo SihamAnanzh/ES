@@ -13,7 +13,6 @@ const Index = ({ data, singleCategoryData }) => {
   const [productList, setProductList] = useState([]);
   const [singleCategory, setSingleCategory] = useState([singleCategoryData]);
   const handlePageChange = (_, page) => setPage(page);
-  console.log(singleCategory);
   return (
     <SaleLayout2 list={data}>
       <Container
@@ -22,18 +21,23 @@ const Index = ({ data, singleCategoryData }) => {
         }}
       >
         <Grid container spacing={3} minHeight={500}>
-          {singleCategory.map((item, ind) => (
-            <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
-              <ServiceCard
-                id={item.id}
-                title={item.title}
-                imgUrl={item.logo_url}
-                haveIcon={false}
-                notProduct={true}
-                isCard={item.is_card}
-              />
-            </Grid>
-          ))}
+          {singleCategory.map((item, ind) =>
+            item.has_subcategories
+              ? item.subcategories.map((item) => (
+                  <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
+                    <ServiceCard
+                      id={item.id}
+                      title={item.title}
+                      imgUrl={item.logo_url}
+                      isCard={item.is_card}
+                      price={item.price}
+                      newPrice={item.mewPrice}
+                      items={item.denominations}
+                    />
+                  </Grid>
+                ))
+              : ""
+          )}
           {/* {singleCategory.map(
             (item, ind) =>
               item.items &&

@@ -177,48 +177,43 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
         </TableRow>
 
         <Box py={1}>
-          {orderDetails.map(
-            (item) => (
-              console.log(item),
-              (
-                <FlexBox
-                  px={2}
-                  py={1}
-                  flexWrap="wrap"
-                  alignItems="center"
-                  key={item.id}
-                >
-                  <FlexBox flex="2 2 260px" m={0.75} alignItems="center">
-                    <Avatar
-                      src={item.imgUrl}
-                      sx={{
-                        height: 64,
-                        width: 64,
-                      }}
-                    />
-                    <Box ml={2.5}>
-                      <H6 my="0px">{item.title}</H6>
-                      <Typography fontSize="14px" color="grey.600">
-                        ${item.price} x 1
-                      </Typography>
-                    </Box>
-                  </FlexBox>
+          {orderDetails.map((item) => (
+            <FlexBox
+              px={2}
+              py={1}
+              flexWrap="wrap"
+              alignItems="center"
+              key={item.id}
+            >
+              <FlexBox flex="2 2 260px" m={0.75} alignItems="center">
+                <Avatar
+                  src={item.imgUrl}
+                  sx={{
+                    height: 64,
+                    width: 64,
+                  }}
+                />
+                <Box ml={2.5}>
+                  <H6 my="0px">{item.title}</H6>
+                  <Typography fontSize="14px" color="grey.600">
+                    ${item.price} x 1
+                  </Typography>
+                </Box>
+              </FlexBox>
 
-                  <FlexBox flex="1 1 260px" m={0.75} alignItems="center">
-                    <Typography fontSize="14px" color="grey.600"></Typography>
-                  </FlexBox>
+              <FlexBox flex="1 1 260px" m={0.75} alignItems="center">
+                <Typography fontSize="14px" color="grey.600"></Typography>
+              </FlexBox>
 
-                  <FlexBox flex="160px" m={0.75} alignItems="center">
-                    <Button variant="text" color="primary">
-                      <Typography fontSize="14px">
-                        Codes :{item.codes.map((data) => data.serial)}
-                      </Typography>
-                    </Button>
-                  </FlexBox>
-                </FlexBox>
-              )
-            )
-          )}
+              <FlexBox flex="160px" m={0.75} alignItems="center">
+                <Button variant="text" color="primary">
+                  <Typography fontSize="14px">
+                    Codes :{item.codes.map((data) => data.serial)}
+                  </Typography>
+                </Button>
+              </FlexBox>
+            </FlexBox>
+          ))}
         </Box>
       </Card>
 

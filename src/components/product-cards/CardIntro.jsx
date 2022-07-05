@@ -107,17 +107,9 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
           <H1 mb={2}>{title}</H1>
 
           <FlexBox alignItems="center" mb={2}>
-            <Box>Catigory</Box>
+            <Box>Category</Box>
             <H6 ml={1}>{mainCatigory}</H6>
           </FlexBox>
-
-          {/* <FlexBox alignItems="center" mb={2}>
-            <Box lineHeight="1">Rated:</Box>
-            <Box mx={1} lineHeight="1">
-              <BazarRating color="warn" fontSize="1.25rem" value={4} readOnly />
-            </Box>
-            <H6 lineHeight="1">(50)</H6>
-          </FlexBox> */}
 
           <Box mb={3}>
             {/* <H2 color="primary.main" mb={0.5} lineHeight="1">
@@ -130,14 +122,13 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
                   color="secondary"
                   variant="contained"
                   onClick={() => {
-                    console.log(item),
-                      setObjects({
-                        price: item.new_price,
-                        qty: item.qty,
-                        name: item.title,
-                        id: item.id,
-                        imgUrl: imgGroup,
-                      });
+                    setObjects({
+                      price: item.new_price,
+                      qty: item.qty,
+                      name: item.title,
+                      id: item.id,
+                      imgUrl: imgGroup,
+                    });
                   }}
                   sx={{
                     m: 1,
@@ -149,6 +140,84 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
                 </BazarButton>
               ))}
           </Box>
+
+          <Box mb={3}>
+            {items &&
+              items.map((item) => (
+                <BazarButton
+                  key={item.id}
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => {
+                    setObjects({
+                      price: item.new_price,
+                      qty: item.qty,
+                      name: item.title,
+                      id: item.id,
+                      imgUrl: imgGroup,
+                    });
+                  }}
+                  sx={{
+                    m: 1,
+                    px: "rem",
+                    height: 40,
+                  }}
+                >
+                  {item.title}
+                </BazarButton>
+              ))}
+          </Box>
+
+          <Box mb={3}>
+            <H2 color="primary.main" mb={5.5} lineHeight="1">
+              Quantity :
+            </H2>
+            <BazarButton
+              color="inherit"
+              variant="contained"
+              sx={{
+                ml: 1.1,
+                px: "1.75rem",
+                height: 40,
+              }}
+            >
+              1{" "}
+            </BazarButton>
+            <BazarButton
+              color="inherit"
+              variant="contained"
+              sx={{
+                ml: 1.1,
+                px: "1.75rem",
+                height: 40,
+              }}
+            >
+              2{" "}
+            </BazarButton>
+            <BazarButton
+              color="inherit"
+              variant="contained"
+              sx={{
+                ml: 1.1,
+                px: "1.75rem",
+                height: 40,
+              }}
+            >
+              3{" "}
+            </BazarButton>
+            <BazarButton
+              color="inherit"
+              variant="contained"
+              sx={{
+                ml: 1.1,
+                px: "1.75rem",
+                height: 40,
+              }}
+            >
+              4{" "}
+            </BazarButton>
+          </Box>
+
           <Box mb={3}>
             <BazarButton
               color="primary"

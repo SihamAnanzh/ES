@@ -83,19 +83,20 @@ const Topbar = () => {
   const handleCountryClick = (curr, id) => () => {
     setCountry(curr);
     setCookie("countryId", id);
+    window.location.reload();
   };
 
   useEffect(() => {
     let id = getCookie("countryId");
-    console.log(id);
     BackendManager.getCountryById(getCookie("countryId")).then((res) => {
+      console.log(res);
+
       setCountry(res);
     });
   }, []);
   const session = useSession();
 
   const handleLanguageClick = (lang) => () => {
-    console.log(lang);
     setLanguage(lang);
   };
 
@@ -177,7 +178,7 @@ const Topbar = () => {
             direction="right"
             handler={
               <TouchRipple className="handler">
-                <Span className="menuTitle">{country.title}</Span>
+                <Span className="menuTitle">{country && country.title}</Span>
                 <ExpandMore fontSize="inherit" />
               </TouchRipple>
             }

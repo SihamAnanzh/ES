@@ -22,8 +22,6 @@ export default NextAuth({
         if (res) {
           console.log("RESPONSE IS : ", res.data);
           if (res.data.status.code !== 200) {
-            console.log(res);
-
             return null;
           } else {
             const user = {

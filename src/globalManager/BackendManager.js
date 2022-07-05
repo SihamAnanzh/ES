@@ -10,8 +10,8 @@ BackendManager.getCategoryList = async (id) => {
     headers: {
       lang: "en",
       limit: 11,
+      country_id: id,
     },
-    data: { country_id: id },
   });
   return res.data.results;
 };
@@ -143,7 +143,6 @@ BackendManager.resetPassword = async (email) => {
     },
     data: { username: email },
   });
-  console.log(res.data);
   return res.data.results;
 };
 
@@ -153,6 +152,34 @@ BackendManager.getCountryById = async (id) => {
     url: url + "/country/" + id,
     headers: {
       lang: "en",
+    },
+  });
+  return res.data.results;
+};
+BackendManager.getOgCatgeroyById = async (id) => {
+  const res = await axios({
+    method: "get",
+    url: url + "/og/category/services/" + id,
+    headers: {
+      lang: "en",
+    },
+  });
+  return res.data.results;
+};
+
+BackendManager.getOgLinkCheckout = async (dataObjects, phoneNumner) => {
+  const res = await axios({
+    method: "post",
+    url: url + "/og/payment/get_link",
+    headers: {
+      lang: "en",
+    },
+    data: {
+      amount: dataObjects.value,
+      msisdn: phoneNumner,
+      timestamp: "20211212",
+      description: "description",
+      description2: "description2",
     },
   });
   return res.data.results;

@@ -11,9 +11,7 @@ import * as yup from "yup";
 
 const AddressEditor = () => {
   // handle form submit
-  const handleFormSubmit = async (values) => {
-    console.log(values);
-  };
+  const handleFormSubmit = async (values) => {};
 
   return (
     <CustomerDashboardLayout>

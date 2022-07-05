@@ -5,7 +5,11 @@ module.exports = {
     autoPrerender: false,
   },
   images: {
-    domains: ["staging.xprestores.com", "pay-it.mobi"],
+    domains: [
+      "staging.xprestores.com",
+      "pay-it.mobi",
+      "likecard-space.fra1.digitaloceanspaces.com",
+    ],
   },
 
   publicRuntimeConfig: {

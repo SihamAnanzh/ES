@@ -10,7 +10,6 @@ import {
 
 const LoginPage = ({ csrfToken, providers }) => {
   console.log(providers);
-  console.log("login page");
   return (
     <FlexRowCenter flexDirection="column" minHeight="100vh">
       <Login csrfToken={csrfToken} providers={providers} />

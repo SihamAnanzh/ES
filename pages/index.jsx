@@ -14,6 +14,7 @@ import {
   getProviders,
   providers,
 } from "next-auth/react";
+import { getCookie } from "cookies-next";
 const SalePage2 = ({ categoryList, product, csrfToken, providers }) => {
   const productPerPage = 28;
   const [page, setPage] = useState(1);
@@ -37,23 +38,6 @@ const SalePage2 = ({ categoryList, product, csrfToken, providers }) => {
     });
   };
 
-  useEffect(() => {
-    let items = JSON.parse(localStorage.getItem("cart"));
-
-    items.map(async (data) => {
-      let res = await BackendManager.getItemById(data.id);
-      handleCartAmountChange(
-        {
-          name: res.title,
-          qty: data.qty,
-          price: res.new_price,
-          imgUrl: res.images[0].image_url,
-          id: res.id,
-        },
-        data.qty
-      );
-    });
-  }, []);
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(state.cart));
   }, [state.cart]);
@@ -109,7 +93,9 @@ export async function getServerSideProps(context) {
   const { cookies } = context.req;
 
   const [categoryList, product] = await Promise.all([
-    BackendManager.getCategoryList(cookies.countryId ? cookies.countryId : "1"),
+    BackendManager.getCategoryList(
+      cookies.countryId ? JSON.parse(cookies.countryId) : "1"
+    ),
     BackendManager.getProdcutsList(),
   ]);
 

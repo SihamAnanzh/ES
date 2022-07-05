@@ -88,12 +88,7 @@ const AddressList = () => {
       ))}
 
       <FlexBox justifyContent="center" mt={5}>
-        <Pagination
-          count={5}
-          onChange={(data) => {
-            console.log(data);
-          }}
-        />
+        <Pagination count={5} onChange={(data) => {}} />
       </FlexBox>
     </CustomerDashboardLayout>
   );
