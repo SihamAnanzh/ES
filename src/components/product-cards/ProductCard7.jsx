@@ -32,6 +32,12 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl }) => {
 
   const handleCartAmountChange = useCallback(
     (amount) => () => {
+      let qty = amount;
+      if (amount > 4) {
+        qty = 4;
+      } else {
+        qty = amount;
+      }
       dispatch({
         type: "CHANGE_CART_AMOUNT",
         payload: {
@@ -39,7 +45,7 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl }) => {
           name,
           price,
           imgUrl,
-          qty: amount,
+          qty,
         },
       });
     },

@@ -3,10 +3,28 @@ import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import CustomerDashboardNavigation from "components/layouts/customer-dashboard/Navigations";
 import DashboardPageHeader from "components/layouts/DashboardPageHeader";
 import OrderList from "pages-sections/orders/OrderList";
-import React from "react";
+import React, { useEffect } from "react";
 import { getSession } from "next-auth/react";
 import BackEndManager from "../../src/globalManager/BackendManager";
+import { useRouter } from "next/router";
 const Orders = ({ orderList }) => {
+  const route = useRouter();
+  useEffect(() => {
+    if (goSell) {
+      goSell.showResult({
+        callback: async (response) => {
+          if (response.callback.status === "CAPTURED") {
+            console.log(response);
+          } else {
+            swal("", "something wrong", "info");
+
+            //show Error Message Transaction Failed
+          }
+        },
+      });
+    }
+  }, [route]);
+
   return (
     <CustomerDashboardLayout>
       <DashboardPageHeader

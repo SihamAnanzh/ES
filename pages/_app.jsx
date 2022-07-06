@@ -35,6 +35,53 @@ const App = ({ Component, pageProps }) => {
   const cartList = state.cart;
 
   useEffect(() => {
+    // localStorage.setItem("cart", JSON.stringify(state.cart));
+    // let items = JSON.parse(localStorage.getItem("cart"));
+
+    // items.map(async (data) => {
+    //   let res = await BackendManager.getItemById(data.id);
+    //   handleCartAmountChange(
+    //     {
+    //       name: res.title,
+    //       qty: data.qty,
+    //       price: res.new_price,
+    //       imgUrl: res.images[0].image_url,
+    //       id: res.id,
+    //     },
+    //     data.qty
+    //   );
+    // });
+
+    console.log("change");
+    console.log(state.cart);
+  }, [state.cart]);
+
+  const handleCartAmountChange = (product, amount) => {
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { ...product, qty: amount },
+    });
+  };
+
+  useEffect(() => {
+    let items = JSON.parse(localStorage.getItem("cart"));
+
+    items.map(async (data) => {
+      let res = await BackendManager.getItemById(data.id);
+      handleCartAmountChange(
+        {
+          name: res.title,
+          qty: data.qty,
+          price: res.new_price,
+          imgUrl: res.images[0].image_url,
+          id: res.id,
+        },
+        data.qty
+      );
+    });
+  }, []);
+
+  useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
 

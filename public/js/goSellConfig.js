@@ -2,7 +2,7 @@ function Checkout(customer, order, callbackurl) {
   goSell.config({
     containerID: "payment-root",
     gateway: {
-      publicKey: "pk_live_VYbn5TDqjdBSoP7put1xIcUs",
+      publicKey: "pk_test_EtHFV4BuPQokJT6jiROls87Y",
       merchantId: null,
       language: "en",
       contactInfo: true,
@@ -60,7 +60,6 @@ function Checkout(customer, order, callbackurl) {
           order: "ord_0001",
         },
         hashstring: "",
-        order: order,
         metadata: {},
         receipt: {
           email: false,

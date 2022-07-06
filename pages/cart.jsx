@@ -14,42 +14,63 @@ import BackendManager from "../src/globalManager/BackendManager";
 
 const Cart = ({ userInfo }) => {
   const { state, dispatch } = useAppContext();
-
+  const session = useSession();
   const cartList = state.cart;
 
   const getTotalPrice = () => {
     return cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
   };
 
-  const paymentCheckout = () => {
-    Checkout(
-      {
-        id: null,
-        first_name: userInfo.first_name,
-        middle_name: " ",
-        last_name: userInfo.last_name,
-        email: userInfo.username,
-        phone: {
-          country_code: "965",
-          number: userInfo.phone,
-        },
-        address: "Address",
-      },
-      {
-        amount: getTotalPrice(),
-        currency: "KWD",
-        order: {
-          amount: getTotalPrice(),
-          currency: "KWD",
-          items: [],
-        },
-        shipping: null,
-        taxes: null,
-      },
-      // `${process.env.NEXTAUTH_URL}${route.locale}`
-      `http://localhost:3000/orders`
-    );
-    goSell.openLightBox();
+  const paymentCheckout = async () => {
+    console.log(state.cart);
+    if (session.data.user) {
+      if (state.cart.length > 0) {
+        let items = state.cart.map((item) => {
+          console.log(item);
+          let data = {
+            item_id: item.id,
+            quantity: item.qty,
+          };
+          return data;
+        });
+
+        let data = {
+          id: 27,
+          quick: false,
+          items: items,
+        };
+        await BackendManager.PurchasePackageTap(data, session.data.user);
+
+        Checkout(
+          {
+            id: null,
+            first_name: userInfo.first_name,
+            middle_name: " ",
+            last_name: userInfo.last_name,
+            email: userInfo.username,
+            phone: {
+              country_code: "965",
+              number: userInfo.phone,
+            },
+            address: "Address",
+          },
+          {
+            amount: getTotalPrice(),
+            currency: "KWD",
+            order: {
+              amount: getTotalPrice(),
+              currency: "KWD",
+              items: [],
+            },
+            shipping: null,
+            taxes: null,
+          },
+          // `${process.env.NEXTAUTH_URL}${route.locale}`
+          `http://localhost:3000/orders`
+        );
+        goSell.openLightBox();
+      } else alert("you have no items");
+    } else alert("you need to login");
   };
 
   return (

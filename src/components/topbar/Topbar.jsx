@@ -73,7 +73,7 @@ const TopbarWrapper = styled("div")(({ theme }) => ({
 
 const Topbar = () => {
   const [country, setCountry] = useState({
-    title: setCookie("country"),
+    title: "",
     imgUrl: "",
   });
   const [language, setLanguage] = useState(languageList[0]);
@@ -86,14 +86,6 @@ const Topbar = () => {
     window.location.reload();
   };
 
-  useEffect(() => {
-    let id = getCookie("countryId");
-    console.log(getCookie("countryId"));
-    BackendManager.getCountryById(getCookie("countryId")).then((res) => {
-      console.log(res);
-      setCountry(res);
-    });
-  }, []);
   const session = useSession();
 
   const handleLanguageClick = (lang) => () => {
@@ -104,9 +96,25 @@ const Topbar = () => {
     const country = await BackendManager.getCountryList();
     setCountrylist(country);
   };
+
   useEffect(() => {
     getCountry();
+    setCountry(
+      async () => await BackendManager.getCountryById(getCookie("countryId"))
+    );
+    console.log("top");
+    let id = getCookie("countryId");
+    if (id) {
+      console.log(getCookie("countryId"));
+      BackendManager.getCountryById(getCookie("countryId")).then((res) => {
+        console.log(res);
+        setCountry(res);
+      });
+    } else {
+      setCountry({ title: "Kuwait", imgUrl: "" });
+    }
   }, []);
+
   useEffect(() => {
     setLogOut(!!session.data ? true : false);
   }, [session]);

@@ -22,7 +22,7 @@ import { H5, H6, Paragraph } from "components/Typography";
 import productDatabase from "data/product-database";
 import { format } from "date-fns";
 import useWindowSize from "hooks/useWindowSize";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { getSession } from "next-auth/react";
 import BackEndManager from "../../src/globalManager/BackendManager";
 import BackendManager from "../../src/globalManager/BackendManager";
@@ -56,6 +56,8 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
   const width = useWindowSize();
   const theme = useTheme();
   const breakpoint = 350;
+
+  const route = useRouter();
 
   console.log(theme.breakpoints.up("md"));
   return (

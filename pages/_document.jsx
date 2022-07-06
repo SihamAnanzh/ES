@@ -19,11 +19,13 @@ export default class Bazar extends Component {
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
           />
           <link
+            crossorigin
             href="https://goSellJSLib.b-cdn.net/v2.0.0/css/gosell.css"
             rel="stylesheet"
           />
           <script
             type="text/javascript"
+            crossorigin
             src="https://goSellJSLib.b-cdn.net/v2.0.0/js/gosell.js"
           ></script>
         </Head>
@@ -32,7 +34,14 @@ export default class Bazar extends Component {
           <Main />
           <NextScript />
           <body id="body">
-            <script type="text/javascript" src="/js/goSellConfig.js"></script>
+            <div id="payment-root"> </div>
+
+            <script
+              defer
+              type="text/javascript"
+              src="/js/goSellConfig.js"
+              crossorigin
+            ></script>
           </body>
         </body>
       </Html>

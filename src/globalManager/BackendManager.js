@@ -185,4 +185,22 @@ BackendManager.getOgLinkCheckout = async (dataObjects, phoneNumner) => {
   return res.data.results;
 };
 
+BackendManager.PurchasePackageTap = async (data, token) => {
+  const res = await axios({
+    method: "post",
+    url: url + "/user/orders/add",
+    headers: {
+      lang: "en",
+      Authorization: token,
+    },
+    data: {
+      category_id: data.id,
+      is_quickpay: data.quick,
+      details: data.items,
+    },
+  });
+  console.log(res);
+  return res.data.results;
+};
+
 export default BackendManager;

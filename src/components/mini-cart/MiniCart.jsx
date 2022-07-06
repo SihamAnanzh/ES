@@ -34,9 +34,16 @@ const MiniCart = ({ toggleSidenav }) => {
 
   const handleCartAmountChange = useCallback(
     (amount, product) => () => {
+      let qty = amount;
+      console.log(amount);
+      if (amount > 4) {
+        qty = 4;
+      } else {
+        qty = amount;
+      }
       dispatch({
         type: "CHANGE_CART_AMOUNT",
-        payload: { ...product, qty: amount },
+        payload: { ...product, qty: qty },
       });
     },
     []

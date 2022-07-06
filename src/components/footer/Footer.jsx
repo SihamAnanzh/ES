@@ -43,12 +43,6 @@ const Footer = () => {
                   </a>
                 </Link>
 
-                <Paragraph mb={2.5} color="grey.500">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Auctor libero id et, in gravida. Sit diam duis mauris nulla
-                  cursus. Erat et lectus vel ut sollicitudin elit at amet.
-                </Paragraph>
-
                 <AppStore />
               </Grid>
 
@@ -65,26 +59,6 @@ const Footer = () => {
 
                 <div>
                   {aboutLinks.map((item, ind) => (
-                    <Link href="/" key={ind} passHref>
-                      <StyledLink>{item}</StyledLink>
-                    </Link>
-                  ))}
-                </div>
-              </Grid>
-
-              <Grid item lg={3} md={6} sm={6} xs={12}>
-                <Box
-                  fontSize="25px"
-                  fontWeight="600"
-                  mb={2.5}
-                  lineHeight="1"
-                  color="white"
-                >
-                  Customer Care
-                </Box>
-
-                <div>
-                  {customerCareLinks.map((item, ind) => (
                     <Link href="/" key={ind} passHref>
                       <StyledLink>{item}</StyledLink>
                     </Link>
@@ -140,20 +114,8 @@ const Footer = () => {
   );
 };
 
-const aboutLinks = [
-  "Careers",
-  "Our Stores",
-  "Our Cares",
-  "Terms & Conditions",
-  "Privacy Policy",
-];
-const customerCareLinks = [
-  "Help Center",
-  "How to Buy",
-  "Track Your Order",
-  "Corporate & Bulk Purchasing",
-  "Returns & Refunds",
-];
+const aboutLinks = ["Terms & Conditions", "Privacy Policy"];
+
 const iconList = [
   {
     icon: Facebook,

@@ -10,6 +10,7 @@ import { useAppContext } from "contexts/AppContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
+import { useEffect } from "react";
 import ImageViewer from "react-simple-image-viewer";
 import { FlexBox, FlexRowCenter } from "../flex-box"; // ================================================================
 
@@ -21,24 +22,30 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const { state, dispatch } = useAppContext();
-  const [amount, setAmount] = useState(1);
-  const [dataObjects, setObjects] = useState([]);
+  const [amount, setAmount] = useState("1");
+  const [dataObjects, setObjects] = useState({});
   const cartList = state.cart;
   let byNow = true;
   const cartItem = cartList.find(
     (item) => item.id === id || item.id === routerId
   );
 
-  //   let imgGroup = [];
-  //   images.map((img) => {
-  //     imgGroup.push(img.image_url);
-  //   });
+  useEffect(() => {
+    setObjects({
+      price: items[0].new_price,
+      name: items[0].title,
+      id: items[0].id,
+      imgUrl: items[0].imgGroup,
+    });
+
+    handleCartAmountChange(dataObjects, amount);
+  }, []);
 
   const handleCartAmountChange = useCallback(
     (amount, product, byNow) => () => {
-      if (product.length == 0) {
-        alert("choose amount");
-      }
+      const cartItem = cartList.find(
+        (item) => item.id === id || item.id === routerId
+      );
       dispatch({
         type: "CHANGE_CART_AMOUNT",
         // payload: {
