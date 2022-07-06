@@ -39,6 +39,10 @@ const SalePage2 = ({ categoryList, product, csrfToken, providers }) => {
   };
 
   useEffect(() => {
+    console.log(session);
+  }, [session]);
+
+  useEffect(() => {
     let items = JSON.parse(localStorage.getItem("cart"));
 
     items.map(async (data) => {
