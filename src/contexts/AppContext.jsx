@@ -44,17 +44,23 @@ const reducer = (state, action) => {
   switch (action.type) {
     case "CHANGE_CART_AMOUNT":
       let cartList = state.cart;
+
       let cartItem = action.payload;
       let exist = cartList.find((item) => item.id === cartItem.id);
       if (cartItem.qty < 1) {
         const filteredCart = cartList.filter((item) => item.id !== cartItem.id);
+
         return { ...state, cart: filteredCart };
       }
-
       if (exist) {
         const newCart = cartList.map((item) =>
           item.id === cartItem.id ? { ...item, qty: cartItem.qty } : item
         );
+        // localStorage.setItem(
+        //   "cart",
+        //   JSON.stringify([...state.cart, ...newCart])
+        // );
+
         return { ...state, cart: newCart };
       }
 
@@ -71,6 +77,10 @@ const reducer = (state, action) => {
 
 export const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(state.cart));
+  }, [state.cart]);
 
   const contextValue = useMemo(
     () => ({

@@ -3,6 +3,7 @@ import CheckoutNavLayout from "components/layouts/CheckoutNavLayout";
 import CheckoutForm from "pages-sections/checkout/CheckoutForm";
 import CheckoutSummary from "pages-sections/checkout/CheckoutSummary";
 import React from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Checkout = () => {
   return (
@@ -21,3 +22,12 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
+export async function getServerSideProps(context) {
+  const { locale } = context;
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}

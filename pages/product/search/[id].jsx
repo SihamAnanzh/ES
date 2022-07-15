@@ -1,153 +1,91 @@
-import { Apps, FilterList, ViewList } from "@mui/icons-material";
-import {
-  Box,
-  Card,
-  Grid,
-  IconButton,
-  MenuItem,
-  TextField,
-} from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { FlexBox } from "components/flex-box";
-import NavbarLayout from "components/layouts/NavbarLayout";
-import ProductCard1List from "components/products/ProductCard1List";
-import ProductCard9List from "components/products/ProductCard9List";
-import ProductFilterCard from "components/products/ProductFilterCard";
-import Sidenav from "components/sidenav/Sidenav";
-import { H5, Paragraph } from "components/Typography";
-import React, { useCallback, useState } from "react";
+import { Container, Grid, Pagination } from "@mui/material";
+import { FlexBetween } from "components/flex-box";
+import SaleLayout2 from "components/layouts/SaleLayout2";
+import ProductCard1 from "components/product-cards/ProductCard1";
+import { Span } from "components/Typography";
+import { renderProductCount } from "lib";
+import { useEffect, useState } from "react";
+import React from "react";
+import BackendManager from "../../../src/globalManager/BackendManager";
+import { getSession, SessionProvider, useSession } from "next-auth/react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-const ProductSearchResult = () => {
-  const [view, setView] = useState("grid");
-  const downMd = useMediaQuery((theme) => theme.breakpoints.down("md"));
-  const toggleView = useCallback((v) => () => setView(v), []);
+const Index = ({ data, searchResult }) => {
+  const [page, setPage] = useState(1);
+
+  // useEffect(() => {
+  //   setProductList(
+  //     product.slice(page * productPerPage, (page + 1) * productPerPage)
+  //   );
+  // }, [page]);
+
   return (
-    <NavbarLayout>
-      <Box pt={2.5}>
-        <Card
-          elevation={1}
-          sx={{
-            mb: "55px",
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "space-between",
-            p: {
-              sm: "1rem 1.25rem",
-              md: "0.5rem 1.25rem",
-              xs: "1.25rem 1.25rem 0.25rem",
-            },
-          }}
-        >
-          <Box>
-            <H5>Searching for “ mobile phone ”</H5>
-            <Paragraph color="grey.600">48 results found</Paragraph>
-          </Box>
-
-          <FlexBox
-            alignItems="center"
-            columnGap={4}
-            flexWrap="wrap"
-            my="0.5rem"
-          >
-            <FlexBox alignItems="center" gap={1} flex="1 1 0">
-              <Paragraph color="grey.600" whiteSpace="pre">
-                Short by:
-              </Paragraph>
-
-              <TextField
-                select
-                fullWidth
-                size="small"
-                variant="outlined"
-                placeholder="Short by"
-                defaultValue={sortOptions[0].value}
-                sx={{
-                  flex: "1 1 0",
-                  minWidth: "150px",
-                }}
-              >
-                {sortOptions.map((item) => (
-                  <MenuItem value={item.value} key={item.value}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </FlexBox>
-
-            <FlexBox alignItems="center" my="0.25rem">
-              <Paragraph color="grey.600" mr={1}>
-                View:
-              </Paragraph>
-
-              <IconButton onClick={toggleView("grid")}>
-                <Apps
-                  color={view === "grid" ? "primary" : "inherit"}
-                  fontSize="small"
+    <SaleLayout2 sx={{ background: "red" }} list={data}>
+      <Container
+        sx={{
+          mt: 4,
+        }}
+      >
+        <Grid container spacing={3} minHeight={500}>
+          {searchResult.length > 0 ? (
+            searchResult.map((item, ind) => (
+              <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
+                <ProductCard1
+                  id={item.category.id}
+                  title={item.title}
+                  imgUrl={item.category.logo_url}
+                  haveIcon={false}
+                  notProduct={true}
+                  isCard={true}
                 />
-              </IconButton>
-
-              <IconButton onClick={toggleView("list")}>
-                <ViewList
-                  color={view === "list" ? "primary" : "inherit"}
-                  fontSize="small"
-                />
-              </IconButton>
-
-              {downMd && (
-                <Sidenav
-                  handle={
-                    <IconButton>
-                      <FilterList fontSize="small" />
-                    </IconButton>
-                  }
-                >
-                  <ProductFilterCard />
-                </Sidenav>
-              )}
-            </FlexBox>
-          </FlexBox>
-        </Card>
-
-        <Grid container spacing={3}>
-          <Grid
-            item
-            md={3}
-            sx={{
-              display: {
-                md: "block",
-                xs: "none",
-              },
-            }}
-          >
-            <ProductFilterCard />
-          </Grid>
-
-          <Grid item md={9} xs={12}>
-            {view === "grid" ? <ProductCard1List /> : <ProductCard9List />}
-          </Grid>
+              </Grid>
+            ))
+          ) : (
+            <>
+              <h1>No Content Found</h1>
+            </>
+          )}
         </Grid>
-      </Box>
-    </NavbarLayout>
+
+        <FlexBetween flexWrap="wrap" my={8}>
+          {/* <Span>
+            {renderProductCount(page, productPerPage, productPerPage.length)}
+          </Span> */}
+          {/* 
+          <Pagination
+            page={page}
+            color="primary"
+            variant="outlined"
+            onChange={handlePageChange}
+            count={Math.ceil(productPerPage.length / productPerPage)}
+          /> */}
+        </FlexBetween>
+      </Container>
+    </SaleLayout2>
   );
 };
 
-const sortOptions = [
-  {
-    label: "Relevance",
-    value: "Relevance",
-  },
-  {
-    label: "Date",
-    value: "Date",
-  },
-  {
-    label: "Price Low to High",
-    value: "Price Low to High",
-  },
-  {
-    label: "Price High to Low",
-    value: "Price High to Low",
-  },
-];
-export default ProductSearchResult;
+export default Index;
+export async function getServerSideProps(context) {
+  let criteria = context.query.f;
+  let categoryId = context.query.id;
+  const { cookies } = context.req;
+  const { locale } = context;
+
+  const [categoryList, searchResult] = await Promise.all([
+    BackendManager.getCategoryList(
+      cookies.countryId ? cookies.countryId : "1",
+      locale
+    ),
+    BackendManager.searchResult(criteria, 0, locale),
+  ]);
+
+  console.log(searchResult);
+  return {
+    props: {
+      data: categoryList,
+      searchResult,
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}

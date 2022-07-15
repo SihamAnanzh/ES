@@ -56,7 +56,7 @@ const ResetPassword = () => {
     <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
       <form>
         <H3 textAlign="center" mb={1}>
-          Welcome To Ecommerce
+          Welcome To XpressStors
         </H3>
         <Small
           mb={4.5}

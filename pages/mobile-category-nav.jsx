@@ -36,7 +36,7 @@ const MobileCategoryNav = ({}) => {
             className="main-category-box"
             borderLeft={`${category?.href === item.href ? "3" : "0"}px solid`}
             onClick={handleCategoryClick(item)}
-            key={item.title}
+            key={item.id}
           >
             <item.icon
               sx={{

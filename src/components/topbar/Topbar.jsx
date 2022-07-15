@@ -17,6 +17,10 @@ import Link from "next/link";
 import { title } from "process";
 import React, { useEffect, useState } from "react";
 import { layoutConstant } from "utils/constants";
+import { useRouter } from "next/router";
+import { Instagram, WhatsApp } from "@mui/icons-material";
+import { useAppContext } from "contexts/AppContext";
+import { useTranslation } from "next-i18next";
 
 const TopbarWrapper = styled("div")(({ theme }) => ({
   background: theme.palette.secondary.main,
@@ -79,41 +83,84 @@ const Topbar = () => {
   const [language, setLanguage] = useState(languageList[0]);
   const [countryList, setCountrylist] = useState([]);
   const [logOut, setLogOut] = useState(false);
+  const { state, dispatch } = useAppContext();
+  const [phonNumber, setPhoneNumber] = useState("");
+  let { t, i18n } = useTranslation();
 
+  const route = useRouter();
   const handleCountryClick = (curr, id) => () => {
     setCountry(curr);
     setCookie("countryId", id);
-    window.location.reload();
+    route.push(route.asPath, route.asPath, { locale: route.locale });
   };
 
   const session = useSession();
 
+  const handleCartAmountChange = (product, amount) => {
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { ...product, qty: amount },
+    });
+  };
+
   const handleLanguageClick = (lang) => () => {
     setLanguage(lang);
+    route.push(route.asPath, route.asPath, { locale: route.locale });
+  };
+
+  const getTrans = (key) => {
+    return t(`common:${key}`);
   };
 
   const getCountry = async () => {
-    const country = await BackendManager.getCountryList();
+    const country = await BackendManager.getCountryList(route.locale);
+
     setCountrylist(country);
   };
 
   useEffect(() => {
+    getwhatsapp();
     getCountry();
-    setCountry(
-      async () => await BackendManager.getCountryById(getCookie("countryId"))
-    );
-    console.log("top");
+
     let id = getCookie("countryId");
     if (id) {
-      console.log(getCookie("countryId"));
-      BackendManager.getCountryById(getCookie("countryId")).then((res) => {
-        console.log(res);
-        setCountry(res);
-      });
+      BackendManager.getCountryById(getCookie("countryId"), route.locale).then(
+        (res) => {
+          setCountry(res);
+        }
+      );
     } else {
-      setCountry({ title: "Kuwait", imgUrl: "" });
+      let initCountry = BackendManager.getCountryById(1, route.locale).then(
+        (res) => {
+          setCountry(res);
+        }
+      );
     }
+
+    let items = JSON.parse(localStorage.getItem("cart"));
+    items &&
+      items.map(async (data) => {
+        let res = await BackendManager.getItemById(data.id, route.locale);
+        let product = {
+          name: res.title,
+          qty: data.qty,
+          price: res.price,
+          imgUrl:
+            res.images && res.images.length > 0 ? res.images[0].image_url : "",
+          id: res.id,
+          mainId: data.mainId,
+        };
+        dispatch({
+          type: "CHANGE_CART_AMOUNT",
+          payload: { ...product, qty: data.qty },
+        });
+      });
   }, []);
+
+  const getwhatsapp = async () => {
+    let res = await BackendManager.getWhatsappNumber();
+    setPhoneNumber(res);
+  };
 
   useEffect(() => {
     setLogOut(!!session.data ? true : false);
@@ -141,12 +188,23 @@ const Topbar = () => {
           </div>
 
           <FlexBox alignItems="center">
-            <CallOutlined fontSize="small" />
-            <Span className="title">+88012 3456 7894</Span>
+            <WhatsApp fontSize="small" />
+            <Span color="#fff" className="title">
+              <a href={`https://api.whatsapp.com/send?phone=${phonNumber}`}>
+                {phonNumber}
+              </a>{" "}
+            </Span>
           </FlexBox>
           <FlexBox alignItems="center" ml={2.5}>
-            <MailOutline fontSize="small" />
-            <Span className="title">support@ui-lib.com</Span>
+            <Instagram fontSize="small" />
+            <Span color="#fff" className="title">
+              <a
+                href="https://www.instagram.com/xprestoreskw/?igshid=YmMyMTA2M2Y="
+                target="_balank"
+              >
+                xprestoreskw
+              </a>
+            </Span>
           </FlexBox>
         </FlexBox>
 
@@ -158,7 +216,7 @@ const Topbar = () => {
             <BazarMenu
               handler={
                 <TouchRipple className="handler marginRight" onClick={signOut}>
-                  <Span className="menuTitle">logout</Span>
+                  <Span className="menuTitle">{getTrans("logout")}</Span>
                 </TouchRipple>
               }
             ></BazarMenu>
@@ -166,7 +224,9 @@ const Topbar = () => {
           <BazarMenu
             handler={
               <TouchRipple className="handler marginRight">
-                <Span className="menuTitle">{language.title} </Span>
+                <Span className="menuTitle">
+                  {route.locale != "ar" ? "EN" : "AR"}{" "}
+                </Span>
                 <ExpandMore fontSize="inherit" />
               </TouchRipple>
             }
@@ -177,7 +237,12 @@ const Topbar = () => {
                 key={item.title}
                 onClick={handleLanguageClick(item)}
               >
-                <Span className="menuTitle">{item.title}</Span>
+                <a
+                  href={item.title != "AR" ? "/en" : "/ar"}
+                  className="menuTitle"
+                >
+                  {item.title}
+                </a>
               </MenuItem>
             ))}
           </BazarMenu>
@@ -186,7 +251,26 @@ const Topbar = () => {
             direction="right"
             handler={
               <TouchRipple className="handler">
-                <Span className="menuTitle">{country && country.title}</Span>
+                <Span
+                  className="menuTitle"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  {" "}
+                  <img
+                    style={{
+                      objectFit: "contain",
+                      width: "20px",
+                      height: "20px",
+                      marginRight: "10px",
+                    }}
+                    src={country.logo_url}
+                    alt=""
+                  />
+                  {country.title}{" "}
+                </Span>
                 <ExpandMore fontSize="inherit" />
               </TouchRipple>
             }
@@ -197,7 +281,25 @@ const Topbar = () => {
                 key={item.title}
                 onClick={handleCountryClick(item, item.id)}
               >
-                <Span className="menuTitle">{item.title}</Span>
+                <Span
+                  className="menuTitle"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    style={{
+                      objectFit: "contain",
+                      width: "20px",
+                      height: "20px",
+                      marginRight: "10px",
+                    }}
+                    src={item.logo_url}
+                    alt=""
+                  />
+                  {item.title}{" "}
+                </Span>
               </MenuItem>
             ))}
           </BazarMenu>
@@ -214,7 +316,7 @@ const languageList = [
   },
 
   {
-    title: "Ar",
+    title: "AR",
     imgUrl: "/assets/images/flags/in.png",
   },
 ];

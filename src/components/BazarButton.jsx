@@ -3,12 +3,17 @@ import { styled } from "@mui/material/styles";
 const BazarButton = styled(Button)({
   minWidth: 0,
   minHeight: 0,
+  color: "#000000",
   "&.selected": {
-    backgroundColor: "#0F3460",
-    color: "#fff",
+    backgroundColor: "#FFECDF",
+    color: "#A8123E",
   },
   "&.selectedAmount": {
-    backgroundColor: "#0F3460",
+    backgroundColor: "#FFECDF",
+    color: "#A8123E",
+  },
+  "&.add": {
+    backgroundColor: "#FF8236",
     color: "#fff",
   },
 });

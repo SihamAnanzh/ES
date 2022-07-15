@@ -5,10 +5,11 @@ import AppLayout from "./AppLayout";
 
 const NavbarLayout = ({ children }) => {
   return (
-    <AppLayout navbar={<Navbar />}>
+    <AppLayout xs={{ background: "#fff" }} navbar={<Navbar />}>
       <Container
         sx={{
           my: "2rem",
+          background: "#fff",
         }}
       >
         {children}

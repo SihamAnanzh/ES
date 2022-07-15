@@ -83,10 +83,14 @@ export default Index;
 export async function getServerSideProps(context) {
   let data = [{}];
   let id = context.query.id;
-
+  const { locale } = context;
+  const { cookies } = context.req;
   const [categoryList, singleCategoryData] = await Promise.all([
-    BackendManager.getCategoryList(),
-    BackendManager.getCategoryById(id),
+    BackendManager.getCategoryList(
+      cookies.countryId ? JSON.parse(cookies.countryId) : "1",
+      locale
+    ),
+    BackendManager.getCategoryById(id, locale),
   ]);
 
   categoryList.results.map((res) => {

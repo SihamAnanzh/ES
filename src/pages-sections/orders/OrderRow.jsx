@@ -1,31 +1,15 @@
 import East from "@mui/icons-material/East";
 import { Box, Chip, IconButton, Typography } from "@mui/material";
+
 import TableRow from "components/TableRow";
 import { H5 } from "components/Typography";
 import { format } from "date-fns";
 import Link from "next/link";
-import React from "react"; // component props interface
+import { useRouter } from "next/router";
+import React from "react";
 
-const OrderRow = ({ item }) => {
-  const getColor = (status) => {
-    switch (status) {
-      case "Pending":
-        return "secondary";
-
-      case "Processing":
-        return "secondary";
-
-      case "Delivered":
-        return "success";
-
-      case "Cancelled":
-        return "error";
-
-      default:
-        return "";
-    }
-  };
-
+const OrderRow = ({ item, quick }) => {
+  const route = useRouter();
   return (
     <Link href={item.href}>
       <a>
@@ -38,22 +22,7 @@ const OrderRow = ({ item }) => {
           <H5 m={0.75} textAlign="left">
             {item.orderNo}
           </H5>
-          <Box m={0.75}>
-            <Chip
-              size="small"
-              label={item.status}
-              sx={{
-                p: "0.25rem 0.5rem",
-                fontSize: 12,
-                color: !!getColor(item.status)
-                  ? `${getColor(item.status)}.900`
-                  : "inherit",
-                backgroundColor: !!getColor(item.status)
-                  ? `${getColor(item.status)}.100`
-                  : "none",
-              }}
-            />
-          </Box>
+
           <Typography className="pre" m={0.75} textAlign="left">
             {item.purchaseDate}
           </Typography>

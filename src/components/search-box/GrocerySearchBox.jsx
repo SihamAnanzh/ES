@@ -34,9 +34,9 @@ const GrocerySearchBox = () => {
       flex="1 1 0"
       maxWidth="670px"
       mx="auto"
-      {...{
-        ref: parentRef,
-      }}
+      // {...{
+      //   ref: parentRef,
+      // }}
     >
       <TextField
         variant="outlined"
@@ -75,7 +75,7 @@ const GrocerySearchBox = () => {
       {!!resultList.length && (
         <SearchResultCard elevation={2}>
           {resultList.map((item) => (
-            <Link href={`/product/search/${item}`} key={item} passHref>
+            <Link href={`/product/search/${item}`} key={item}>
               <MenuItem key={item}>{item}</MenuItem>
             </Link>
           ))}

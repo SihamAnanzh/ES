@@ -6,6 +6,8 @@ import { Span } from "components/Typography";
 import { renderProductCount } from "lib";
 import { useEffect, useState } from "react";
 import React from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import BackendManager from "../../src/globalManager/BackendManager";
 const Index = ({ data, singleCategoryData }) => {
   const productPerPage = 28;
@@ -85,13 +87,21 @@ export async function getServerSideProps(context) {
   let data = [{}];
   let id = context.query.id;
   const { cookies } = context.req;
+  const { locale } = context;
 
   const [categoryList, singleCategoryData] = await Promise.all([
-    BackendManager.getCategoryList(cookies.countryId ? cookies.countryId : "1"),
-    BackendManager.getCategoryById(id),
+    BackendManager.getCategoryList(
+      cookies.countryId ? cookies.countryId : "1",
+      locale
+    ),
+    BackendManager.getCategoryById(id, locale),
   ]);
 
   return {
-    props: { data: categoryList, singleCategoryData },
+    props: {
+      data: categoryList,
+      singleCategoryData,
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
   };
 }

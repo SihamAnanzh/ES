@@ -52,6 +52,7 @@
     "react-quill": "^0.0.2",
     "react-scroll": "^1.8.4",
     "react-simple-image-viewer": "^1.1.1",
+    "react-toastify": "^9.0.5",
     "sharp": "^0.30.3",
     "simplebar-react": "^2.3.6",
     "stylis": "^4.1.1",

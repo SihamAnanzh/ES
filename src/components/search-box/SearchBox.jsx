@@ -5,13 +5,18 @@ import { Box, Card, MenuItem, TextField } from "@mui/material";
 import TouchRipple from "@mui/material/ButtonBase";
 import { styled } from "@mui/material/styles";
 import { debounce } from "@mui/material/utils";
+import BazarButton from "components/BazarButton";
 import BazarMenu from "components/BazarMenu";
 import { FlexBox } from "components/flex-box";
+import { Span } from "components/Typography";
 import { getCookie } from "cookies-next";
 import BackendManager from "globalManager/BackendManager";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import Router, { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react"; // styled components
-// also used in the GrocerySearchBox component
+import { Button } from "react-scroll";
+import { toast, ToastContainer } from "react-toastify";
 
 export const SearchOutlinedIcon = styled(SearchOutlined)(({ theme }) => ({
   color: theme.palette.grey[600],
@@ -26,46 +31,65 @@ export const SearchResultCard = styled(Card)(() => ({
   paddingTop: "0.5rem",
   paddingBottom: "0.5rem",
 }));
-const DropDownHandler = styled(FlexBox)(({ theme }) => ({
-  whiteSpace: "pre",
-  borderTopRightRadius: 300,
-  borderBottomRightRadius: 300,
-  borderLeft: `1px solid ${theme.palette.text.disabled}`,
-  [theme.breakpoints.down("xs")]: {
-    display: "none",
-  },
-}));
 
-const SearchBox = ({ list }) => {
+const SearchBox = () => {
   const [category, setCategory] = useState("All Categories");
   const [categoryId, setCategoryId] = useState(0);
   const [resultList, setResultList] = useState([]);
-  const [listItem, setListItem] = useState([]);
   const parentRef = useRef();
-
+  const [searchContent, setSearchContent] = useState("");
+  const session = useSession();
+  const [categories, setCategories] = useState([]);
+  const router = useRouter();
   const handleCategoryChange = (cat, id) => () => {
     setCategory(cat);
     setCategoryId(id);
+    search();
   };
 
   useEffect(() => {
-    BackendManager.getCategoryList(getCookie("countyId")).then((res) => {
-      console.log(res);
+    let id = getCookie("countryId");
+    BackendManager.getCategoryList(id ? id : 1, router.locale).then((res) => {
+      setCategories(res);
     });
   }, []);
-  const search = debounce((e) => {
-    const value = e.target?.value;
-    if (!value) setResultList([]);
-    else setResultList(dummySearchResult);
-  }, 200);
-  const hanldeSearch = useCallback((event) => {
-    event.persist();
-    search(event);
-  }, []);
+
+  // const search = debounce((event) => {
+  //   if (searchContent != "") {
+  //     router.push(`/product/search/${categoryId}?f=${searchContent}`);
+  //     setSearchContent("");
+  //   }
+  // }, 2000);
+
+  const handleSearch = async () => {
+    if (searchContent != "") {
+      router.push(`/product/search/${categoryId}?f=${searchContent}`);
+    } else {
+      toast.warn(
+        router.locale == "ar"
+          ? "املأ حقل البحث من فضلك"
+          : "Fill in the search field please",
+        {
+          position: "top-center",
+          autoClose: 5005,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          autoClose: false,
+        }
+      );
+    }
+  };
 
   const handleDocumentClick = () => {
     setResultList([]);
   };
+  const StyledButton = styled(BazarButton)(() => ({
+    marginTop: "2rem",
+    padding: "11px 24px",
+  }));
 
   useEffect(() => {
     window.addEventListener("click", handleDocumentClick);
@@ -73,34 +97,6 @@ const SearchBox = ({ list }) => {
       window.removeEventListener("click", handleDocumentClick);
     };
   }, []);
-
-  // const categories = list.map((item) => {
-  //   listItem.push({ title: item.title, id: item.id });
-  // });
-  const categoryDropdown = (
-    <BazarMenu
-      direction="left"
-      handler={
-        <DropDownHandler
-          alignItems="center"
-          bgcolor="grey.100"
-          height="100%"
-          px={3}
-          color="grey.700"
-          component={TouchRipple}
-        >
-          <Box mr={0.5}>{category}</Box>
-          <KeyboardArrowDownOutlined fontSize="small" color="inherit" />
-        </DropDownHandler>
-      }
-    >
-      {/* {listItem.map((item, ind) => (
-      <MenuItem key={ind} onClick={handleCategoryChange(item.title, item.id)}>
-        {item.title}
-      </MenuItem>
-    ))} */}
-    </BazarMenu>
-  );
 
   return (
     <Box
@@ -112,40 +108,82 @@ const SearchBox = ({ list }) => {
         ref: parentRef,
       }}
     >
+      <ToastContainer />
       <TextField
         variant="outlined"
-        placeholder="Searching for..."
+        placeholder={router.locale == "ar" ? "...البحث عن" : "Searching for..."}
         fullWidth
-        onChange={hanldeSearch}
+        onChange={(e) => setSearchContent(e.target.value)}
         InputProps={{
           sx: {
             height: 44,
             borderRadius: 300,
             paddingRight: 0,
             color: "grey.700",
+
             overflow: "hidden",
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "primary.main",
+              borderColor: "grey.700",
+            },
+            "&:focus .MuiOutlinedInput-notchedOutline": {
+              borderColor: "grey.700",
             },
           },
-          endAdornment: categoryDropdown,
+          endAdornment: (
+            <BazarButton
+              className="add"
+              fullWidth
+              color="primary"
+              variant="contained"
+              sx={{
+                height: 44,
+              }}
+              onClick={handleSearch}
+              style={{
+                border: "none",
+                height: "100%",
+                width: "100px",
+                color: "#fff",
+              }}
+            >
+              {router.locale == "ar" ? "بحث" : "Search"}
+            </BazarButton>
+          ),
+
           startAdornment: <SearchOutlinedIcon fontSize="small" />,
         }}
       />
 
       {!!resultList.length && (
         <SearchResultCard elevation={2}>
-          {resultList.map((item) => (
-            <Link href={`/product/search/${item}`} key={item} passHref>
+          {/* {resultList.map((item) => (
+            <Link
+              href={{
+                pathname: `/product/search/${categoryId}`,
+                query: { resultList },
+              }}
+              key={item}
+              passHref
+            >
               <MenuItem key={item}>{item}</MenuItem>
             </Link>
-          ))}
+          ))} */}
         </SearchResultCard>
       )}
     </Box>
   );
 };
 
+const categories = [
+  "All Categories",
+  "Car",
+  "Clothes",
+  "Electronics",
+  "Laptop",
+  "Desktop",
+  "Camera",
+  "Toys",
+];
 const dummySearchResult = [
   "Macbook Air 13",
   "Asus K555LA",

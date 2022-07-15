@@ -16,16 +16,26 @@ import * as yup from "yup";
 import BackendManager from "../../src/globalManager/BackendManager";
 import { getSession, useSession } from "next-auth/react";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
-const ProfileEditor = () => {
-  const session = useSession();
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [firstName, setFirstName] = useState("");
+const ProfileEditor = ({ res }) => {
   const [emailRquired, setEmailRqueired] = useState(false);
-  console.log(session);
 
+  const session = useSession();
+  const [email, setEmail] = useState(
+    res.username == "" ? setEmailRqueired(true) : res.username
+  );
+  const [phone, setPhone] = useState(res.phone);
+  const [lastName, setLastName] = useState(res.last_name);
+  const [firstName, setFirstName] = useState(res.first_name);
+  const route = useRouter();
+  const { t } = useTranslation();
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
   const handleFormSubmit = async () => {
     let data = {
       username: email,
@@ -35,43 +45,53 @@ const ProfileEditor = () => {
     };
     let response = await BackendManager.updateUserProfile(
       session.data.user,
-      data
+      data,
+      route.locale
     );
 
-    alert(response);
+    if (response.data.status.code == 200) {
+      toast.success(response.data.status.message, {
+        position: "top-center",
+        autoClose: 5005,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        autoClose: false,
+      });
+    } else {
+      toast.warn(response.data.status.message, {
+        position: "top-center",
+        autoClose: 5005,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        autoClose: false,
+      });
+    }
   };
 
-  useEffect(() => {
-    if (session.data) {
-      BackendManager.getUserProfile(session.data.user).then((res) => {
-        setFirstName(res.first_name);
-        setLastName(res.last_name);
-        setEmail(res.username);
-        setPhone(res.phone);
-      });
-
-      if (email == "") {
-        setEmail(true);
-      }
-    }
-  }, [session]);
+  useEffect(() => {}, []);
 
   return (
     <CustomerDashboardLayout>
+      <ToastContainer />
       <DashboardPageHeader
         icon={Person}
-        title="Edit Profile"
+        title={getTrans("EditProfile")}
         navigation={<CustomerDashboardNavigation />}
         button={
           <Link href="/profile" passHref>
             <Button
-              color="primary"
               sx={{
                 px: 4,
                 bgcolor: "primary.light",
               }}
             >
-              Back to Profile
+              {getTrans("BacktoProfile")}
             </Button>
           </Link>
         }
@@ -85,40 +105,52 @@ const ProfileEditor = () => {
             <Grid container spacing={3}>
               <Grid item md={6} xs={12}>
                 <TextField
+                  autoComplete="off"
                   fullWidth
                   name="first_name"
-                  label="First Name"
+                  label={getTrans("FirstName")}
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                 />
               </Grid>
               <Grid item md={6} xs={12}>
                 <TextField
+                  autoComplete="off"
                   value={lastName}
                   fullWidth
                   name="last_name"
-                  label="Last Name"
+                  label={getTrans("LastName")}
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </Grid>
               <Grid item md={6} xs={12}>
-                <TextField
-                  aria-readonly="true"
-                  value={email}
-                  fullWidth
-                  name="email"
-                  type="email"
-                  label="Email"
-                  onChange={(e) => {
-                    emailRquired && setEmail(e.target.value);
-                  }}
-                />
+                {emailRquired ? (
+                  <TextField
+                    autoComplete="off"
+                    value={email}
+                    name="email"
+                    fullWidth
+                    label={getTrans("Email")}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
+                  />
+                ) : (
+                  <TextField
+                    autoComplete="off"
+                    value={email}
+                    name="email"
+                    fullWidth
+                    label={getTrans("Email")}
+                  />
+                )}
               </Grid>
               <Grid item md={6} xs={12}>
                 <TextField
+                  autoComplete="off"
                   value={phone}
                   fullWidth
-                  label="Phone"
+                  label={getTrans("Phone")}
                   name="contact"
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -131,7 +163,7 @@ const ProfileEditor = () => {
             onClick={handleFormSubmit}
             color="primary"
           >
-            Save Changes
+            {getTrans("SaveChanges")}
           </Button>
         </Box>
       </Card1>
@@ -139,10 +171,23 @@ const ProfileEditor = () => {
   );
 };
 
-const checkoutSchema = yup.object().shape({
-  first_name: yup.string().required("required"),
-  last_name: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  contact: yup.string().required("required"),
-});
 export default ProfileEditor;
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  const { locale } = context;
+
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/" + locale,
+      },
+    };
+  }
+  let res = await BackendManager.getUserProfile(session.user, locale);
+
+  return {
+    props: { res, ...(await serverSideTranslations(locale, ["common"])) },
+  };
+}

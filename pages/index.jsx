@@ -15,19 +15,16 @@ import {
   providers,
 } from "next-auth/react";
 import { getCookie } from "cookies-next";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 const SalePage2 = ({ categoryList, product, csrfToken, providers, games }) => {
-  console.log(games);
-  const productPerPage = 28;
+  const productPerPage = 5;
   const [page, setPage] = useState(1);
   const [productList, setProductList] = useState([]);
 
   const handlePageChange = (_, page) => setPage(page);
+  const { t } = useTranslation();
 
-  // useEffect(() => {
-  //   setProductList(
-  //     product.slice(page * productPerPage, (page + 1) * productPerPage)
-  //   );
-  // }, [page]);
   const session = useSession();
 
   const { state, dispatch } = useAppContext();
@@ -38,28 +35,6 @@ const SalePage2 = ({ categoryList, product, csrfToken, providers, games }) => {
       payload: { ...product, qty: amount },
     });
   };
-
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
-
-  // useEffect(() => {
-  //   let items = JSON.parse(localStorage.getItem("cart"));
-
-  //   items.map(async (data) => {
-  //     let res = await BackendManager.getItemById(data.id);
-  //     handleCartAmountChange(
-  //       {
-  //         name: res.title,
-  //         qty: data.qty,
-  //         price: res.new_price,
-  //         imgUrl: res.images[0].image_url,
-  //         id: res.id,
-  //       },
-  //       data.qty
-  //     );
-  //   });
-  // }, []);
 
   return (
     <SaleLayout2
@@ -82,32 +57,19 @@ const SalePage2 = ({ categoryList, product, csrfToken, providers, games }) => {
                     imgUrl={item.logo_url}
                     haveIcon={false}
                     notProduct={true}
-                    isCard={item.is_card}
+                    isCard={!item.items ? false : true}
                   />
                 </Grid>
               ))
             : ""}
-          {/* {games.map((item, ind) => (
-            <Grid item lg={3} md={4} sm={6} xs={12} key={item.id}>
-              <ProductCard1
-                id={item.id}
-                price={item.price}
-                imgUrl={item.images[0].image_url}
-                newPrice={item.new_price}
-                haveIcon={false}
-                notProduct={false}
-                {...item}
-              />
-            </Grid>
-          ))} */}
         </Grid>
 
         <FlexBetween flexWrap="wrap" my={8}>
-          <Span>
+          {/* <Span>
             {renderProductCount(page, productPerPage, product.length)}
-          </Span>
-
-          {/* <Pagination
+          </Span> */}
+          {/* 
+          <Pagination
             page={page}
             color="primary"
             variant="outlined"
@@ -124,13 +86,15 @@ export default SalePage2;
 
 export async function getServerSideProps(context) {
   const { cookies } = context.req;
+  const { locale } = context;
 
   const [categoryList, product, games] = await Promise.all([
     BackendManager.getCategoryList(
-      cookies.countryId ? JSON.parse(cookies.countryId) : "1"
+      cookies.countryId ? JSON.parse(cookies.countryId) : "1",
+      locale
     ),
     BackendManager.getProdcutsList(),
-    BackendManager.getCategoryById("24"),
+    BackendManager.getCategoryById("24", locale),
   ]);
 
   let csrfToken = await getCsrfToken(context);
@@ -142,6 +106,7 @@ export async function getServerSideProps(context) {
       providers,
       csrfToken,
       games,
+      ...(await serverSideTranslations(locale, ["common"])),
     },
   }; // will be passed to the page component as props
 }

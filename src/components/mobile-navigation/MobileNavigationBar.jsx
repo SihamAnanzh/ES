@@ -6,6 +6,7 @@ import User2 from "components/icons/User2";
 import NavLink from "components/nav-link/NavLink";
 import { useAppContext } from "contexts/AppContext";
 import useWindowSize from "hooks/useWindowSize";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { layoutConstant } from "utils/constants"; // styled components
 
@@ -36,6 +37,7 @@ const StyledNavLink = styled(NavLink)(() => ({
 
 const MobileNavigationBar = () => {
   const width = useWindowSize();
+  const session = useSession();
   const { state } = useAppContext();
   const iconStyle = {
     marginBottom: "4px",
@@ -46,7 +48,16 @@ const MobileNavigationBar = () => {
   return width <= 900 ? (
     <Wrapper>
       {list.map((item) => (
-        <StyledNavLink href={item.href} key={item.title}>
+        <StyledNavLink
+          href={
+            item.title === "Profile"
+              ? session.data == null
+                ? "/login"
+                : "/profile"
+              : item.href
+          }
+          key={item.title}
+        >
           {item.title === "Cart" ? (
             <Badge badgeContent={state.cart.length} color="primary">
               <item.icon fontSize="small" sx={iconStyle} />
@@ -68,18 +79,14 @@ const list = [
     icon: Home,
     href: "/",
   },
-  {
-    title: "Category",
-    icon: CategoryOutlined,
-    href: "/mobile-category-nav",
-  },
+
   {
     title: "Cart",
     icon: ShoppingBagOutlined,
     href: "/cart",
   },
   {
-    title: "Account",
+    title: "Profile",
     icon: User2,
     href: "/profile",
   },

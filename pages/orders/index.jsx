@@ -5,10 +5,17 @@ import DashboardPageHeader from "components/layouts/DashboardPageHeader";
 import OrderList from "pages-sections/orders/OrderList";
 import React, { useEffect } from "react";
 import { getSession } from "next-auth/react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import BackEndManager from "../../src/globalManager/BackendManager";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 const Orders = ({ orderList }) => {
   const route = useRouter();
+  const { t } = useTranslation();
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
   useEffect(() => {
     if (goSell) {
       goSell.showResult({
@@ -28,7 +35,7 @@ const Orders = ({ orderList }) => {
   return (
     <CustomerDashboardLayout>
       <DashboardPageHeader
-        title="My Orders"
+        title={getTrans("MyOrders")}
         icon={ShoppingBag}
         navigation={<CustomerDashboardNavigation />}
       />
@@ -41,17 +48,18 @@ export default Orders;
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
+  const { locale } = context;
+
   const orderList = [];
   if (!session) {
     return {
       redirect: {
         permanent: false,
-        destination: "/",
+        destination: "/" + locale,
       },
     };
   }
-  const lists = await BackEndManager.getUserOrders(session.user);
-
+  const lists = await BackEndManager.getUserOrders(session.user, locale);
   lists.map((list, ind) => {
     orderList.push({
       orderNo: list.id,
@@ -63,6 +71,6 @@ export async function getServerSideProps(context) {
   });
 
   return {
-    props: { orderList },
+    props: { orderList, ...(await serverSideTranslations(locale, ["common"])) },
   };
 }

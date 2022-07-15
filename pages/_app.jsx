@@ -6,7 +6,7 @@ import Head from "next/head";
 import Router from "next/router";
 import nProgress from "nprogress";
 import "nprogress/nprogress.css";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useContext, useEffect, useState } from "react";
 // import "react-quill/dist/quill.snow.css";
 import "simplebar/dist/simplebar.min.css";
 import MuiTheme from "theme/MuiTheme";
@@ -18,6 +18,7 @@ import { getSession, SessionProvider, useSession } from "next-auth/react";
 import { useAppContext } from "contexts/AppContext";
 import BackendManager from "../src/globalManager/BackendManager";
 import { getCookie } from "cookies-next";
+import "react-toastify/dist/ReactToastify.css";
 
 //Binding events.
 Router.events.on("routeChangeStart", () => nProgress.start());
@@ -31,63 +32,53 @@ nProgress.configure({
 const App = ({ Component, pageProps }) => {
   const getLayout = Component.getLayout ?? ((page) => page);
   const { state, dispatch } = useAppContext();
-
   const cartList = state.cart;
 
-  useEffect(() => {
-    // localStorage.setItem("cart", JSON.stringify(state.cart));
-    // let items = JSON.parse(localStorage.getItem("cart"));
+  // const handleCartAmountChange = (product, amount) => {
+  //   console.log("Product in dispatch", product);
+  //   dispatch({
+  //     type: "CHANGE_CART_AMOUNT",
+  //     payload: product,
+  //   });
+  //   console.log("Cart Context: ", state.cart);
+  // };
 
-    // items.map(async (data) => {
-    //   let res = await BackendManager.getItemById(data.id);
-    //   handleCartAmountChange(
-    //     {
-    //       name: res.title,
-    //       qty: data.qty,
-    //       price: res.new_price,
-    //       imgUrl: res.images[0].image_url,
-    //       id: res.id,
-    //     },
-    //     data.qty
-    //   );
-    // });
+  const handleCartAmountChange = useCallback(
+    (product, amount) => () => {
+      dispatch({
+        type: "CHANGE_CART_AMOUNT",
+        payload: { ...product, qty: amount },
+      });
+      console.log("State Cart: ", state.cart);
+    },
+    []
+  );
 
-    console.log("change");
-    console.log(state.cart);
-  }, [state.cart]);
-
-  const handleCartAmountChange = (product, amount) => {
-    dispatch({
-      type: "CHANGE_CART_AMOUNT",
-      payload: { ...product, qty: amount },
-    });
-  };
-
-  useEffect(() => {
-    let items = JSON.parse(localStorage.getItem("cart"));
-
-    items.map(async (data) => {
-      let res = await BackendManager.getItemById(data.id);
-      handleCartAmountChange(
-        {
-          name: res.title,
-          qty: data.qty,
-          price: res.new_price,
-          imgUrl: res.images[0].image_url,
-          id: res.id,
-        },
-        data.qty
-      );
-    });
-  }, []);
-
-  useEffect(() => {
+  useEffect(async () => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
 
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
+
+    let items = JSON.parse(localStorage.getItem("cart"));
+    items &&
+      items.map(async (data) => {
+        let res = await BackendManager.getItemById(data.id);
+
+        let product = {
+          name: res.title,
+          qty: data.qty,
+          price: res.new_price,
+          imgUrl: res.category.logo_url,
+          id: res.id,
+        };
+        dispatch({
+          type: "CHANGE_CART_AMOUNT",
+          payload: { ...product, qty: data.qty },
+        });
+      });
   }, []);
 
   return (
@@ -122,3 +113,12 @@ const App = ({ Component, pageProps }) => {
 // };
 
 export default appWithTranslation(App);
+export async function getServerSideProps(context) {
+  const { locale } = context;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["default"])),
+    },
+  }; // will be passed to the page component as props
+}

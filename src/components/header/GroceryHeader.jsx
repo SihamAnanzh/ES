@@ -64,7 +64,7 @@ const GroceryHeader = ({ isFixed }) => {
         >
           <Link href="/">
             <a>
-              <img src="/assets/images/logo2.svg" alt="logo" />
+              <img src="/assets/images/logoFooter.svg" alt="logo" />
             </a>
           </Link>
 

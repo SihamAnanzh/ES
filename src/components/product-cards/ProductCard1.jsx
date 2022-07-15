@@ -11,7 +11,6 @@ import Link from "next/link";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { FlexBox } from "../flex-box";
 const StyledBazarCard = styled(BazarCard)(() => ({
-  height: "max-content",
   margin: "auto",
   display: "flex",
   overflow: "hidden",
@@ -69,6 +68,7 @@ const ProductCard1 = ({
   notProduct,
   sub,
   isCard,
+  image = true,
 }) => {
   const { state, dispatch } = useAppContext();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -115,17 +115,18 @@ const ProductCard1 = ({
           </LoveIconWrapper>
         )}
 
-        <Link href={isCard ? `/card/details/${id}` : `/category/${id}`}>
-          <a>
-            <LazyImage
-              src={imgUrl}
-              width={0}
-              height={0}
-              layout="responsive"
-              alt={title}
-            />
-          </a>
-        </Link>
+        {image && (
+          <Link href={isCard ? `/card/details/${id}` : `/category/${id}`}>
+            <a>
+              <LazyImage
+                src={imgUrl}
+                width="200px"
+                height="200px"
+                alt={title}
+              />
+            </a>
+          </Link>
+        )}
       </ImageWrapper>
 
       <ContentWrapper>
@@ -139,7 +140,7 @@ const ProductCard1 = ({
                   fontSize="14px"
                   fontWeight="600"
                   className="title"
-                  color="text.secondary"
+                  color="#757575"
                 >
                   {title}
                 </H3>

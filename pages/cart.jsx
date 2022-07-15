@@ -10,75 +10,143 @@ import countryList from "data/countryList";
 import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect } from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import BazarButton from "components/BazarButton";
+
 import BackendManager from "../src/globalManager/BackendManager";
+import {
+  Checkbox,
+  styled,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+} from "@mui/material";
+import { useState } from "react";
+import { withStyles } from "@mui/material";
+import { useTranslation } from "next-i18next";
+import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/router";
 
 const Cart = ({ userInfo }) => {
   const { state, dispatch } = useAppContext();
   const session = useSession();
   const cartList = state.cart;
-
+  const [quickPay, setQuicPay] = useState(false);
   const getTotalPrice = () => {
     return cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
   };
+  const route = useRouter();
+
+  const { t } = useTranslation();
+
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
 
   const paymentCheckout = async () => {
-    console.log(state.cart);
-    if (session.data.user) {
+    let cartItem = [];
+
+    if (session.data) {
       if (state.cart.length > 0) {
         let items = state.cart.map((item) => {
-          console.log(item);
-          let data = {
+          cartItem.push({
             item_id: item.id,
-            quantity: item.qty,
-          };
+            quantity: Number(item.qty),
+          });
+
           return data;
         });
 
         let data = {
-          id: 27,
-          quick: false,
-          items: items,
+          id: state.cart[0].mainId,
+          quick: quickPay,
+          items: cartItem,
         };
-        await BackendManager.PurchasePackageTap(data, session.data.user);
 
-        Checkout(
-          {
-            id: null,
-            first_name: userInfo.first_name,
-            middle_name: " ",
-            last_name: userInfo.last_name,
-            email: userInfo.username,
-            phone: {
-              country_code: "965",
-              number: userInfo.phone,
-            },
-            address: "Address",
-          },
-          {
-            amount: getTotalPrice(),
-            currency: "KWD",
-            order: {
-              amount: getTotalPrice(),
-              currency: "KWD",
-              items: [],
-            },
-            shipping: null,
-            taxes: null,
-          },
-          // `${process.env.NEXTAUTH_URL}${route.locale}`
-          `http://localhost:3000/orders`
-        );
-        goSell.openLightBox();
-      } else alert("you have no items");
-    } else alert("you need to login");
+        await BackendManager.tapPaymentCheckOutValidat(
+          data,
+          session.data.user
+        ).then(async (res) => {
+          if (res.results) {
+            let res = await BackendManager.PurchasePackageTap(
+              data,
+              session.data.user,
+              route.locale
+            );
+            console.log(res);
+            if (res.status.code == 400) {
+              toast.warn(res.status.message, {
+                position: "top-center",
+                autoClose: 5005,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                autoClose: false,
+              });
+            }
+            if (res.status.code == 200) {
+              Checkout(
+                {
+                  id: null,
+                  first_name: userInfo.first_name,
+                  middle_name: " ",
+                  last_name: userInfo.last_name,
+                  email: userInfo.username,
+                  phone: {
+                    country_code: "965",
+                    number: userInfo.phone,
+                  },
+                  address: "Address",
+                },
+                {
+                  amount: getTotalPrice(),
+                  currency: "KWD",
+                  order: {
+                    amount: getTotalPrice(),
+                    currency: "KWD",
+                    items: [],
+                  },
+                  shipping: null,
+                  taxes: null,
+                },
+                // `${process.env.NEXTAUTH_URL}${route.locale}`
+                `http://localhost:3000/orders`
+              );
+              goSell.openLightBox();
+            }
+          }
+        });
+      }
+    } else {
+      toast.warn(getTrans("needLogin"), {
+        position: "top-center",
+        autoClose: 5005,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        autoClose: false,
+      });
+    }
   };
 
   return (
     <CheckoutNavLayout>
-      <Grid container spacing={3}>
+      <ToastContainer />
+      <Grid
+        style={{
+          height: "100vh",
+        }}
+        container
+        spacing={3}
+      >
         <Grid item md={8} xs={12}>
-          {cartList.map((item) => (
-            <ProductCard7 key={item.id} {...item} />
+          {cartList.map((item, ind) => (
+            <ProductCard7 id={item.id} key={ind} {...item} />
           ))}
         </Grid>
 
@@ -89,24 +157,39 @@ const Cart = ({ userInfo }) => {
             }}
           >
             <FlexBetween mb={2}>
-              <Span color="grey.600">Item:</Span>
+              <Span color="grey.600">{getTrans("Item")} :</Span>
 
-              <Span fontSize={13} fontWeight={200} lineHeight="1">
+              <Span
+                color="#FF8236"
+                fontSize={13}
+                fontWeight={200}
+                lineHeight="1"
+              >
                 {cartList.length}
               </Span>
             </FlexBetween>
 
             <FlexBetween mb={2}>
-              <Span color="grey.600">Email:</Span>
+              <Span color="grey.600">{getTrans("Email")} :</Span>
 
-              <Span fontSize={13} fontWeight={200} lineHeight="1">
+              <Span
+                color="#FF8236"
+                fontSize={13}
+                fontWeight={200}
+                lineHeight="1"
+              >
                 {userInfo.username}
               </Span>
             </FlexBetween>
             <FlexBetween mb={2}>
-              <Span color="grey.600">Phone:</Span>
+              <Span color="grey.600">{getTrans("Phone")} :</Span>
 
-              <Span fontSize={13} fontWeight={200} lineHeight="1">
+              <Span
+                color="#FF8236"
+                fontSize={13}
+                fontWeight={200}
+                lineHeight="1"
+              >
                 {userInfo.phone}
               </Span>
             </FlexBetween>
@@ -116,9 +199,37 @@ const Cart = ({ userInfo }) => {
               }}
             />
             <FlexBetween mb={2}>
-              <Span color="grey.600">Total:</Span>
+              <Span color="#000" fontWeight={600}>
+                {getTrans("AddtoQuick")} :
+              </Span>
 
-              <Span fontSize={16} fontWeight={600} lineHeight="1">
+              <Span
+                color="#FF8236"
+                fontSize={16}
+                fontWeight={600}
+                lineHeight="1"
+              >
+                {" "}
+                <Checkbox
+                  checked={quickPay}
+                  onChange={(e) => setQuicPay(e.target.checked)}
+                  style={{
+                    color: "#FF8236",
+                  }}
+                />
+              </Span>
+            </FlexBetween>
+            <FlexBetween mb={2}>
+              <Span color="#000" fontWeight={600}>
+                {getTrans("Total")} :
+              </Span>
+
+              <Span
+                color="#FF8236"
+                fontSize={16}
+                fontWeight={600}
+                lineHeight="1"
+              >
                 ${getTotalPrice().toFixed(2)}
               </Span>
             </FlexBetween>
@@ -129,14 +240,15 @@ const Cart = ({ userInfo }) => {
               }}
             />
 
-            <Button
+            <BazarButton
+              className="add"
               onClick={paymentCheckout}
               variant="contained"
-              color="primary"
+              // style={{ background: "#FF8236", color: "#fff" }}
               fullWidth
             >
-              Checkout Now
-            </Button>
+              {getTrans("CheckoutNow")}
+            </BazarButton>
           </Card>
         </Grid>
       </Grid>
@@ -147,10 +259,13 @@ const Cart = ({ userInfo }) => {
 export default Cart;
 export async function getServerSideProps(context) {
   let session = await getSession(context);
-  console.log(session.data);
-  let userInfo = await BackendManager.getUserProfile(session.user);
+  const { locale } = context;
+  let userInfo = {};
+  if (session) {
+    userInfo = await BackendManager.getUserProfile(session.user, locale);
+  }
 
   return {
-    props: { userInfo },
+    props: { userInfo, ...(await serverSideTranslations(locale, ["common"])) },
   };
 }

@@ -83,13 +83,18 @@ const Index = ({ data, singleCategoryData }) => {
 
 export default Index;
 export async function getServerSideProps(context) {
+  const { locale } = context;
   let data = [{}];
-  const categoryList = await BackendManager.getCategoryList();
+  const { cookies } = context.req;
+  const categoryList = await BackendManager.getCategoryList(
+    cookies.countryId ? JSON.parse(cookies.countryId) : "1",
+    locale
+  );
   categoryList.results.map((res) => {
     data.push({ title: res.title, icon: res.logo_url, id: res.id });
   });
   let id = context.query.id;
-  let singleCategoryData = await BackendManager.getCategoryById(id);
+  let singleCategoryData = await BackendManager.getCategoryById(id, locale);
   return {
     props: { data, singleCategoryData },
   };

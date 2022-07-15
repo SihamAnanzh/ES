@@ -4,6 +4,12 @@ module.exports = {
   devIndicators: {
     autoPrerender: false,
   },
+
+  i18n: {
+    defaultLocale: "en",
+    locales: ["en", "ar"],
+  },
+
   images: {
     domains: [
       "staging.xprestores.com",

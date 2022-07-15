@@ -47,7 +47,7 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
     if (!session.data) {
       setDialogOpen(true);
     } else {
-      route.push("/profile");
+      route.push("/profile", "/profile", { locale: route.locale });
     }
   };
 
@@ -78,7 +78,6 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
       >
         <FlexBox
           mr={2}
-          minWidth="170px"
           alignItems="center"
           sx={{
             display: {
@@ -90,15 +89,19 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
           <Link href="/">
             <a>
               <Image
-                height={28}
+                sx={{
+                  margin: "20px",
+                  marginTop: "30px",
+                }}
+                height={50}
                 mb={0.5}
-                src="/assets/images/logo.png"
+                src="/assets/images/logo.svg"
                 alt="logo"
               />
             </a>
           </Link>
 
-          {isFixed && (
+          {/* {isFixed && (
             <CategoryMenu>
               <FlexBox color="grey.600" alignItems="center" ml={2}>
                 <BazarButton color="inherit">
@@ -107,7 +110,7 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
                 </BazarButton>
               </FlexBox>
             </CategoryMenu>
-          )}
+          )} */}
         </FlexBox>
 
         <FlexBox justifyContent="center" flex="1 1 0">

@@ -6,6 +6,8 @@ import { Span } from "components/Typography";
 import { renderProductCount } from "lib";
 import { useEffect, useState } from "react";
 import React from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import BackendManager from "../../src/globalManager/BackendManager";
 const Index = ({ data, singleCategoryData }) => {
   const productPerPage = 28;
@@ -14,13 +16,26 @@ const Index = ({ data, singleCategoryData }) => {
   const [singleCategory, setSingleCategory] = useState([singleCategoryData]);
   const handlePageChange = (_, page) => setPage(page);
   return (
-    <SaleLayout2 list={data}>
+    <SaleLayout2
+      sx={{
+        background: "#fff",
+      }}
+      list={data}
+    >
       <Container
         sx={{
           mt: 4,
+          background: "#fff",
         }}
       >
-        <Grid container spacing={3} minHeight={500}>
+        <Grid
+          sx={{
+            background: "#fff",
+          }}
+          container
+          spacing={3}
+          minHeight={500}
+        >
           {singleCategory.map((item, ind) => {
             {
               <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
@@ -68,13 +83,21 @@ export async function getServerSideProps(context) {
   let data = [{}];
   let id = context.query.id;
   const { cookies } = context.req;
+  const { locale } = context;
 
   const [categoryList, singleCategoryData] = await Promise.all([
-    BackendManager.getCategoryList(cookies.countryId ? cookies.countryId : "1"),
-    BackendManager.getCategoryById(id),
+    BackendManager.getCategoryList(
+      cookies.countryId ? cookies.countryId : "1",
+      locale
+    ),
+    BackendManager.getCategoryById(id, locale),
   ]);
 
   return {
-    props: { data: categoryList, singleCategoryData },
+    props: {
+      data: categoryList,
+      singleCategoryData,
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
   };
 }

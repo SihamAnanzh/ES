@@ -12,56 +12,126 @@ import { Wrapper } from "./Login";
 import SocialButtons from "./SocialButtons";
 import { useEffect } from "react";
 import { getSession, useSession, signIn } from "next-auth/react";
+import { toast, ToastContainer } from "react-toastify";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 const Signup = ({ providers }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
-
+  const { t } = useTranslation();
+  const route = useRouter();
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
   const handleFormSubmit = (values) => {
     console.log(values);
-    axios
-      .post(process.env.endPoint + "/user/register", {
-        username: values.email,
-        first_name: values.name,
-        phone: values.phone,
-        password: values.password,
-      })
-      .then(async (response) => {
-        console.log(response);
-        if (response && response.data.status.code === 200) {
-          const res = await signIn("xp-login-auth", {
-            redirect: false,
+    if (values.agreement) {
+      axios
+        .post(
+          process.env.endPoint + "/user/register",
+          {
             username: values.email,
+            first_name: values.name,
+            phone: values.phone,
             password: values.password,
-          });
-          if (res?.error) {
-            console.log(res);
-          } else {
-            route.push("/profile");
+          },
+          { headers: { lang: route.locale } }
+        )
+        .then(async (response) => {
+          console.log(response);
+          if (response && response.data.status.code === 200) {
+            const res = await signIn("xpress-login-auth", {
+              redirect: false,
+              username: values.email,
+              password: values.password,
+            });
+            if (res?.error) {
+              toast.warn(getTrans("Somethingwrongtrylater"), {
+                position: "top-center",
+                autoClose: 5005,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                autoClose: false,
+              });
+            } else {
+              toast.success(getTrans("WelcometoXpressStore"), {
+                position: "top-center",
+                autoClose: 5005,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                autoClose: false,
+              });
+              route.push("/profile", "/profile", { locale: route.locale });
+            }
+          } else if (response.data.status.code == 400) {
+            toast.warn(response.data.status.message, {
+              position: "top-center",
+              autoClose: 5005,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              autoClose: false,
+            });
           }
-        }
+        });
+    } else {
+      toast.warn(getTrans("YouhavetoagreewithourTermsandConditions"), {
+        position: "top-center",
+        autoClose: 5005,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        autoClose: false,
       });
+    }
   };
   const session = useSession();
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
+  const formSchema = yup.object().shape({
+    name: yup.string().required(getTrans("Nameisrequired")),
+    email: yup
+      .string()
+      .email(getTrans("invalidemail"))
+      .required(getTrans("Emailisrequired")),
+
+    password: yup.string().required(getTrans("Passwordisrequired")),
+    re_password: yup
+      .string()
+      .oneOf([yup.ref("password"), null], getTrans("Passwordsmustmatch"))
+      .required(getTrans("Pleasere-typepassword")),
+  });
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues,
       onSubmit: handleFormSubmit,
       validationSchema: formSchema,
     });
+
   return (
     <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
+      <ToastContainer />
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
+        method="post"
+        action="/api/auth/callback/xpress-login-auth"
+        onSubmit={handleSubmit}
       >
         <H3 textAlign="center" mb={1}>
-          Create Your Account
+          {getTrans("CreateYourAccount")}
         </H3>
         <Small
           mb={4.5}
@@ -71,7 +141,7 @@ const Signup = ({ providers }) => {
           color="grey.800"
           textAlign="center"
         >
-          Please fill all fields to continue
+          {getTrans("Pleasefillallfieldstocontinue")}
         </Small>
 
         <BazarTextField
@@ -79,12 +149,12 @@ const Signup = ({ providers }) => {
           fullWidth
           name="name"
           size="small"
-          label="Full Name"
+          label={getTrans("FullName")}
           variant="outlined"
           onBlur={handleBlur}
           value={values.name}
           onChange={handleChange}
-          placeholder="Ralph Adwards"
+          placeholder={getTrans("FullName")}
           error={!!touched.name && !!errors.name}
           helperText={touched.name && errors.name}
         />
@@ -99,8 +169,8 @@ const Signup = ({ providers }) => {
           onBlur={handleBlur}
           value={values.email}
           onChange={handleChange}
-          label="Email "
-          placeholder="email"
+          label={getTrans("Email")}
+          placeholder={getTrans("Email")}
           error={!!touched.email && !!errors.email}
           helperText={touched.email && errors.email}
         />
@@ -114,8 +184,8 @@ const Signup = ({ providers }) => {
           onBlur={handleBlur}
           value={values.phone}
           onChange={handleChange}
-          label="Phone Number"
-          placeholder="Phone Number"
+          label={getTrans("Phone")}
+          placeholder={getTrans("Phone")}
           error={!!touched.Phone && !!errors.Phone}
           helperText={touched.Phone && errors.Phone}
         />
@@ -125,7 +195,7 @@ const Signup = ({ providers }) => {
           fullWidth
           size="small"
           name="password"
-          label="Password"
+          label={getTrans("Passowrd")}
           variant="outlined"
           autoComplete="on"
           placeholder="*********"
@@ -151,7 +221,7 @@ const Signup = ({ providers }) => {
           autoComplete="on"
           name="re_password"
           variant="outlined"
-          label="Retype Password"
+          label={getTrans("RetypePassword")}
           placeholder="*********"
           onBlur={handleBlur}
           onChange={handleChange}
@@ -186,10 +256,10 @@ const Signup = ({ providers }) => {
               alignItems="center"
               justifyContent="flex-start"
             >
-              By signing up, you agree to
+              {getTrans("agree")}
               <a href="/" target="_blank" rel="noreferrer noopener">
                 <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
-                  Terms & Condtion
+                  {getTrans("Terms&Conditions")}
                 </H6>
               </a>
             </FlexBox>
@@ -203,19 +273,24 @@ const Signup = ({ providers }) => {
           variant="contained"
           sx={{
             height: 44,
+            color: "#fff",
           }}
         >
-          Create Account
+          {getTrans("CreateAccount")}
         </BazarButton>
       </form>
 
       <SocialButtons
         providers={providers}
         redirect="/login"
-        redirectText="Login"
+        redirectText={getTrans("login")}
       />
     </Wrapper>
   );
+
+  function newFunction() {
+    return "agreement";
+  }
 };
 
 const initialValues = {
@@ -226,31 +301,5 @@ const initialValues = {
   phone: "",
   agreement: false,
 };
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-const formSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  email: yup.string().email("invalid email").required("Email is required"),
-  phone: yup
-    .string()
-    .matches(phoneRegExp, "Phone number is not valid")
-    .min(10, "to short")
-    .max(10, "to long")
-    .required("Pone is required"),
-
-  password: yup.string().required("Password is required"),
-  re_password: yup
-    .string()
-    .oneOf([yup.ref("password"), null], "Passwords must match")
-    .required("Please re-type password"),
-  agreement: yup
-    .bool()
-    .test(
-      "agreement",
-      "You have to agree with our Terms and Conditions!",
-      (value) => value === true
-    )
-    .required("You have to agree with our Terms and Conditions!"),
-});
 export default Signup;

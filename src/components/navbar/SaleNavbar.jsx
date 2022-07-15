@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { styled } from "@mui/material";
-import { FlexRowCenter } from "components/flex-box";
+import { FlexBox, FlexRowCenter } from "components/flex-box";
 import Scrollbar from "components/Scrollbar";
 import React, { useCallback, useState } from "react";
 import { H5 } from "../Typography"; // ==========================================================================
@@ -37,28 +37,25 @@ const Title = styled(H5)(({ selected, theme }) => ({
 const SaleNavbar = ({ saleCategoryList, onChange }) => {
   const [selected, setSelected] = useState();
   const route = useRouter();
-  // const handleCategoryClick = useCallback(
-  //   (categoryIndex, id) => () => {
-  //     setSelected(categoryIndex);
-  //     if (onChange) onChange(saleCategoryList[categoryIndex]);
-  //     console.log("this is catgeroy id" + id);
-  //   },
-  //   []
-  // );
 
   return (
     <Wrapper autoHide={false}>
       {saleCategoryList.map((item, ind) => (
-        <Link
+        <FlexBox
           key={ind}
-          href={
-            item.from_og == true
-              ? `/telecom/${item.id}`
-              : `/category/${item.id}`
-          }
+          onClick={() => {
+            route.push(
+              item.from_og == true
+                ? `/telecom/${item.id}`
+                : `/category/${item.id}`,
+              item.from_og == true
+                ? `/telecom/${item.id}`
+                : `/category/${item.id}`,
+              { locale: route.locale }
+            );
+          }}
         >
           <FlexRowCenter
-            key={ind}
             sx={{
               cursor: "pointer",
               minWidth: "100px",
@@ -68,17 +65,21 @@ const SaleNavbar = ({ saleCategoryList, onChange }) => {
           >
             <>
               <img
-                key={ind}
                 width={40}
                 height={30}
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "cover", marginBottom: "3px" }}
                 src={item.logo_url}
                 alt=""
               />
-              <Title selected={ind === selected}>{item.title}</Title>
+              <Title
+                sx={{ fontSize: "10px", fontWeight: "600" }}
+                selected={ind === selected}
+              >
+                {item.title}
+              </Title>
             </>
           </FlexRowCenter>
-        </Link>
+        </FlexBox>
       ))}
     </Wrapper>
   );

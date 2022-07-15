@@ -11,7 +11,7 @@ import Link from "next/link";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { FlexBox } from "../flex-box";
 const StyledBazarCard = styled(BazarCard)(() => ({
-  height: "max-content",
+  height: "100%",
   margin: "auto",
   display: "flex",
   overflow: "hidden",

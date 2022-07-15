@@ -33,7 +33,7 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl }) => {
   const handleCartAmountChange = useCallback(
     (amount) => () => {
       let qty = amount;
-      if (amount > 4) {
+      if (qty > 4) {
         qty = 4;
       } else {
         qty = amount;
@@ -74,29 +74,28 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl }) => {
       </IconButton>
 
       <FlexBox p={2} rowGap={2} width="100%" flexDirection="column">
-        <Link href={`/product/${id}`}>
-          <a>
-            <Span ellipsis fontWeight="600" fontSize={18}>
-              {name}
-            </Span>
-          </a>
-        </Link>
+        <a>
+          <Span color="#595959" ellipsis fontWeight="600" fontSize={18}>
+            {name}
+          </Span>
+        </a>
 
         <FlexBox gap={1} flexWrap="wrap" alignItems="center">
           <Span color="grey.600">
             ${price.toFixed(2)} x {qty}
           </Span>
 
-          <Span fontWeight={600} color="primary.main">
+          <Span fontWeight={600} color="#595959">
             ${(price * qty).toFixed(2)}
           </Span>
         </FlexBox>
 
         <FlexBox alignItems="center">
           <Button
-            color="primary"
             sx={{
               p: "5px",
+              color: "#FF8236",
+              marginRight: "5px",
             }}
             variant="outlined"
             disabled={qty === 1}
@@ -105,13 +104,14 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl }) => {
             <Remove fontSize="small" />
           </Button>
 
-          <Span mx={1} fontWeight={600} fontSize={15}>
+          <Span color="#595959" mx={1} fontWeight={600} fontSize={15}>
             {qty}
           </Span>
           <Button
-            color="primary"
             sx={{
               p: "5px",
+              color: "#FF8236",
+              marginLeft: "5px",
             }}
             variant="outlined"
             onClick={handleCartAmountChange(qty + 1)}

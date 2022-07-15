@@ -10,9 +10,9 @@ export const StyledBox = styled(
 )(({ theme, componentHeight, fixedOn, fixed }) => ({
   "& .hold": {
     zIndex: 2,
-    boxShadow: "none",
     position: "relative",
     background: "#fff",
+    boxShadow: theme.shadows[2],
   },
   "& .fixed": {
     left: 0,

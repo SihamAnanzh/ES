@@ -10,6 +10,8 @@ import * as yup from "yup";
 import EyeToggleButton from "./EyeToggleButton";
 import SocialButtons from "./SocialButtons";
 import { useSession, getSession, signIn, providers } from "next-auth/react";
+import { toast, ToastContainer } from "react-toastify";
+import { useTranslation } from "next-i18next";
 const fbStyle = {
   background: "#3B5998",
   color: "white",
@@ -51,7 +53,7 @@ const Login = ({ csrfToken, providers }) => {
 
   const route = useRouter();
   const { callbackurl } = route.query;
-
+  const { t } = useTranslation();
   const handleFormSubmit = async (values) => {
     console.log(values);
     const res = await signIn("xpress-login-auth", {
@@ -61,120 +63,149 @@ const Login = ({ csrfToken, providers }) => {
     });
     if (res?.error) {
       console.log(res);
+      toast.warn(getTrans("wrongemailorpassword"), {
+        position: "top-center",
+        autoClose: 5005,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        autoClose: false,
+      });
     } else {
-      console.log(res);
-      route.push("/profile");
+      toast.success(getTrans("Loggedin") + "...", {
+        position: "top-center",
+        autoClose: 5005,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      route.push("/profile", "/profile", { locale: route.locale });
     }
   };
 
   const session = useSession();
-
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues,
       onSubmit: handleFormSubmit,
       validationSchema: formSchema,
     });
+
+  const formSchema = yup.object().shape({
+    password: yup.string().required(getTrans("Passwordisrequired")),
+    email: yup
+      .string()
+      .email(getTrans("invalidemail"))
+      .required(getTrans("Emailisrequired")),
+  });
   return (
-    <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
-      <form
-        method="post"
-        action="/api/auth/callback/xpress-login-auth"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
-        <H3 textAlign="center" mb={1}>
-          Welcome To Ecommerce
-        </H3>
-        <Small
-          mb={4.5}
-          display="block"
-          fontSize="12px"
-          fontWeight="600"
-          color="grey.800"
-          textAlign="center"
-        >
-          Log in with email & password
-        </Small>
-        <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-
-        <BazarTextField
-          id="email"
-          mb={1.5}
-          fullWidth
-          name="email"
-          size="small"
-          type="email"
-          variant="outlined"
-          onBlur={handleBlur}
-          value={values.email}
-          onChange={handleChange}
-          label="Email or Phone Number"
-          placeholder="Phone Number"
-          error={!!touched.email && !!errors.email}
-          helperText={touched.email && errors.email}
-        />
-
-        <BazarTextField
-          id="password"
-          mb={2}
-          fullWidth
-          size="small"
-          name="password"
-          label="Password"
-          autoComplete="on"
-          variant="outlined"
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.password}
-          placeholder="*********"
-          type={passwordVisibility ? "text" : "password"}
-          error={!!touched.password && !!errors.password}
-          helperText={touched.password && errors.password}
-          InputProps={{
-            endAdornment: (
-              <EyeToggleButton
-                show={passwordVisibility}
-                click={togglePasswordVisibility}
-              />
-            ),
+    <>
+      <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
+        <form
+          method="post"
+          action="/api/auth/callback/xpress-login-auth"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            handleSubmit();
           }}
-        />
+        >
+          <H3 textAlign="center" mb={1}>
+            {getTrans("WelcomeToXpressStors")}
+          </H3>
+          <Small
+            mb={4.5}
+            display="block"
+            fontSize="12px"
+            fontWeight="600"
+            color="grey.800"
+            textAlign="center"
+          >
+            {getTrans("Loginwithemail&password")}
+          </Small>
+          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
 
-        <BazarButton
-          fullWidth
-          type="submit"
-          color="primary"
-          variant="contained"
+          <BazarTextField
+            id="email"
+            mb={1.5}
+            fullWidth
+            name="email"
+            size="small"
+            type="email"
+            variant="outlined"
+            onBlur={handleBlur}
+            value={values.email}
+            onChange={handleChange}
+            label={getTrans("Email")}
+            placeholder={getTrans("Email")}
+            error={!!touched.email && !!errors.email}
+            helperText={touched.email && errors.email}
+          />
+
+          <BazarTextField
+            id="password"
+            mb={2}
+            fullWidth
+            size="small"
+            name="password"
+            label={getTrans("Password")}
+            autoComplete="on"
+            variant="outlined"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.password}
+            placeholder="*********"
+            type={passwordVisibility ? "text" : "password"}
+            error={!!touched.password && !!errors.password}
+            helperText={touched.password && errors.password}
+            InputProps={{
+              endAdornment: (
+                <EyeToggleButton
+                  show={passwordVisibility}
+                  click={togglePasswordVisibility}
+                />
+              ),
+            }}
+          />
+
+          <BazarButton
+            fullWidth
+            type="submit"
+            color="primary"
+            variant="contained"
+            sx={{
+              mb: "1.65rem",
+              height: 44,
+              color: "#fff",
+            }}
+          >
+            {getTrans("login")}
+          </BazarButton>
+        </form>
+
+        <SocialButtons
+          t={t}
           sx={{
-            mb: "1.65rem",
-            height: 44,
+            mb: "2.65rem",
           }}
-        >
-          login
-        </BazarButton>
-      </form>
-
-      <SocialButtons
-        sx={{
-          mb: "2.65rem",
-        }}
-        providers={providers}
-        redirect="/signup"
-        redirectText="Sign Up"
-      />
-    </Wrapper>
+          providers={providers}
+          redirect="/signup"
+          redirectText={getTrans("SignUp")}
+        />
+      </Wrapper>
+      <ToastContainer />
+    </>
   );
 };
 
+export default Login;
 const initialValues = {
   email: "",
   password: "",
 };
-const formSchema = yup.object().shape({
-  password: yup.string().required("Password is required"),
-  email: yup.string().email("invalid email").required("Email is required"),
-});
-export default Login;

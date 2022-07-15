@@ -12,6 +12,7 @@ import ShoppingBagOutlined from "components/icons/ShoppingBagOutlined";
 import LazyImage from "components/LazyImage";
 import { H5, Tiny } from "components/Typography";
 import { useAppContext } from "contexts/AppContext";
+import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import React, { useCallback, useEffect } from "react";
 
@@ -20,22 +21,15 @@ const MiniCart = ({ toggleSidenav }) => {
   const { state, dispatch } = useAppContext();
   const cartList = state.cart;
 
-  // const cartItemsList = cartList.forEach(async q=>{
-  //   const item = await getItemById(q.id);
-  //   item.cart_quantity = q.qty;
-  //   return {
-  //     id: item.id,
-  //     qty: item.cart_quantity,
-  //     title: item.title,
-  //     logo_url: item.image_url,
-  //     price: item.new_price
-  //   };
-  // });
+  const { t } = useTranslation();
+
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
 
   const handleCartAmountChange = useCallback(
     (amount, product) => () => {
       let qty = amount;
-      console.log(amount);
       if (amount > 4) {
         qty = 4;
       } else {
@@ -59,15 +53,10 @@ const MiniCart = ({ toggleSidenav }) => {
         overflow="auto"
         height={`calc(100vh - ${!!cartList.length ? "80px - 3.25rem" : "0px"})`}
       >
-        <FlexBox
-          alignItems="center"
-          m="0px 20px"
-          height="74px"
-          color="secondary.main"
-        >
+        <FlexBox alignItems="center" m="0px 20px" height="74px" color="#FF8236">
           <ShoppingBagOutlined color="inherit" />
-          <Box fontWeight={600} fontSize="16px" ml={1}>
-            {cartList.length} item
+          <Box color="#595959" fontWeight={600} fontSize="16px" ml={1}>
+            {cartList.length} {getTrans("item")}
           </Box>
         </FlexBox>
 
@@ -92,7 +81,7 @@ const MiniCart = ({ toggleSidenav }) => {
               textAlign="center"
               maxWidth="200px"
             >
-              Your shopping bag is empty. Start shopping
+              {getTrans("emptyCart")}
             </Box>
           </FlexBox>
         )}
@@ -107,26 +96,26 @@ const MiniCart = ({ toggleSidenav }) => {
             <FlexBox alignItems="center" flexDirection="column">
               <BazarButton
                 variant="outlined"
-                color="primary"
                 sx={{
                   height: "32px",
                   width: "32px",
                   borderRadius: "300px",
+                  color: "#FF8236",
                 }}
                 onClick={handleCartAmountChange(item.qty + 1, item)}
               >
                 <Add fontSize="small" />
               </BazarButton>
-              <Box fontWeight={600} fontSize="15px" my="3px">
+              <Box color={"#595959"} fontWeight={600} fontSize="15px" my="3px">
                 {item.qty}
               </Box>
               <BazarButton
                 variant="outlined"
-                color="primary"
                 sx={{
                   height: "32px",
                   width: "32px",
                   borderRadius: "300px",
+                  color: "#FF8236",
                 }}
                 onClick={handleCartAmountChange(item.qty - 1, item)}
                 disabled={item.qty === 1}
@@ -134,35 +123,25 @@ const MiniCart = ({ toggleSidenav }) => {
                 <Remove fontSize="small" />
               </BazarButton>
             </FlexBox>
+            {console.log(item.imgUrl)}
 
-            <Link href={`/product/${item.id}`}>
-              <a>
-                <BazarAvatar
-                  src={item.imgUrl || "/assets/images/products/iphone-x.png"}
-                  mx={2}
-                  alt={item.name}
-                  height={76}
-                  width={76}
-                />
-              </a>
-            </Link>
+            <BazarAvatar
+              src={item.imgUrl}
+              mx={2}
+              alt={item.name}
+              height={76}
+              width={76}
+            />
+
             <Box flex="1 1 0">
-              <Link href={`/product/${item.id}`}>
-                <a>
-                  <H5 className="title" fontSize="14px">
-                    {item.name}
-                  </H5>
-                </a>
-              </Link>
+              <H5 color="#595959" className="title" fontSize="14px">
+                {item.name}
+              </H5>
+
               <Tiny color="grey.600">
-                ${item.price.toFixed(2)} x {item.qty}
+                {/* ${item.price.toFixed(2)} x {item.qty} */}
               </Tiny>
-              <Box
-                fontWeight={600}
-                fontSize="14px"
-                color="primary.main"
-                mt={0.5}
-              >
+              <Box fontWeight={600} fontSize="14px" color="#FF8236" mt={0.5}>
                 ${(item.qty * item.price).toFixed(2)}
               </Box>
             </Box>
@@ -179,9 +158,10 @@ const MiniCart = ({ toggleSidenav }) => {
       </Box>
 
       {!!cartList.length && (
-        <Box p={2.5}>
-          <Link href="/cart" passHref>
+        <Box m={2.5}>
+          <Link href="/cart">
             <BazarButton
+              className="add"
               variant="contained"
               color="primary"
               sx={{
@@ -191,20 +171,7 @@ const MiniCart = ({ toggleSidenav }) => {
               fullWidth
               onClick={toggleSidenav}
             >
-              Checkout Now (${getTotalPrice().toFixed(2)})
-            </BazarButton>
-          </Link>
-          <Link href="/cart" passHref>
-            <BazarButton
-              color="primary"
-              variant="outlined"
-              sx={{
-                height: 40,
-              }}
-              fullWidth
-              onClick={toggleSidenav}
-            >
-              View Cart
+              {getTrans("CheckoutNow")} (${getTotalPrice().toFixed(2)})
             </BazarButton>
           </Link>
         </Box>

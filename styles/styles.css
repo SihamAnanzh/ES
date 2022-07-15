@@ -1,0 +1,15 @@
+.textAmount:focus,.textAmount:hover{
+    border-color: #000 !important;
+    border: none;
+
+}
+    
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #000 !important;
+    border: none !important;
+}
+
+.css-1o79yss-MuiGrid-root{
+    height: max-content;
+    padding-bottom: 63px; 
+}

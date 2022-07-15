@@ -67,6 +67,11 @@ const linkList = [
         title: "Orders",
         icon: ShoppingBagOutlined,
       },
+      {
+        href: "/quickPay",
+        title: "Quick Pay",
+        icon: ShoppingBagOutlined,
+      },
     ],
   },
 ];

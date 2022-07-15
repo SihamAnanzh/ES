@@ -2,12 +2,16 @@ import { Pagination } from "@mui/material";
 import { FlexBox } from "components/flex-box";
 import TableRow from "components/TableRow";
 import { H5 } from "components/Typography";
+import { useTranslation } from "next-i18next";
 import React, { Fragment, useEffect } from "react";
 import OrderRow from "./OrderRow"; // ============================================================
 
 // ============================================================
-const OrderList = ({ orderList }) => {
-  console.log(orderList);
+const OrderList = ({ orderList, quick }) => {
+  const { t } = useTranslation();
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
   return (
     <Fragment>
       <TableRow
@@ -22,35 +26,24 @@ const OrderList = ({ orderList }) => {
         }}
       >
         <H5 color="grey.600" my={0} mx={0.75} textAlign="left">
-          Order #
+          {getTrans("Order#")}
         </H5>
 
         <H5 color="grey.600" my={0} mx={0.75} textAlign="left">
-          Status
+          {getTrans("Datepurchased")}
         </H5>
 
         <H5 color="grey.600" my={0} mx={0.75} textAlign="left">
-          Date purchased
-        </H5>
-
-        <H5 color="grey.600" my={0} mx={0.75} textAlign="left">
-          Total
+          {getTrans("Total")}
         </H5>
         <H5 flex="0 0 0 !important" color="grey.600" px={2.75} my={0} />
       </TableRow>
 
       {orderList.map((item, ind) => (
-        <OrderRow item={item} key={ind} />
+        <OrderRow item={item} key={ind} quick={quick} />
       ))}
 
-      <FlexBox justifyContent="center" mt={5}>
-        {/* <Pagination
-          count={5}
-          color="primary"
-          variant="outlined"
-          onChange={(data) => console.log(data)}
-        /> */}
-      </FlexBox>
+      <FlexBox justifyContent="center" mt={5}></FlexBox>
     </Fragment>
   );
 };

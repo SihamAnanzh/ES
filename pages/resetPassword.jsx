@@ -7,6 +7,9 @@ import React, { useCallback, useState } from "react";
 import { useSession, getSession, getProviders } from "next-auth/react";
 import BackendManager from "../src/globalManager/BackendManager";
 import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import { toast, ToastContainer } from "react-toastify";
 
 const fbStyle = {
   background: "#3B5998",
@@ -49,7 +52,11 @@ const resetPassword = () => {
     setPasswordVisibility((visible) => !visible);
   }, []);
   const session = useSession();
+  const { t } = useTranslation();
 
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
   return (
     <div
       className=""
@@ -64,7 +71,7 @@ const resetPassword = () => {
       <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
         <form>
           <H3 textAlign="center" mb={1}>
-            Welcome To Xpress Stors
+            {getTrans("WelcomeToXpressStors")}
           </H3>
           <Small
             mb={4.5}
@@ -74,7 +81,7 @@ const resetPassword = () => {
             color="grey.800"
             textAlign="center"
           >
-            Enter your email
+            {getTrans("Enteryouremail")}
           </Small>
 
           <BazarTextField
@@ -91,12 +98,56 @@ const resetPassword = () => {
 
           <BazarButton
             onClick={async () => {
-              email != ""
-                ? await BackendManager.resetPassword(email).then((res) => {
-                    alert(res);
-                    route.push("/");
-                  })
-                : alert("invalid email");
+              email !== ""
+                ? await BackendManager.resetPassword(email, route.locale).then(
+                    (res) => {
+                      console.log(res);
+                      if (res.data.status.code == 200) {
+                        toast.success(res.data.results, {
+                          position: "top-center",
+                          autoClose: 5005,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          autoClose: false,
+                        });
+                        route.push("/", "/", { locale: route.locale });
+                      } else if (res.data.status.code == 400) {
+                        toast.warn(getTrans("invalidemail"), {
+                          position: "top-center",
+                          autoClose: 5005,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          autoClose: false,
+                        });
+                      } else
+                        toast.warn(getTrans("Somethingwrongtrylater"), {
+                          position: "top-center",
+                          autoClose: 5005,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          autoClose: false,
+                        });
+                    }
+                  )
+                : toast.warn(getTrans("Pleasefillallfieldstocontinue"), {
+                    position: "top-center",
+                    autoClose: 5005,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    autoClose: false,
+                  });
             }}
             fullWidth
             color="primary"
@@ -104,14 +155,25 @@ const resetPassword = () => {
             sx={{
               mb: "1.65rem",
               height: 44,
+              color: "#fff",
             }}
           >
-            Reset
+            {getTrans("Reset")}
           </BazarButton>
         </form>
+        <ToastContainer />
       </Wrapper>
     </div>
   );
 };
 
 export default resetPassword;
+
+export async function getServerSideProps(context) {
+  const { locale } = context;
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}

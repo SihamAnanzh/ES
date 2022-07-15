@@ -10,7 +10,12 @@ import Twitter from "components/icons/Twitter";
 import Youtube from "components/icons/Youtube";
 import { Paragraph } from "components/Typography";
 import Link from "next/link";
-import React from "react"; // styled component
+import React, { useState } from "react"; // styled component
+import { useTranslation } from "next-i18next";
+import { WhatsApp, WhatsappSharp } from "@mui/icons-material";
+import { useEffect } from "react";
+import BackendManager from "globalManager/BackendManager";
+import { Span } from "components/Typography";
 
 const StyledLink = styled("a")(({ theme }) => ({
   position: "relative",
@@ -25,9 +30,24 @@ const StyledLink = styled("a")(({ theme }) => ({
 }));
 
 const Footer = () => {
+  let { t, i18n } = useTranslation();
+  const [whatsapp, setWhatsapp] = useState("");
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
+
+  const aboutLinks = [getTrans("Terms&Conditions"), getTrans("PrivacyPolicy")];
+  useEffect(() => {
+    getwhatsapp();
+  }, []);
+  const getwhatsapp = async () => {
+    let res = await BackendManager.getWhatsappNumber();
+    setWhatsapp(res);
+  };
+
   return (
     <footer>
-      <Box bgcolor="#0c0e30">
+      <Box bgcolor="#A8123E">
         <Container
           sx={{
             p: "1rem",
@@ -39,7 +59,18 @@ const Footer = () => {
               <Grid item lg={4} md={6} sm={6} xs={12}>
                 <Link href="/">
                   <a>
-                    <Image mb={2.5} src="/assets/images/logo.svg" alt="logo" />
+                    <Image
+                      width="200px"
+                      src="/assets/images/logoFooter.svg"
+                      alt="logo"
+                      mb={3.5}
+                      sx={{
+                        margin: "0",
+                        padding: "20",
+                        width: "220px",
+                        marginBottom: "20px",
+                      }}
+                    />
                   </a>
                 </Link>
 
@@ -52,9 +83,9 @@ const Footer = () => {
                   fontWeight="600"
                   mb={2.5}
                   lineHeight="1"
-                  color="white"
+                  color="#fff"
                 >
-                  About Us
+                  {getTrans("AboutUs")}
                 </Box>
 
                 <div>
@@ -72,21 +103,48 @@ const Footer = () => {
                   fontWeight="600"
                   mb={2.5}
                   lineHeight="1"
-                  color="white"
+                  color="#fff"
                 >
-                  Contact Us
-                </Box>
-                <Box py={0.6} color="grey.500">
-                  70 Washington Square South, New York, NY 10012, United States
-                </Box>
-                <Box py={0.6} color="grey.500">
-                  Email: uilib.help@gmail.com
-                </Box>
-                <Box py={0.6} mb={2} color="grey.500">
-                  Phone: +1 1123 456 780
+                  {getTrans("ContactUs")}
                 </Box>
 
-                <FlexBox className="flex" mx={-0.625}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "flex-start",
+                    width: "150px",
+                  }}
+                  mb={2}
+                  color="grey.500"
+                >
+                  {/* {getTrans("instagram")}:{" "} */}
+                  <Instagram fontSize="small" />
+                  <a
+                    href="https://www.instagram.com/xprestoreskw/?igshid=YmMyMTA2M2Y="
+                    target="_balank"
+                  >
+                    xprestoreskw
+                  </a>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "flex-start",
+                    width: "150px",
+                  }}
+                  color="grey.500"
+                >
+                  <WhatsApp />
+                  <Span color="#fff" className="title">
+                    <a href={`https://api.whatsapp.com/send?phone=${whatsapp}`}>
+                      {whatsapp}
+                    </a>{" "}
+                  </Span>
+                </Box>
+
+                {/* <FlexBox className="flex" mx={-0.625}>
                   {iconList.map((item, ind) => (
                     <a
                       href={item.url}
@@ -104,7 +162,7 @@ const Footer = () => {
                       </BazarIconButton>
                     </a>
                   ))}
-                </FlexBox>
+                </FlexBox> */}
               </Grid>
             </Grid>
           </Box>
@@ -114,25 +172,12 @@ const Footer = () => {
   );
 };
 
-const aboutLinks = ["Terms & Conditions", "Privacy Policy"];
-
 const iconList = [
   {
-    icon: Facebook,
-    url: "https://www.facebook.com/UILibOfficial",
-  },
-  {
-    icon: Twitter,
-    url: "https://twitter.com/uilibofficial",
-  },
-  {
-    icon: Youtube,
-    url: "https://www.youtube.com/channel/UCsIyD-TSO1wQFz-n2Y4i3Rg",
-  },
-  {
-    icon: Google,
+    icon: WhatsApp,
     url: "/",
   },
+
   {
     icon: Instagram,
     url: "https://www.instagram.com/uilibofficial/",

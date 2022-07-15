@@ -3,12 +3,12 @@ import axios from "axios";
 import { useRouter } from "next/router";
 const BackendManager = {};
 
-BackendManager.getCategoryList = async (id) => {
+BackendManager.getCategoryList = async (id, lang) => {
   const res = await axios({
     method: "GET",
     url: url + "/category/list",
     headers: {
-      lang: "en",
+      lang: lang,
       limit: 11,
       country_id: id,
     },
@@ -27,24 +27,26 @@ BackendManager.getProdcutsList = async () => {
   });
   return res.data;
 };
-BackendManager.getCategoryById = async (id) => {
+BackendManager.getCategoryById = async (id, lang) => {
   const res = await axios({
     method: "GET",
     url: url + "/category/" + id,
     headers: {
-      lang: "en",
+      lang: lang,
+      limit: 5,
+      offset: 0,
     },
   });
 
   return res.data.results;
 };
 
-BackendManager.getCountryList = async () => {
+BackendManager.getCountryList = async (lang) => {
   const res = await axios({
     method: "GET",
     url: url + "/country/list",
     headers: {
-      lang: "en",
+      lang: lang,
     },
   });
 
@@ -56,33 +58,32 @@ BackendManager.getUserProfile = async (token) => {
     method: "GET",
     url: url + "/user/profile",
     headers: {
-      lang: "en",
       Authorization: token,
     },
   });
   return res.data.results;
 };
 
-BackendManager.updateUserProfile = async (token, updatedData) => {
+BackendManager.updateUserProfile = async (token, updatedData, lang) => {
   const res = await axios({
     method: "Post",
     url: url + "/user/update_account/",
     headers: {
-      lang: "en",
+      lang: lang,
       Authorization: token,
     },
     data: updatedData,
   });
 
-  return res.data.status.message;
+  return res;
 };
 
-BackendManager.getUserOrders = async (token) => {
+BackendManager.getUserOrders = async (token, lang) => {
   const res = await axios({
     method: "GET",
-    url: url + "/user/orders/ongoing/list",
+    url: url + "/user/orders/list",
     headers: {
-      lang: "en",
+      lang: lang,
       Authorization: token,
     },
   });
@@ -90,12 +91,12 @@ BackendManager.getUserOrders = async (token) => {
   return res.data.results;
 };
 
-BackendManager.getOrderById = async (token, id) => {
+BackendManager.getOrderById = async (token, id, lang) => {
   const res = await axios({
     method: "GET",
     url: url + "/user/orders/" + id,
     headers: {
-      lang: "en",
+      lang: lang,
       Authorization: token,
     },
   });
@@ -119,8 +120,11 @@ BackendManager.getRelatedProducts = async (id) => {
     url: url + "/items/similar/" + id,
     headers: {
       lang: "en",
+      limit: "5",
+      offset: "0",
     },
   });
+  console.log(res.data);
   return res.data.results;
 };
 BackendManager.getPopularProducts = async (id) => {
@@ -134,34 +138,56 @@ BackendManager.getPopularProducts = async (id) => {
   return res.data.results;
 };
 
-BackendManager.resetPassword = async (email) => {
+BackendManager.resetPassword = async (email, lang) => {
   const res = await axios({
     method: "POST",
     url: url + "/user/forget_password",
     headers: {
-      lang: "en",
+      lang: lang,
     },
     data: { username: email },
   });
-  return res.data.results;
+  return res;
 };
 
-BackendManager.getCountryById = async (id) => {
+BackendManager.getCountryById = async (id, lang) => {
   const res = await axios({
     method: "get",
     url: url + "/country/" + id,
     headers: {
-      lang: "en",
+      lang: lang,
+    },
+  });
+
+  return res.data.results;
+};
+
+BackendManager.getItemslistById = async (id, lnag) => {
+  const res = await axios({
+    method: "get",
+    url: url + "/items/list/" + id,
+    headers: {
+      lang: lnag,
     },
   });
   return res.data.results;
 };
-BackendManager.getOgCatgeroyById = async (id) => {
+BackendManager.getOgCatgeroyById = async (id, lang) => {
   const res = await axios({
     method: "get",
     url: url + "/og/category/services/" + id,
     headers: {
-      lang: "en",
+      lang: lang,
+    },
+  });
+  return res.data.results;
+};
+BackendManager.getServicByid = async (id, lang) => {
+  const res = await axios({
+    method: "get",
+    url: url + "/og/service/" + id,
+    headers: {
+      lang: lang,
     },
   });
   return res.data.results;
@@ -186,9 +212,29 @@ BackendManager.getOgLinkCheckout = async (dataObjects, phoneNumner) => {
 };
 
 BackendManager.PurchasePackageTap = async (data, token) => {
+  console.log(data);
   const res = await axios({
     method: "post",
     url: url + "/user/orders/add",
+    headers: {
+      lang: "en",
+      Authorization: token,
+    },
+    data: {
+      category_id: Number(data.id),
+      is_quickpay: data.quick,
+      details: data.items,
+    },
+  });
+  console.log(res);
+  return res.data;
+};
+
+BackendManager.tapPaymentCheckOutValidat = async (data, token, lang) => {
+  console.log("token", token);
+  const res = await axios({
+    method: "post",
+    url: url + "/user/order/validate_checkout",
     headers: {
       lang: "en",
       Authorization: token,
@@ -200,6 +246,46 @@ BackendManager.PurchasePackageTap = async (data, token) => {
     },
   });
   console.log(res);
+  return res.data;
+};
+
+BackendManager.getQuickPayList = async (token, lang) => {
+  const res = await axios({
+    method: "get",
+    url: url + "/user/orders/quickpay",
+    headers: {
+      lang: lang,
+      Authorization: token,
+    },
+  });
+  return res.data.results;
+};
+
+BackendManager.searchResult = async (message, id) => {
+  const res = await axios({
+    method: "post",
+    url: url + "/items/search",
+    headers: {
+      lang: "en",
+    },
+    data: {
+      search_criteria: message,
+      category_id: Number(id),
+    },
+  });
+  console.log("backend Results ", res.data);
+  return res.data.results;
+};
+
+BackendManager.getWhatsappNumber = async () => {
+  const res = await axios({
+    method: "get",
+    url: url + "/app_settings/whatspp_number",
+    headers: {
+      lang: "en",
+    },
+  });
+
   return res.data.results;
 };
 

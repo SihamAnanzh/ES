@@ -7,9 +7,9 @@ import {
   getProviders,
   providers,
 } from "next-auth/react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const LoginPage = ({ csrfToken, providers }) => {
-  console.log(providers);
   return (
     <FlexRowCenter flexDirection="column" minHeight="100vh">
       <Login csrfToken={csrfToken} providers={providers} />
@@ -21,6 +21,7 @@ export default LoginPage;
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
+  const { locale } = context;
 
   if (session) {
     return {
@@ -35,6 +36,7 @@ export async function getServerSideProps(context) {
     props: {
       csrfToken: await getCsrfToken(context),
       providers: providers,
+      ...(await serverSideTranslations(locale, ["common"])),
     },
   };
 }

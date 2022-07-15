@@ -5,7 +5,7 @@ import BazarAvatar from "components/BazarAvatar";
 import BazarButton from "components/BazarButton";
 import BazarRating from "components/BazarRating";
 import LazyImage from "components/LazyImage";
-import { H1, H2, H3, H6 } from "components/Typography";
+import { H1, H2, H3, H6, Span } from "components/Typography";
 import { useAppContext } from "contexts/AppContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -13,9 +13,25 @@ import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
 import ImageViewer from "react-simple-image-viewer";
 import { FlexBox, FlexRowCenter } from "../flex-box"; // ================================================================
+import { toast, ToastContainer } from "react-toastify";
+import BackendManager from "globalManager/BackendManager";
+import RelatedProducts from "components/products/RelatedProducts";
+import { useTranslation } from "next-i18next";
+
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 // ================================================================
-const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
+const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
   const router = useRouter();
   const routerId = router.query.id;
   const [selectedImage, setSelectedImage] = useState(0);
@@ -23,49 +39,109 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const { state, dispatch } = useAppContext();
   const [amount, setAmount] = useState("1");
+  const [itemPrice, setPrice] = useState();
   const [dataObjects, setObjects] = useState({});
+  const [mainId, setMaiaId] = useState("");
+  const route = useRouter();
   const cartList = state.cart;
-  let byNow = true;
+  const [cart, setCart] = useState(state.cart);
+  let buyNow = true;
   const cartItem = cartList.find(
     (item) => item.id === id || item.id === routerId
   );
 
+  let { t, i18n } = useTranslation();
+
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
+
   useEffect(() => {
-    setObjects({
-      price: items[0].new_price,
-      name: items[0].title,
-      id: items[0].id,
-      imgUrl: items[0].imgGroup,
+    BackendManager.getItemslistById(id, route.locale).then((res) => {
+      let data = res[0];
+      setMaiaId(data.main_category.id);
+      items &&
+        setObjects({
+          price: items[0].price,
+          name: items[0].title,
+          id: items[0].id,
+          imgUrl: imgGroup,
+          mainId: data.main_category.id,
+        });
+      setPrice(items[0].price);
     });
 
     handleCartAmountChange(dataObjects, amount);
   }, []);
 
   const handleCartAmountChange = useCallback(
-    (amount, product, byNow) => () => {
-      const cartItem = cartList.find(
-        (item) => item.id === id || item.id === routerId
-      );
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        // payload: {
-        //   price,
-        //   qty: amount,
-        //   name: title,
-        //   imgUrl: imgGroup,
-        //   id: id || routerId,
-        // },
-        payload: { ...product, qty: amount },
+    (amount, product, buyNow) => () => {
+      let duplicate;
+      console.log(state.cart);
+      console.log("product", product);
+      state.cart.map((item) => {
+        item.mainId != product.mainId ? (duplicate = true) : "";
       });
-      if (byNow) {
-        router.push("/cart");
-      }
+
+      duplicate
+        ? setOpen(true)
+        : (dispatch({
+            type: "CHANGE_CART_AMOUNT",
+            payload: { ...product, qty: amount },
+          }),
+          buyNow && router.push("/cart"));
     },
-    []
+
+    [state.cart]
   );
+  const [open, setOpen] = React.useState(false);
+  const handleClearCart = (product) => {
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { ...product, qty: 0 },
+    });
+  };
+
+  const claerCart = () => {
+    state.cart.map((item) => {
+      handleClearCart(item);
+    });
+    console.log(state.cart);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Box width="100%">
+      <div>
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{getTrans('"titleDiaglog!"')}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              {getTrans("message")}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>{getTrans("cancel")}</Button>
+            <Button
+              onClick={() => {
+                claerCart();
+                setOpen(false);
+              }}
+            >
+              {getTrans("Agree")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+      <ToastContainer />
       <Grid container spacing={3} justifyContent="space-around">
         <Grid item md={6} xs={12} alignItems="center">
           <FlexBox justifyContent="center" mb={6}>
@@ -77,51 +153,19 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
               objectFit="contain"
               src={imgGroup}
             />
-            {/* {isViewerOpen && (
-              <ImageViewer
-                src={imgGroup}
-                onClose={closeImageViewer}
-                currentIndex={currentImage}
-                backgroundStyle={{
-                  backgroundColor: "rgba(0,0,0,0.9)",
-                  zIndex: 1501,
-                }}
-              />
-            )} */}
           </FlexBox>
 
-          <FlexBox overflow="auto">
-            {/* {imgGroup.map((url, ind) => (
-              <FlexRowCenter
-                key={ind}
-                width={64}
-                height={64}
-                minWidth={64}
-                bgcolor="white"
-                border="1px solid"
-                borderRadius="10px"
-                ml={ind === 0 ? "auto" : 0}
-                style={{
-                  cursor: "pointer",
-                }}
-                onClick={handleImageClick(ind)}
-                mr={ind === imgGroup.length - 1 ? "auto" : "10px"}
-                borderColor={
-                  selectedImage === ind ? "primary.main" : "grey.400"
-                }
-              >
-                <BazarAvatar src={url} variant="square" height={40} />
-              </FlexRowCenter>
-            ))} */}
-          </FlexBox>
+          <FlexBox overflow="auto"></FlexBox>
         </Grid>
 
         <Grid item md={6} xs={12} alignItems="center">
-          <H1 mb={2}>{title}</H1>
+          <H1 color="#595959" mb={2}>
+            {title}
+          </H1>
 
           <FlexBox alignItems="center" mb={2}>
-            <H2 color="primary.main" mb={0.5} lineHeight="1">
-              Ammounts :
+            <H2 color="#595959" mb={0.5} lineHeight="1">
+              {getTrans("Amounts")} :
             </H2>
           </FlexBox>
 
@@ -130,7 +174,7 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
               items.map((item, ind) => (
                 <BazarButton
                   className={`btnAmount ${ind == 0 && "selected"} `}
-                  key={item.id}
+                  key={ind}
                   color="inherit"
                   variant="contained"
                   onClick={(e) => {
@@ -139,14 +183,17 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
                         btn.classList.remove("selected");
                       }
                     );
+
                     e.target.classList.add("selected");
                     setObjects({
-                      price: item.new_price,
+                      price: item.price,
                       qty: item.qty,
                       name: item.title,
                       id: item.id,
                       imgUrl: imgGroup,
+                      mainId: mainId,
                     });
+                    setPrice(item.price);
                   }}
                   sx={{
                     m: 1,
@@ -160,12 +207,13 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
           </Box>
 
           <Box mb={3}>
-            <H2 color="primary.main" mb={5.5} lineHeight="1">
-              Quantity :
+            <H2 color="#595959" mb={5.5} lineHeight="1">
+              {getTrans("Quantity")} :
             </H2>
 
             {[1, 2, 3, 4].map((qty, ind) => (
               <BazarButton
+                key={ind}
                 className={`btnQuntity ${ind == 0 && "selectedAmount"} `}
                 color="inherit"
                 variant="contained"
@@ -188,9 +236,22 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
               </BazarButton>
             ))}
           </Box>
-
+          <Box mb={3}>
+            <H2
+              color="#595959"
+              mb={5.5}
+              lineHeight="1"
+              style={{ display: "inline" }}
+            >
+              {getTrans("Total")} :{" "}
+            </H2>
+            <H3 color="#FF8236" style={{ display: "inline" }}>
+              {`${itemPrice} * ${amount}`} = ${itemPrice * amount}
+            </H3>
+          </Box>
           <Box mb={3}>
             <BazarButton
+              className="add"
               color="primary"
               variant="contained"
               onClick={handleCartAmountChange(amount, dataObjects)}
@@ -200,14 +261,16 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
                 px: "1.75rem",
                 height: 40,
                 width: "140px",
+                minWidth: "fit-content",
               }}
             >
-              Add to Cart
+              {getTrans("AddToCart")}
             </BazarButton>
             <BazarButton
+              className="add"
               color="primary"
               variant="contained"
-              onClick={handleCartAmountChange(amount, dataObjects, byNow)}
+              onClick={handleCartAmountChange(amount, dataObjects, buyNow)}
               sx={{
                 mt: 1.1,
                 ml: 1.1,
@@ -216,7 +279,7 @@ const CardIntro = ({ imgGroup, price, title, id, mainCatigory, items }) => {
                 width: "140px",
               }}
             >
-              By Now
+              {getTrans("BuyNow")}
             </BazarButton>
           </Box>
           {/* {!cartItem?.qty ? (

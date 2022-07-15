@@ -9,6 +9,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
   display: "flex",
   marginTop: theme.spacing(-2),
   marginBottom: theme.spacing(3),
+
   "& .headerHold": {
     flexGrow: 1,
     alignItems: "center",
@@ -32,8 +33,8 @@ const DashboardPageHeader = ({ title, button, navigation, ...props }) => {
     <StyledBox>
       <FlexBox mt={2} className="headerHold">
         <FlexBox alignItems="center">
-          {props.icon && <props.icon color="primary" />}
-          <H2 ml={1.5} my="0px" lineHeight="1" whiteSpace="pre">
+          {props.icon && <props.icon color="#595959" />}
+          <H2 color="#595959" ml={1.5} my="0px" lineHeight="1" whiteSpace="pre">
             {title}
           </H2>
         </FlexBox>

@@ -10,11 +10,12 @@ import { H2 } from "components/Typography";
 import bazarReactDatabase from "data/bazar-react-database";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import CardIIntro from "../../../src/components/product-cards/CardIntro";
 import { getSession, useSession } from "next-auth/react";
 import SaleLayout2 from "../../../src/components/layouts/SaleLayout2";
 import BackendManager from "../../../src/globalManager/BackendManager";
 import CardIntro from "../../../src/components/product-cards/CardIntro";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   minHeight: 0,
   marginTop: 80,
@@ -28,25 +29,15 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
 })); // ===============================================================
 
 // ===============================================================
-const ProductDetails = ({ data, list }) => {
+const ProductDetails = ({ data, list, relatedProducts }) => {
   const router = useRouter();
-  const { id } = router.query;
   const [product, setProduct] = useState(data);
   const [selectedOption, setSelectedOption] = useState(0);
-
-  useEffect(() => {
-    if (id) {
-      const productData = bazarReactDatabase.find(
-        (item) => item.id === parseInt(`${id}`)
-      );
-      setProduct(productData);
-    }
-  }, [id]);
 
   const handleOptionClick = (_, newValue) => {
     setSelectedOption(newValue);
   };
-  console.log(data.items);
+
   return (
     <NavbarLayout list={list}>
       {data && (
@@ -58,6 +49,8 @@ const ProductDetails = ({ data, list }) => {
           items={data.items}
         />
       )}
+
+      <RelatedProducts productsData={relatedProducts} />
     </NavbarLayout>
   );
 };
@@ -67,16 +60,27 @@ export default ProductDetails;
 export async function getServerSideProps(context) {
   const session = await getSession(context);
   const id = context.query.id;
-
+  const { locale } = context;
   // const popularProducts = await BackendManager.getPopularProducts(id);
   const { cookies } = context.req;
+  let data = await BackendManager.getCategoryById(id, locale);
 
   const [relatedProducts, list] = await Promise.all([
-    BackendManager.getRelatedProducts(id),
-    BackendManager.getCategoryList(cookies.countryId ? cookies.countryId : "1"),
+    BackendManager.getRelatedProducts(data && data.items[0].id, locale),
+    BackendManager.getCategoryList(
+      cookies.countryId ? cookies.countryId : "1",
+      locale
+    ),
   ]);
-  let data = await BackendManager.getCategoryById(id);
+  console.log("relatedProducts", relatedProducts);
+
   return {
-    props: { data, relatedProducts, list },
+    props: {
+      data,
+      relatedProducts,
+      list,
+      relatedProducts,
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
   };
 }

@@ -13,6 +13,8 @@ import React, { useEffect, useState } from "react";
 import { getSession, useSession } from "next-auth/react";
 import SaleLayout2 from "../../src/components/layouts/SaleLayout2";
 import BackendManager from "../../src/globalManager/BackendManager";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import TelecomIntro from "../../src/components/product-cards/TelecomIntro";
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   minHeight: 0,
@@ -66,9 +68,10 @@ export default ProductDetails;
 
 export async function getServerSideProps(context) {
   const id = context.query.id;
-  let data = await BackendManager.getOgCatgeroyById(id);
+  const { locale } = context;
+  let data = await BackendManager.getOgCatgeroyById(id, locale);
 
   return {
-    props: { data },
+    props: { data, ...(await serverSideTranslations(locale, ["common"])) },
   };
 }
