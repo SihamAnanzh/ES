@@ -15,7 +15,6 @@ import { useRouter } from "next/router";
 import { StyledTableCell } from "pages-sections/admin";
 import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
-import ImageViewer from "react-simple-image-viewer";
 import { FlexBetween, FlexBox, FlexRowCenter } from "../flex-box"; // ================================================================
 
 import Button from "@mui/material/Button";

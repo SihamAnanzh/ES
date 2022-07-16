@@ -10,7 +10,6 @@ import { useAppContext } from "contexts/AppContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
-import ImageViewer from "react-simple-image-viewer";
 import { FlexBox, FlexRowCenter } from "../flex-box"; // ================================================================
 
 // ================================================================
@@ -75,17 +74,6 @@ const ProductIntro = ({ images, price, title, id, mainCatigory }) => {
                 openImageViewer(imgGroup.indexOf(imgGroup[selectedImage]))
               }
             />
-            {isViewerOpen && (
-              <ImageViewer
-                src={imgGroup}
-                onClose={closeImageViewer}
-                currentIndex={currentImage}
-                backgroundStyle={{
-                  backgroundColor: "rgba(0,0,0,0.9)",
-                  zIndex: 1501,
-                }}
-              />
-            )}
           </FlexBox>
 
           <FlexBox overflow="auto">

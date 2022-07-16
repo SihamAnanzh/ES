@@ -11,7 +11,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
-import ImageViewer from "react-simple-image-viewer";
 import { FlexBox, FlexRowCenter } from "../flex-box"; // ================================================================
 import { toast, ToastContainer } from "react-toastify";
 import BackendManager from "globalManager/BackendManager";
