@@ -63,61 +63,47 @@ const Cart = ({ userInfo }) => {
           quick: quickPay,
           items: cartItem,
         };
+        localStorage.setItem("order", JSON.stringify(data));
 
         await BackendManager.tapPaymentCheckOutValidat(
           data,
           session.data.user
         ).then(async (res) => {
-          if (res.results) {
-            let res = await BackendManager.PurchasePackageTap(
-              data,
-              session.data.user,
-              route.locale
+          if (res.status.code == 200) {
+            Checkout(
+              {
+                id: null,
+                first_name: userInfo.first_name,
+                middle_name: " ",
+                last_name: userInfo.last_name,
+                email: userInfo.username,
+                phone: {
+                  country_code: "965",
+                  number: userInfo.phone,
+                },
+                address: "Address",
+              },
+              {
+                amount: getTotalPrice(),
+                currency: "KWD",
+                items: [],
+                shipping: null,
+                taxes: null,
+              } // `${process.env.NEXTAUTH_URL}${route.locale}`
+              `http://localhost:3000/orders`
             );
-            console.log(res);
-            if (res.status.code == 400) {
-              toast.warn(res.status.message, {
-                position: "top-center",
-                autoClose: 5005,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                autoClose: false,
-              });
-            }
-            if (res.status.code == 200) {
-              Checkout(
-                {
-                  id: null,
-                  first_name: userInfo.first_name,
-                  middle_name: " ",
-                  last_name: userInfo.last_name,
-                  email: userInfo.username,
-                  phone: {
-                    country_code: "965",
-                    number: userInfo.phone,
-                  },
-                  address: "Address",
-                },
-                {
-                  amount: getTotalPrice(),
-                  currency: "KWD",
-                  order: {
-                    amount: getTotalPrice(),
-                    currency: "KWD",
-                    items: [],
-                  },
-                  shipping: null,
-                  taxes: null,
-                },
-                // `${process.env.NEXTAUTH_URL}${route.locale}`
-                `http://localhost:3000/orders`
-              );
-              goSell.openLightBox();
-            }
+            goSell.openLightBox();
           }
+          toast.warn(res.status.message, {
+            position: "top-center",
+            autoClose: 5005,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            autoClose: false,
+          });
         });
       }
     } else {
@@ -136,7 +122,6 @@ const Cart = ({ userInfo }) => {
 
   return (
     <CheckoutNavLayout>
-      <ToastContainer />
       <Grid
         style={{
           height: "100vh",

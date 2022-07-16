@@ -4,33 +4,78 @@ import CustomerDashboardNavigation from "components/layouts/customer-dashboard/N
 import DashboardPageHeader from "components/layouts/DashboardPageHeader";
 import OrderList from "pages-sections/orders/OrderList";
 import React, { useEffect } from "react";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
+import { toast, ToastContainer } from "react-toastify";
 import BackEndManager from "../../src/globalManager/BackendManager";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
+import BackendManager from "../../src/globalManager/BackendManager";
 const Orders = ({ orderList }) => {
   const route = useRouter();
+  const session = useSession();
+
   const { t } = useTranslation();
   const getTrans = (key) => {
     return t(`common:${key}`);
   };
+
   useEffect(() => {
     if (goSell) {
       goSell.showResult({
         callback: async (response) => {
           if (response.callback.status === "CAPTURED") {
             console.log(response);
-          } else {
-            swal("", "something wrong", "info");
-
-            //show Error Message Transaction Failed
+            let orderDetails = JSON.parse(localStorage.getItem("order"));
+            console.log(orderDetails);
+            if (session.data) {
+              let res = await BackendManager.PurchasePackageTap(
+                orderDetails,
+                session.data.user,
+                route.locale
+              );
+              console.log(res);
+              if (res.status.code == 400) {
+                toast.warn(res.status.message, {
+                  position: "top-center",
+                  autoClose: 5005,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  autoClose: false,
+                });
+              }
+              if (res.status.code == 200) {
+                toast.success(res.status.message, {
+                  position: "top-center",
+                  autoClose: 5005,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  autoClose: false,
+                });
+              }
+            } else {
+              toast.warn(getTrans("Somethingwrongtrylater"), {
+                position: "top-center",
+                autoClose: 5005,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                autoClose: false,
+              });
+            }
           }
         },
       });
     }
-  }, [route]);
+  }, [route, session]);
 
   return (
     <CustomerDashboardLayout>

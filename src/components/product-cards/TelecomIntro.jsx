@@ -25,6 +25,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
+import { toast } from "react-toastify";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -54,17 +55,15 @@ const TelecomIntro = ({
   const session = useSession();
 
   useEffect(() => {
-    console.log(items[0].sellingPrice);
-
-    items &&
-      setObjects({
+    console.log(imgGroup);
+    items.length > 0 &&
+      (setObjects({
         price: items[0].sellingPrice,
         id: items[0].denominationID,
         value: items[0].denominationValue,
-      });
-    setPrice(items[0].sellingPrice);
-
-    handleCartAmountChange(dataObjects, amount);
+      }),
+      setPrice(items[0].sellingPrice),
+      handleCartAmountChange(dataObjects, amount));
   }, []);
 
   useEffect(() => {
@@ -121,13 +120,19 @@ const TelecomIntro = ({
   };
 
   const handleOgPayment = async () => {
-    console.log(state.cart);
     if (state.cart.length > 0) {
       setOpen(true);
-    }
-
-    if (!session.data) {
-      alert("you need to login");
+    } else if (!session.data) {
+      toast.warn(getTrans("needLogin"), {
+        position: "top-center",
+        autoClose: 5005,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        autoClose: false,
+      });
     } else {
       dataObjects.length == 0
         ? alert("pick one")
@@ -138,7 +143,7 @@ const TelecomIntro = ({
           );
     }
   };
-
+  let message = getTrans("clearCart");
   return (
     <Box width="100%">
       <div>
@@ -150,7 +155,7 @@ const TelecomIntro = ({
           aria-describedby="alert-dialog-slide-description"
         >
           {" "}
-          <DialogTitle>{getTrans('"clearCart!"')}</DialogTitle>
+          <DialogTitle>{message}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
               {getTrans("message")}
@@ -172,25 +177,16 @@ const TelecomIntro = ({
       <Grid container spacing={3} justifyContent="space-around">
         <Grid item md={6} xs={12} alignItems="center">
           <FlexBox justifyContent="center" mb={6}>
-            <LazyImage
-              width={300}
-              alt={title}
-              height={300}
-              loading="eager"
-              objectFit="contain"
-              src={imgGroup}
-            />
-            {/* {isViewerOpen && (
-              <ImageViewer
+            {imgGroup && (
+              <LazyImage
+                width={300}
+                alt={title}
+                height={300}
+                loading="eager"
+                objectFit="contain"
                 src={imgGroup}
-                onClose={closeImageViewer}
-                currentIndex={currentImage}
-                backgroundStyle={{
-                  backgroundColor: "rgba(0,0,0,0.9)",
-                  zIndex: 1501,
-                }}
               />
-            )} */}
+            )}
           </FlexBox>
         </Grid>
 

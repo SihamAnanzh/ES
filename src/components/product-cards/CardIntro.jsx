@@ -62,13 +62,13 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
       setMaiaId(data.main_category.id);
       items &&
         setObjects({
-          price: items[0].price,
-          name: items[0].title,
-          id: items[0].id,
+          price: data.price,
+          name: data.title,
+          id: data.id,
           imgUrl: imgGroup,
           mainId: data.main_category.id,
         });
-      setPrice(items[0].price);
+      setPrice(data.price);
     });
 
     handleCartAmountChange(dataObjects, amount);
@@ -111,6 +111,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
   const handleClose = () => {
     setOpen(false);
   };
+  let message = getTrans("titleDiaglog");
 
   return (
     <Box width="100%">
@@ -122,7 +123,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{getTrans('"titleDiaglog!"')}</DialogTitle>
+          <DialogTitle>{message}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
               {getTrans("message")}

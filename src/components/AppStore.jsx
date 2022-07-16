@@ -1,3 +1,4 @@
+import { Phone } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { FlexBox } from "./flex-box";
 import AppleStore from "./icons/AppleStore";
@@ -5,7 +6,7 @@ import PlayStore from "./icons/PlayStore";
 
 const AppStore = () => {
   return (
-    <FlexBox>
+    <FlexBox style={{ width: "max-content" }}>
       {" "}
       <FlexBox flexWrap="wrap" m={1}>
         <a

@@ -13,3 +13,10 @@
     height: max-content;
     padding-bottom: 63px; 
 }
+
+@media (max-width:1060px) {
+    .MuiBox-root{
+        margin: 5px;
+    }
+    
+}

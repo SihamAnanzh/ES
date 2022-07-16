@@ -12,10 +12,17 @@ import { Paragraph } from "components/Typography";
 import Link from "next/link";
 import React, { useState } from "react"; // styled component
 import { useTranslation } from "next-i18next";
-import { WhatsApp, WhatsappSharp } from "@mui/icons-material";
+import {
+  Phone,
+  PhoneAndroid,
+  StoreSharp,
+  WhatsApp,
+  WhatsappSharp,
+} from "@mui/icons-material";
 import { useEffect } from "react";
 import BackendManager from "globalManager/BackendManager";
 import { Span } from "components/Typography";
+import { MobileDatePicker } from "@mui/lab";
 
 const StyledLink = styled("a")(({ theme }) => ({
   position: "relative",
@@ -55,12 +62,11 @@ const Footer = () => {
           }}
         >
           <Box py={10} overflow="hidden">
-            <Grid container spacing={3}>
-              <Grid item lg={4} md={6} sm={6} xs={12}>
-                <Link href="/">
+            <Grid container spacing={1}>
+              <Grid item lg={3} md={6} sm={6} xs={12}>
+                <Link style={{ width: "fit-content" }} href="/">
                   <a>
                     <Image
-                      width="200px"
                       src="/assets/images/logoFooter.svg"
                       alt="logo"
                       mb={3.5}
@@ -73,8 +79,6 @@ const Footer = () => {
                     />
                   </a>
                 </Link>
-
-                <AppStore />
               </Grid>
 
               <Grid item lg={2} md={6} sm={6} xs={12}>
@@ -97,7 +101,7 @@ const Footer = () => {
                 </div>
               </Grid>
 
-              <Grid item lg={3} md={6} sm={6} xs={12}>
+              <Grid item lg={2} md={6} sm={6} xs={12}>
                 <Box
                   fontSize="25px"
                   fontWeight="600"
@@ -163,6 +167,43 @@ const Footer = () => {
                     </a>
                   ))}
                 </FlexBox> */}
+              </Grid>
+              <Grid item lg={3} md={6} sm={6} xs={6}>
+                <AppStore />
+                <FlexBox flexWrap="wrap" m={1}>
+                  <a
+                    href=""
+                    key="AppleStore"
+                    target="_blank"
+                    style={{ display: "inline-block", width: "160px" }}
+                  >
+                    <Box
+                      m={1}
+                      gap={1}
+                      p="10px 16px"
+                      color="white"
+                      display="flex"
+                      bgcolor="#fff"
+                      borderRadius="5px"
+                      alignItems="center"
+                    >
+                      <Box>
+                        <Box
+                          color="#595959"
+                          fontSize="8px"
+                          fontWeight="600"
+                          lineHeight="1"
+                        >
+                          Download on the
+                        </Box>
+
+                        <Box color="#595959" fontSize="14px" fontWeight="900">
+                          huawei store
+                        </Box>
+                      </Box>
+                    </Box>
+                  </a>
+                </FlexBox>
               </Grid>
             </Grid>
           </Box>

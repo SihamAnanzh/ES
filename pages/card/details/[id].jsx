@@ -64,9 +64,9 @@ export async function getServerSideProps(context) {
   // const popularProducts = await BackendManager.getPopularProducts(id);
   const { cookies } = context.req;
   let data = await BackendManager.getCategoryById(id, locale);
-
+  console.log(data);
   const [relatedProducts, list] = await Promise.all([
-    BackendManager.getRelatedProducts(data && data.items[0].id, locale),
+    BackendManager.getRelatedProducts(data.items[0].id, locale),
     BackendManager.getCategoryList(
       cookies.countryId ? cookies.countryId : "1",
       locale
