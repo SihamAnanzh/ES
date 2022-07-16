@@ -1,5 +1,4 @@
 // process.env.NEXTAUTH_URL = "http://localhost:3000/";
-// process.env.NEXTAUTH_URL = "https://store-zeta-three.vercel.app/";
 process.env.NEXTAUTH_URL = "https://xp-stors.herokuapp.com/";
 module.exports = {
   devIndicators: {
