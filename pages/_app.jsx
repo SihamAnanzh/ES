@@ -7,7 +7,7 @@ import Router from "next/router";
 import nProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { Fragment, useCallback, useContext, useEffect, useState } from "react";
-// import "react-quill/dist/quill.snow.css";
+
 import "simplebar/dist/simplebar.min.css";
 import MuiTheme from "theme/MuiTheme";
 import GoogleAnalytics from "utils/GoogleAnalytics";
