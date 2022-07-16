@@ -33,8 +33,8 @@ BackendManager.getCategoryById = async (id, lang) => {
     url: url + "/category/" + id,
     headers: {
       lang: lang,
-      limit: 5,
-      offset: 0,
+      limit: 11,
+      offset: 1,
     },
   });
 

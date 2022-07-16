@@ -170,7 +170,7 @@ const Footer = () => {
               </Grid>
               <Grid item lg={3} md={6} sm={6} xs={6}>
                 <AppStore />
-                <FlexBox flexWrap="wrap" m={1}>
+                <FlexBox flexWrap="wrap">
                   <a
                     href=""
                     key="AppleStore"
@@ -213,15 +213,4 @@ const Footer = () => {
   );
 };
 
-const iconList = [
-  {
-    icon: WhatsApp,
-    url: "/",
-  },
-
-  {
-    icon: Instagram,
-    url: "https://www.instagram.com/uilibofficial/",
-  },
-];
 export default Footer;

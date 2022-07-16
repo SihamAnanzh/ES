@@ -7,7 +7,6 @@ import ProductIntro from "components/products/ProductIntro";
 import ProductReview from "components/products/ProductReview";
 import RelatedProducts from "components/products/RelatedProducts";
 import { H2 } from "components/Typography";
-import bazarReactDatabase from "data/bazar-react-database";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
@@ -34,15 +33,6 @@ const ProductDetails = (props) => {
   const { id } = router.query;
   const [product, setProduct] = useState(data);
   const [selectedOption, setSelectedOption] = useState(0);
-
-  useEffect(() => {
-    if (id) {
-      const productData = bazarReactDatabase.find(
-        (item) => item.id === parseInt(`${id}`)
-      );
-      setProduct(productData);
-    }
-  }, [id]);
 
   const handleOptionClick = (_, newValue) => {
     setSelectedOption(newValue);

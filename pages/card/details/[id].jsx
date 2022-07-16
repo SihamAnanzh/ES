@@ -1,32 +1,14 @@
 import { Box, styled, Tab, Tabs } from "@mui/material";
 import NavbarLayout from "components/layouts/NavbarLayout";
-import AvailableShops from "components/products/AvailableShops";
-import FrequentlyBought from "components/products/FrequentlyBought";
-import ProductDescription from "components/products/ProductDescription";
-import ProductIntro from "components/products/ProductIntro";
-import ProductReview from "components/products/ProductReview";
+
 import RelatedProducts from "components/products/RelatedProducts";
 import { H2 } from "components/Typography";
-import bazarReactDatabase from "data/bazar-react-database";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { getSession, useSession } from "next-auth/react";
-import SaleLayout2 from "../../../src/components/layouts/SaleLayout2";
 import BackendManager from "../../../src/globalManager/BackendManager";
 import CardIntro from "../../../src/components/product-cards/CardIntro";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
-const StyledTabs = styled(Tabs)(({ theme }) => ({
-  minHeight: 0,
-  marginTop: 80,
-  marginBottom: 24,
-  borderBottom: `1px solid ${theme.palette.text.disabled}`,
-  "& .inner-tab": {
-    minHeight: 40,
-    fontWeight: 600,
-    textTransform: "capitalize",
-  },
-})); // ===============================================================
 
 // ===============================================================
 const ProductDetails = ({ data, list, relatedProducts }) => {

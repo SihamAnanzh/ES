@@ -8,7 +8,7 @@ const AppStore = () => {
   return (
     <FlexBox style={{ width: "max-content" }}>
       {" "}
-      <FlexBox flexWrap="wrap" m={1}>
+      <FlexBox flexWrap="wrap">
         <a
           href="https://play.google.com/store/apps/details?id=com.dominate.express"
           key="Google Play"
@@ -43,7 +43,7 @@ const AppStore = () => {
           </Box>
         </a>
       </FlexBox>
-      <FlexBox flexWrap="wrap" m={1}>
+      <FlexBox flexWrap="wrap">
         <a
           href="https://apps.apple.com/jo/app/xprestores-%D8%A7%D9%83%D8%B3%D8%A8%D8%B1%D8%B3-%D8%B3%D8%AA%D9%88%D8%B1%D8%B2/id1597251061"
           key="AppleStore"

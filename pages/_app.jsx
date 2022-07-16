@@ -12,7 +12,6 @@ import "simplebar/dist/simplebar.min.css";
 import MuiTheme from "theme/MuiTheme";
 import GoogleAnalytics from "utils/GoogleAnalytics";
 import OpenGraphTags from "utils/OpenGraphTags";
-import "../src/fake-db";
 import { appWithTranslation, useTranslation } from "next-i18next";
 import { getSession, SessionProvider, useSession } from "next-auth/react";
 import { useAppContext } from "contexts/AppContext";

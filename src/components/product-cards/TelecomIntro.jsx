@@ -46,16 +46,15 @@ const TelecomIntro = ({
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const { state, dispatch } = useAppContext();
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(10);
   const [itemPrice, setPrice] = useState("");
   const [dataObjects, setObjects] = useState({});
   const [phoneNumner, setPhonNumber] = useState("");
-
+  const [denominationValue, setDenominationValue] = useState();
   const [aciveClass, setAddClass] = useState(false);
   const session = useSession();
 
   useEffect(() => {
-    console.log(imgGroup);
     items.length > 0 &&
       (setObjects({
         price: items[0].sellingPrice,
@@ -63,14 +62,19 @@ const TelecomIntro = ({
         value: items[0].denominationValue,
       }),
       setPrice(items[0].sellingPrice),
+      setDenominationValue(items[0].denominationValue),
       handleCartAmountChange(dataObjects, amount));
   }, []);
 
   useEffect(() => {
+    let phone;
     if (session.data) {
       BackendManager.getUserProfile(session.data.user, router.locale).then(
         (res) => {
-          setPhonNumber(res.phone);
+          console.log();
+          res.phone.length == 12
+            ? ((phone = res.phone.slice(0, 4)), setPhonNumber(phone))
+            : "";
         }
       );
     }
@@ -136,11 +140,28 @@ const TelecomIntro = ({
     } else {
       dataObjects.length == 0
         ? alert("pick one")
-        : await BackendManager.getOgLinkCheckout(dataObjects, phoneNumner).then(
-            (res) => {
-              router.push(res);
-            }
-          );
+        : (phoneNumner.length === 8
+            ? await BackendManager.getOgLinkCheckout(
+                dataObjects,
+                phoneNumner
+              ).then((res) => {
+                router.push(res);
+              })
+            : toast.warn(
+                router.locale == "ar"
+                  ? "يجب أن يتكون رقم الهاتف من 8 أحرف"
+                  : "phone Number should be 8 character !"
+              ),
+          {
+            position: "top-center",
+
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            autoClose: false,
+          });
     }
   };
   let message = getTrans("clearCart");
@@ -305,6 +326,7 @@ const TelecomIntro = ({
                   });
 
                   setPrice(item.sellingPrice);
+                  setDenominationValue(item.denominationValue);
                 }}
                 sx={{
                   m: 1,
@@ -329,7 +351,8 @@ const TelecomIntro = ({
             </H2>
             {id == 5 ? (
               <H3 color="#FF8236" style={{ display: "inline" }}>
-                {`${itemPrice} * ${amount}`} = ${itemPrice * amount}
+                {`${itemPrice} * ${denominationValue}`} = $
+                {itemPrice * denominationValue}
               </H3>
             ) : (
               <H3 color="#FF8236" style={{ display: "inline" }}>

@@ -83,7 +83,7 @@ const Login = ({ csrfToken, providers }) => {
         draggable: true,
         progress: undefined,
       });
-      route.push("/profile", "/profile", { locale: route.locale });
+      // route.push("/profile", "/profile", { locale: route.locale });
     }
   };
 

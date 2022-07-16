@@ -78,7 +78,6 @@ const ProfileEditor = ({ res }) => {
 
   return (
     <CustomerDashboardLayout>
-      <ToastContainer />
       <DashboardPageHeader
         icon={Person}
         title={getTrans("EditProfile")}

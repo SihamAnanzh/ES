@@ -36,6 +36,8 @@ const Cart = ({ userInfo }) => {
   const getTotalPrice = () => {
     return cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
   };
+
+  let price = getTotalPrice();
   const route = useRouter();
 
   const { t } = useTranslation();
@@ -64,7 +66,6 @@ const Cart = ({ userInfo }) => {
           items: cartItem,
         };
         localStorage.setItem("order", JSON.stringify(data));
-
         await BackendManager.tapPaymentCheckOutValidat(
           data,
           session.data.user
@@ -86,24 +87,29 @@ const Cart = ({ userInfo }) => {
               {
                 amount: getTotalPrice(),
                 currency: "KWD",
-                items: [],
+                order: {
+                  amount: getTotalPrice(),
+                  currency: "KWD",
+                  items: [],
+                },
                 shipping: null,
                 taxes: null,
-              } // `${process.env.NEXTAUTH_URL}${route.locale}`
+              },
+              // `${process.env.NEXTAUTH_URL}${route.locale}`
               `http://localhost:3000/orders`
             );
             goSell.openLightBox();
-          }
-          toast.warn(res.status.message, {
-            position: "top-center",
-            autoClose: 5005,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            autoClose: false,
-          });
+          } else
+            toast.warn(res.status.message, {
+              position: "top-center",
+              autoClose: 5005,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              autoClose: false,
+            });
         });
       }
     } else {
