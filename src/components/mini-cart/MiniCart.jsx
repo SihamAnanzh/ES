@@ -123,7 +123,6 @@ const MiniCart = ({ toggleSidenav }) => {
                 <Remove fontSize="small" />
               </BazarButton>
             </FlexBox>
-            {console.log(item.imgUrl)}
 
             <BazarAvatar
               src={item.imgUrl}
@@ -142,7 +141,7 @@ const MiniCart = ({ toggleSidenav }) => {
                 {/* ${item.price.toFixed(2)} x {item.qty} */}
               </Tiny>
               <Box fontWeight={600} fontSize="14px" color="#FF8236" mt={0.5}>
-                ${(item.qty * item.price).toFixed(2)}
+                KWD {(item.qty * item.price).toFixed(2)}
               </Box>
             </Box>
 
@@ -171,7 +170,7 @@ const MiniCart = ({ toggleSidenav }) => {
               fullWidth
               onClick={toggleSidenav}
             >
-              {getTrans("CheckoutNow")} (${getTotalPrice().toFixed(2)})
+              {getTrans("CheckoutNow")} (KWD {getTotalPrice().toFixed(2)})
             </BazarButton>
           </Link>
         </Box>

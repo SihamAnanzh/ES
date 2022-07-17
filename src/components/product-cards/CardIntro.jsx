@@ -76,8 +76,10 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
   const handleCartAmountChange = useCallback(
     (amount, product, buyNow) => () => {
       let duplicate;
-      console.log(state.cart);
-      console.log("product", product);
+      let replaceItem = localStorage.setItem(
+        "product",
+        JSON.stringify({ product, amount })
+      );
       state.cart.map((item) => {
         item.mainId != product.mainId ? (duplicate = true) : "";
       });
@@ -105,7 +107,13 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
     state.cart.map((item) => {
       handleClearCart(item);
     });
-    console.log(state.cart);
+
+    let item = JSON.parse(localStorage.getItem("product"));
+
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { ...item.product, qty: item.amount },
+    });
   };
   const handleClose = () => {
     setOpen(false);
@@ -246,7 +254,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
               {getTrans("Total")} :{" "}
             </H2>
             <H3 color="#FF8236" style={{ display: "inline" }}>
-              {`${itemPrice} * ${amount}`} = ${itemPrice * amount}
+              {`KWD ${itemPrice} * ${amount}`} = KWD {itemPrice * amount}
             </H3>
           </Box>
           <Box mb={3}>

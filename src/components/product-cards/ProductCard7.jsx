@@ -82,11 +82,11 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl }) => {
 
         <FlexBox gap={1} flexWrap="wrap" alignItems="center">
           <Span color="grey.600">
-            ${price.toFixed(2)} x {qty}
+            KWD {price.toFixed(2)} x {qty}
           </Span>
 
           <Span fontWeight={600} color="#595959">
-            ${(price * qty).toFixed(2)}
+            KWD {(price * qty).toFixed(2)}
           </Span>
         </FlexBox>
 

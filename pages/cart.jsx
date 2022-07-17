@@ -96,7 +96,8 @@ const Cart = ({ userInfo }) => {
                 taxes: null,
               },
               // `${process.env.NEXTAUTH_URL}${route.locale}`
-              `http://localhost:3000/orders`
+              // `http://localhost:3000/orders`
+              `${route.asPath}/orders`
             );
             goSell.openLightBox();
           } else
@@ -113,15 +114,19 @@ const Cart = ({ userInfo }) => {
         });
       }
     } else {
-      toast.warn(getTrans("needLogin"), {
-        position: "top-center",
-        autoClose: 5005,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        autoClose: false,
+      // toast.warn(getTrans("needLogin"), {
+      //   position: "top-center",
+      //   autoClose: 5005,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   autoClose: false,
+      // });
+
+      route.push("/login?callbackurl=/cart", "/login?callbackurl=/cart", {
+        locale: route.locale,
       });
     }
   };
@@ -221,7 +226,7 @@ const Cart = ({ userInfo }) => {
                 fontWeight={600}
                 lineHeight="1"
               >
-                ${getTotalPrice().toFixed(2)}
+                KWD {getTotalPrice().toFixed(2)}
               </Span>
             </FlexBetween>
 

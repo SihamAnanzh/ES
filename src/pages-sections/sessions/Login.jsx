@@ -5,7 +5,7 @@ import BazarTextField from "components/BazarTextField";
 import { H3, Small } from "components/Typography";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as yup from "yup";
 import EyeToggleButton from "./EyeToggleButton";
 import SocialButtons from "./SocialButtons";
@@ -45,21 +45,23 @@ export const Wrapper = styled(({ children, passwordVisibility, ...rest }) => (
   },
 }));
 
-const Login = ({ csrfToken, providers }) => {
+const Login = ({ csrfToken, providers, setDialogOpen, dialogOpen }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
 
   const route = useRouter();
-  const { callbackurl } = route.query;
+
   const { t } = useTranslation();
+  const { callbackurl } = route.query;
   const handleFormSubmit = async (values) => {
-    console.log(values);
+    console.log(callbackurl);
     const res = await signIn("xpress-login-auth", {
       redirect: false,
       username: values.email,
       password: values.password,
+      callbackUrl: callbackurl,
     });
     if (res?.error) {
       console.log(res);
@@ -83,7 +85,14 @@ const Login = ({ csrfToken, providers }) => {
         draggable: true,
         progress: undefined,
       });
-      // route.push("/profile", "/profile", { locale: route.locale });
+
+      if (res.url) {
+        // route.push(route.asPath, route.asPath, { locale: route.locale });
+
+        if (callbackurl)
+          route.push(callbackurl, callbackurl, { locale: route.locale });
+        else route.push("/profile", { locale: route.locale });
+      }
     }
   };
 
@@ -91,13 +100,6 @@ const Login = ({ csrfToken, providers }) => {
   const getTrans = (key) => {
     return t(`common:${key}`);
   };
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
-      initialValues,
-      onSubmit: handleFormSubmit,
-      validationSchema: formSchema,
-    });
-
   const formSchema = yup.object().shape({
     password: yup.string().required(getTrans("Passwordisrequired")),
     email: yup
@@ -105,8 +107,15 @@ const Login = ({ csrfToken, providers }) => {
       .email(getTrans("invalidemail"))
       .required(getTrans("Emailisrequired")),
   });
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues,
+      onSubmit: handleFormSubmit,
+      validationSchema: formSchema,
+    });
+
   return (
-    <>
+    <div>
       <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
         <form
           method="post"
@@ -199,8 +208,7 @@ const Login = ({ csrfToken, providers }) => {
           redirectText={getTrans("SignUp")}
         />
       </Wrapper>
-      <ToastContainer />
-    </>
+    </div>
   );
 };
 

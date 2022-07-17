@@ -23,6 +23,7 @@ import { useEffect } from "react";
 import BackendManager from "globalManager/BackendManager";
 import { Span } from "components/Typography";
 import { MobileDatePicker } from "@mui/lab";
+import PlayStore from "components/icons/PlayStore";
 
 const StyledLink = styled("a")(({ theme }) => ({
   position: "relative",
@@ -172,7 +173,7 @@ const Footer = () => {
                 <AppStore />
                 <FlexBox flexWrap="wrap">
                   <a
-                    href=""
+                    href="https://appgallery.huawei.com/app/C105992195"
                     key="AppleStore"
                     target="_blank"
                     style={{ display: "inline-block", width: "160px" }}
@@ -180,13 +181,23 @@ const Footer = () => {
                     <Box
                       m={1}
                       gap={1}
-                      p="10px 16px"
+                      p="5px 8px"
+                      pt="8px"
                       color="white"
                       display="flex"
                       bgcolor="#fff"
                       borderRadius="5px"
                       alignItems="center"
                     >
+                      <div className="">
+                        {" "}
+                        <img
+                          style={{ width: "28px", height: "27px" }}
+                          src="/assets/images/huawei.webp"
+                          alt=""
+                        />
+                      </div>
+
                       <Box>
                         <Box
                           color="#595959"

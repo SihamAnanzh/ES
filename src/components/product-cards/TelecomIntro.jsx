@@ -70,9 +70,10 @@ const TelecomIntro = ({
     if (session.data) {
       BackendManager.getUserProfile(session.data.user, router.locale).then(
         (res) => {
-          console.log();
           res.phone.length == 12
             ? ((phone = res.phone.slice(0, 4)), setPhonNumber(phone))
+            : res.phone.length == 8
+            ? setPhonNumber(phone)
             : "";
         }
       );
@@ -88,8 +89,7 @@ const TelecomIntro = ({
   const handleCartAmountChange = useCallback(
     (amount, product, buyNow) => () => {
       let duplicate;
-      console.log(state.cart);
-      console.log("product", product);
+
       state.cart.map((item) => {
         item.mainId != product.mainId ? (duplicate = true) : "";
       });
@@ -123,23 +123,31 @@ const TelecomIntro = ({
   };
 
   const handleOgPayment = async () => {
+    console.log("trigger");
     if (state.cart.length > 0) {
       setOpen(true);
     } else if (!session.data) {
-      toast.warn(getTrans("needLogin"), {
-        position: "top-center",
-        autoClose: 5005,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        autoClose: false,
-      });
+      router.push(
+        "/login?callbackurl=" + router.asPath,
+        "/login?callbackurl=" + router.asPath,
+        {
+          locale: router.locale,
+        }
+      );
+      // toast.warn(getTrans("needLogin"), {
+      //   position: "top-center",
+      //   autoClose: 5005,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   autoClose: false,
+      // });
     } else {
       dataObjects.length == 0
         ? alert("pick one")
-        : (phoneNumner.length === 8
+        : (phoneNumner.length === 8 || phoneNumner != ""
             ? await BackendManager.getOgLinkCheckout(
                 dataObjects,
                 phoneNumner
@@ -350,12 +358,12 @@ const TelecomIntro = ({
             </H2>
             {id == 5 ? (
               <H3 color="#FF8236" style={{ display: "inline" }}>
-                {`${itemPrice} * ${denominationValue}`} = $
+                {`KWD ${itemPrice} * ${denominationValue}`} =KWD{" "}
                 {itemPrice * denominationValue}
               </H3>
             ) : (
               <H3 color="#FF8236" style={{ display: "inline" }}>
-                {`${amount} * ${amount}`} = ${amount * amount}
+                {`KWD ${amount} * ${amount}`} = KWD {amount * amount}
               </H3>
             )}
           </Box>

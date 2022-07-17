@@ -9,6 +9,7 @@ import React from "react";
 import BackendManager from "../../../src/globalManager/BackendManager";
 import { getSession, SessionProvider, useSession } from "next-auth/react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import ServiceCard from "../../../src/components/product-cards/ServiceCard";
 
 const Index = ({ data, searchResult }) => {
   const [page, setPage] = useState(1);
@@ -28,18 +29,32 @@ const Index = ({ data, searchResult }) => {
       >
         <Grid container spacing={3} minHeight={500}>
           {searchResult.length > 0 ? (
-            searchResult.map((item, ind) => (
-              <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
-                <ProductCard1
-                  id={item.category.id}
-                  title={item.title}
-                  imgUrl={item.category.logo_url}
-                  haveIcon={false}
-                  notProduct={true}
-                  isCard={true}
-                />
-              </Grid>
-            ))
+            searchResult.map((item, ind) =>
+              item.category.id == 600 ? (
+                <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
+                  <ServiceCard
+                    id={item.id}
+                    title={item.title}
+                    imgUrl={item.category.logo_url}
+                    isCard={item.is_card}
+                    price={item.price}
+                    newPrice={item.mewPrice}
+                    items={item.denominations}
+                  />
+                </Grid>
+              ) : (
+                <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
+                  <ProductCard1
+                    id={item.category.id}
+                    title={item.title}
+                    imgUrl={item.category.logo_url}
+                    haveIcon={false}
+                    notProduct={true}
+                    isCard={true}
+                  />
+                </Grid>
+              )
+            )
           ) : (
             <>
               <h1>No Content Found</h1>

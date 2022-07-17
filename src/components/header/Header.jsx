@@ -17,6 +17,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Login from "pages-sections/sessions/Login";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import { layoutConstant } from "utils/constants";
 import SearchBox from "../search-box/SearchBox"; // styled component
@@ -50,7 +51,18 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
       route.push("/profile", "/profile", { locale: route.locale });
     }
   };
+  const loginRef = useRef();
 
+  const clickOutside = (e) => {
+    if (loginRef.current && loginRef.current.contains(e.target)) {
+      setDialogOpen(!dialogOpen);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("click", clickOutside);
+
+    return () => document.removeEventListener("click", clickOutside);
+  }, []);
   const toggleSidenav = () => setSidenavOpen(!sidenavOpen);
 
   const cartHandle = (
@@ -140,12 +152,18 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
         </FlexBox>
 
         <Dialog
+          ref={loginRef}
           open={dialogOpen}
           fullWidth={isMobile}
           scroll="body"
           onClose={toggleDialog}
         >
-          <Login providers={providers} csrfToken={csrfToken} />
+          <Login
+            dialogOpen={dialogOpen}
+            setDialogOpen={setDialogOpen}
+            providers={providers}
+            csrfToken={csrfToken}
+          />
         </Dialog>
 
         <Drawer open={sidenavOpen} anchor="right" onClose={toggleSidenav}>

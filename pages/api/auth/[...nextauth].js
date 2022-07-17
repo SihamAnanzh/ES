@@ -81,7 +81,6 @@ export default NextAuth({
           },
           headers: { "Content-Type": "application/json" },
         });
-        console.log(response);
         if (response.data.status.code === 200) {
           user.user.token = response.data.results.token;
         } else {
