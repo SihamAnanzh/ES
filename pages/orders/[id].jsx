@@ -26,6 +26,7 @@ import BazarButton from "components/BazarButton";
 import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
 
 const StyledFlexbox = styled(FlexBetween)(({ theme }) => ({
   flexWrap: "wrap",
@@ -57,6 +58,9 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
   console.log(theme.breakpoints.up("md"));
   return (
     <CustomerDashboardLayout>
+      <Head>
+        <title>{"orderId?" + route.query.id}</title>
+      </Head>
       <Card
         sx={{
           p: 0,
@@ -132,7 +136,7 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
         </Box>
       </Card>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={3} style={{ justifyContent: "flex-start" }}>
         <Grid item lg={6} md={6} xs={12}>
           <Card
             sx={{

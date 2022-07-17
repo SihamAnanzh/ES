@@ -12,6 +12,7 @@ import { getSession, useSession } from "next-auth/react";
 import BackendManager from "../../src/globalManager/BackendManager";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
 
 const Profile = ({ data }) => {
   const session = useSession();
@@ -21,6 +22,9 @@ const Profile = ({ data }) => {
   };
   return (
     <CustomerDashboardLayout>
+      <Head>
+        <title>Profile</title>
+      </Head>
       <DashboardPageHeader
         color="#595959"
         icon={Person}

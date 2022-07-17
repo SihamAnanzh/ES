@@ -75,6 +75,6 @@
   "clearCart": "can't buy unless the cart is empty",
   "Agree": "Agree",
   "cancel": "Disagree",
-  "titleDiaglog": "can't add multiple item from different categories",
+  "titleDiaglog": "you have products from another category, do you want to replace the products?",
   "message": "to continue we need to clear the cart"
 }

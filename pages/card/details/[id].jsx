@@ -9,6 +9,7 @@ import { getSession, useSession } from "next-auth/react";
 import BackendManager from "../../../src/globalManager/BackendManager";
 import CardIntro from "../../../src/components/product-cards/CardIntro";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
 
 // ===============================================================
 const ProductDetails = ({ data, list, relatedProducts }) => {
@@ -22,6 +23,9 @@ const ProductDetails = ({ data, list, relatedProducts }) => {
 
   return (
     <NavbarLayout list={list}>
+      <Head>
+        <title>{data.title}</title>
+      </Head>
       {data && (
         <CardIntro
           imgGroup={data.logo_url}

@@ -114,7 +114,7 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl }) => {
               marginLeft: "5px",
             }}
             variant="outlined"
-            onClick={handleCartAmountChange(qty + 1)}
+            onClick={handleCartAmountChange(Number(Number(qty) + 1))}
           >
             <Add fontSize="small" />
           </Button>

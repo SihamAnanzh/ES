@@ -55,7 +55,7 @@ const Footer = () => {
 
   return (
     <footer>
-      <Box bgcolor="#A8123E">
+      <Box bgcolor="#A8123E" mt={20}>
         <Container
           sx={{
             p: "1rem",

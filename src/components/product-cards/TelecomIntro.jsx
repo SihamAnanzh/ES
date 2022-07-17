@@ -170,7 +170,7 @@ const TelecomIntro = ({
     }
   };
 
-  let message = getTrans("clearCart");
+  let message = getTrans("titleDiaglog");
   return (
     <Box width="100%">
       <div>
@@ -182,12 +182,8 @@ const TelecomIntro = ({
           aria-describedby="alert-dialog-slide-description"
         >
           {" "}
-          <DialogTitle>{message}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              {getTrans("message")}
-            </DialogContentText>
-          </DialogContent>
+          <DialogTitle fontSize={8}>{message}</DialogTitle>
+          <DialogContent></DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>{getTrans("cancel")}</Button>
             <Button
@@ -201,7 +197,14 @@ const TelecomIntro = ({
           </DialogActions>
         </Dialog>
       </div>
-      <Grid container spacing={3} justifyContent="space-around">
+      <Grid
+        container
+        spacing={3}
+        justifyContent="space-around"
+        height="max-content"
+        pb={8}
+        pt={8}
+      >
         <Grid item md={6} xs={12} alignItems="center">
           <FlexBox justifyContent="center" mb={6}>
             {imgGroup && (

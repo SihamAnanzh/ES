@@ -27,6 +27,7 @@ import { withStyles } from "@mui/material";
 import { useTranslation } from "next-i18next";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const Cart = ({ userInfo }) => {
   const { state, dispatch } = useAppContext();
@@ -110,9 +111,9 @@ const Cart = ({ userInfo }) => {
                 shipping: null,
                 taxes: null,
               },
-              // `${process.env.NEXTAUTH_URL}${route.locale}`
+              `${process.env.NEXTAUTH_URL}${route.locale}/orders`
               // `http://localhost:3000/${route.locale}/orders`
-              `https://xpresstors.herokuapp.com/${route.locale}/orders`
+              // `https://xpresstors.herokuapp.com/${route.locale}/orders`
             );
             goSell.openLightBox();
           } else
@@ -148,6 +149,9 @@ const Cart = ({ userInfo }) => {
 
   return (
     <CheckoutNavLayout>
+      <Head>
+        <title>Cart</title>
+      </Head>
       <Grid
         style={{
           height: "100vh",

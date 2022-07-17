@@ -37,6 +37,12 @@
 
 .MuiGrid-root.MuiGrid-container{
     justify-content: center;
+    padding-top: 24px;
+}
+
+
+.hold{
+    margin-bottom: -32px;
 }
 @media (min-width:1700px) {
     .MuiContainer-root.MuiContainer-maxWidthLg {

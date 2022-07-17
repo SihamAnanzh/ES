@@ -87,7 +87,7 @@ BackendManager.getUserOrders = async (token, lang) => {
       Authorization: token,
     },
   });
-
+  console.log(res);
   return res.data.results;
 };
 

@@ -12,9 +12,11 @@ const RelatedProducts = ({ productsData }) => {
     return t(`common:${key}`);
   };
   return (
-    <Box mb={7.5}>
-      <H3 mb={3}>{getTrans("RelatedProducts")}</H3>
-      <Grid container spacing={8}>
+    <Box mb={7.5} height="auto" pb={2}>
+      <H3 mb={3} p={2}>
+        {getTrans("RelatedProducts")}
+      </H3>
+      <Grid container spacing={2}>
         {productsData &&
           productsData.map((item, ind) => (
             <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>

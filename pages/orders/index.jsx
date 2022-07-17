@@ -11,13 +11,27 @@ import BackEndManager from "../../src/globalManager/BackendManager";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import BackendManager from "../../src/globalManager/BackendManager";
+import { useAppContext } from "contexts/AppContext";
+import Head from "next/head";
 const Orders = ({ orderList }) => {
   const route = useRouter();
   const session = useSession();
-
+  const { state, dispatch } = useAppContext();
   const { t } = useTranslation();
   const getTrans = (key) => {
     return t(`common:${key}`);
+  };
+  const handleClearCart = (product) => {
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { ...product, qty: 0 },
+    });
+  };
+
+  const clearCart = () => {
+    state.cart.map((item) => {
+      handleClearCart(item);
+    });
   };
 
   useEffect(() => {
@@ -49,8 +63,7 @@ const Orders = ({ orderList }) => {
       }
     }
 
-    let res = JSON.parse(localStorage.getItem("transaction"));
-    if (res == "000") {
+    if (JSON.parse(localStorage.getItem("transaction")) == "000") {
       if (session.data) {
         let orderDetails = JSON.parse(localStorage.getItem("order"));
 
@@ -74,7 +87,9 @@ const Orders = ({ orderList }) => {
               autoClose: false,
             });
           } else if (res.status.code == 200) {
+            clearCart();
             localStorage.setItem("order", JSON.stringify(null));
+
             toast.success(res.results, {
               position: "top-center",
               autoClose: 5005,
@@ -85,14 +100,18 @@ const Orders = ({ orderList }) => {
               progress: undefined,
               autoClose: false,
             });
+            route.reload();
           }
         });
       }
     }
-  }, [route, session]);
+  }, [route]);
 
   return (
     <CustomerDashboardLayout>
+      <Head>
+        <title>Orders</title>
+      </Head>
       <DashboardPageHeader
         title={getTrans("MyOrders")}
         icon={ShoppingBag}

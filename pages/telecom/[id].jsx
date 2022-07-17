@@ -16,14 +16,22 @@ const Index = ({ data, singleCategoryData }) => {
   const [singleCategory, setSingleCategory] = useState([singleCategoryData]);
   const handlePageChange = (_, page) => setPage(page);
 
+  console.log(singleCategoryData);
   return (
-    <SaleLayout2 list={data}>
+    <SaleLayout2 title={singleCategoryData.title} list={data}>
       <Container
         sx={{
           mt: 4,
         }}
       >
-        <Grid container spacing={3} minHeight={500}>
+        <Grid
+          container
+          spacing={3}
+          minHeight={500}
+          style={{
+            justifyContent: "flex-start",
+          }}
+        >
           {singleCategory.map((item, ind) =>
             item.has_subcategories
               ? item.subcategories.map((item) => (

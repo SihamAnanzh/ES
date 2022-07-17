@@ -7,6 +7,7 @@ import BackendManager from "../../src/globalManager/BackendManager";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import TelecomIntro from "../../src/components/product-cards/TelecomIntro";
+import Head from "next/head";
 
 // ===============================================================
 const ProductDetails = ({ data }) => {
@@ -19,8 +20,12 @@ const ProductDetails = ({ data }) => {
     setSelectedOption(newValue);
   };
 
+  console.log(data);
   return (
     <NavbarLayout>
+      <Head>
+        <title>{data.serviceName}</title>
+      </Head>
       {data && (
         <TelecomIntro
           serviceCode={data.serviceCode}

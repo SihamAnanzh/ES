@@ -27,6 +27,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { toast, ToastContainer } from "react-toastify";
+import Head from "next/head";
 
 const quickPay = ({ quickList, userInfo }) => {
   const { t } = useTranslation();
@@ -44,18 +45,21 @@ const quickPay = ({ quickList, userInfo }) => {
   return (
     <CustomerDashboardLayout>
       <ToastContainer />
+      <Head>
+        <title>QuickPay</title>
+      </Head>
       <DashboardPageHeader
         title={getTrans("QuickPay")}
         icon={ShoppingBag}
         navigation={<CustomerDashboardNavigation />}
       />
 
-      <Box py={1}>
+      <Box py={1} sx={{ height: "max-content", pb: 20 }}>
         {quickList &&
           quickList.map((item) => (
             <Card
               sx={{
-                p: 0,
+                pb: "20px",
                 mb: "30px",
               }}
             >

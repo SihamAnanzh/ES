@@ -19,7 +19,11 @@ const Index = ({ data, singleCategoryData, mainID }) => {
   // }, [page]);
 
   return (
-    <SaleLayout2 sx={{ background: "red" }} list={data}>
+    <SaleLayout2
+      title={singleCategoryData.title}
+      sx={{ background: "red" }}
+      list={data}
+    >
       <Container
         sx={{
           mt: 4,

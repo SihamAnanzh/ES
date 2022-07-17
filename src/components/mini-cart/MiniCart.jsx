@@ -29,11 +29,12 @@ const MiniCart = ({ toggleSidenav }) => {
 
   const handleCartAmountChange = useCallback(
     (amount, product) => () => {
+      console.log(amount);
       let qty = amount;
-      if (amount > 4) {
+      if (amount >= 4) {
         qty = 4;
       } else {
-        qty = amount;
+        qty = qty;
       }
       dispatch({
         type: "CHANGE_CART_AMOUNT",
@@ -102,7 +103,10 @@ const MiniCart = ({ toggleSidenav }) => {
                   borderRadius: "300px",
                   color: "#FF8236",
                 }}
-                onClick={handleCartAmountChange(item.qty + 1, item)}
+                onClick={handleCartAmountChange(
+                  Number(Number(item.qty) + 1),
+                  item
+                )}
               >
                 <Add fontSize="small" />
               </BazarButton>

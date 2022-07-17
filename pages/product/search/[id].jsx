@@ -27,7 +27,12 @@ const Index = ({ data, searchResult }) => {
           mt: 4,
         }}
       >
-        <Grid container spacing={3} minHeight={500}>
+        <Grid
+          container
+          spacing={3}
+          minHeight={500}
+          style={{ justifyContent: "flex-start" }}
+        >
           {searchResult.length > 0 ? (
             searchResult.map((item, ind) =>
               item.category.id == 600 ? (

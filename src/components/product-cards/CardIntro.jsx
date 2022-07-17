@@ -44,7 +44,8 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
   const route = useRouter();
   const cartList = state.cart;
   const [cart, setCart] = useState(state.cart);
-  let buyNow = true;
+
+  const [buyNow, setBuyNow] = useState(true);
   const cartItem = cartList.find(
     (item) => item.id === id || item.id === routerId
   );
@@ -90,11 +91,15 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
             type: "CHANGE_CART_AMOUNT",
             payload: { ...product, qty: amount },
           }),
-          buyNow && router.push("/cart"));
+          buyNow && router.push("/cart", "/cart", { locale: route.locale }));
     },
 
     [state.cart]
   );
+
+  // useEffect(()=>{
+  //   buyNow && router.push("/cart","/cart",{locale:route.locale})
+  //   },[buyNow])
   const [open, setOpen] = React.useState(false);
   const handleClearCart = (product) => {
     dispatch({
@@ -121,7 +126,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
   let message = getTrans("titleDiaglog");
 
   return (
-    <Box width="100%">
+    <Box width="100%" height="max-content">
       <div>
         <Dialog
           open={open}
@@ -130,12 +135,8 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{message}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              {getTrans("message")}
-            </DialogContentText>
-          </DialogContent>
+          <DialogTitle fontSize={8}>{message}</DialogTitle>
+
           <DialogActions>
             <Button onClick={handleClose}>{getTrans("cancel")}</Button>
             <Button
@@ -172,7 +173,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
           </H1>
 
           <FlexBox alignItems="center" mb={2}>
-            <H2 color="#595959" mb={0.5} lineHeight="1">
+            <H2 fontSize="22px" color="#595959" mb={0.5} lineHeight="1">
               {getTrans("Amounts")} :
             </H2>
           </FlexBox>
@@ -215,7 +216,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
           </Box>
 
           <Box mb={3}>
-            <H2 color="#595959" mb={5.5} lineHeight="1">
+            <H2 fontSize="22px" color="#595959" mb={5.5} lineHeight="1">
               {getTrans("Quantity")} :
             </H2>
 
@@ -246,6 +247,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
           </Box>
           <Box mb={3}>
             <H2
+              fontSize="22px"
               color="#595959"
               mb={5.5}
               lineHeight="1"
@@ -253,7 +255,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
             >
               {getTrans("Total")} :{" "}
             </H2>
-            <H3 color="#FF8236" style={{ display: "inline" }}>
+            <H3 fontSize="22px" color="#FF8236" style={{ display: "inline" }}>
               {`KWD ${itemPrice} * ${amount}`} = KWD {itemPrice * amount}
             </H3>
           </Box>

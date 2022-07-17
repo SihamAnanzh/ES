@@ -28,7 +28,7 @@ const SaleLayout2 = ({
   providers,
   list,
   children,
-  title = "Multivendor Ecommerce | Sale",
+  title = "XpressStors",
 }) => {
   return (
     <Fragment>
