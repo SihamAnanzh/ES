@@ -97,7 +97,7 @@ const Cart = ({ userInfo }) => {
               },
               // `${process.env.NEXTAUTH_URL}${route.locale}`
               // `http://localhost:3000/orders`
-              `${route.asPath}/orders`
+              `https://xpresstors.herokuapp.com/${route.locale}/orders`
             );
             goSell.openLightBox();
           } else
