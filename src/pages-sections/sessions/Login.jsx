@@ -12,6 +12,7 @@ import SocialButtons from "./SocialButtons";
 import { useSession, getSession, signIn, providers } from "next-auth/react";
 import { toast, ToastContainer } from "react-toastify";
 import { useTranslation } from "next-i18next";
+import { CloseOutlined, CollectionsBookmarkRounded } from "@mui/icons-material";
 const fbStyle = {
   background: "#3B5998",
   color: "white",
@@ -112,6 +113,10 @@ const Login = ({ csrfToken, providers, setDialogOpen, dialogOpen }) => {
     <div>
       <ToastContainer />
       <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
+        <CloseOutlined
+          onClick={() => setDialogOpen(false)}
+          sx={{ cursor: "pointer" }}
+        />
         <form
           method="post"
           action="/api/auth/callback/xpress-login-auth"

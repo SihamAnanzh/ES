@@ -53,16 +53,6 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
   };
   const loginRef = useRef();
 
-  const clickOutside = (e) => {
-    if (loginRef.current && loginRef.current.contains(e.target)) {
-      setDialogOpen(false);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener("click", clickOutside);
-
-    return () => document.removeEventListener("click", clickOutside);
-  }, []);
   const toggleSidenav = () => setSidenavOpen(!sidenavOpen);
 
   const cartHandle = (
