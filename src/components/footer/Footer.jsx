@@ -54,8 +54,8 @@ const Footer = () => {
   };
 
   return (
-    <footer>
-      <Box bgcolor="#A8123E" mt={20}>
+    <footer style={{ marginTop: "40px" }}>
+      <Box bgcolor="#A8123E">
         <Container
           sx={{
             p: "1rem",
@@ -169,9 +169,9 @@ const Footer = () => {
                   ))}
                 </FlexBox> */}
               </Grid>
-              <Grid item lg={3} md={6} sm={6} xs={6}>
+              <Grid item lg={3} md={6} sm={6} xs={6} className="appLinks">
                 <AppStore />
-                <FlexBox flexWrap="wrap">
+                <FlexBox flexWrap="wrap" className="links">
                   <a
                     href="https://appgallery.huawei.com/app/C105992195"
                     key="AppleStore"

@@ -51,7 +51,6 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
       route.push("/profile", "/profile", { locale: route.locale });
     }
   };
-  const loginRef = useRef();
 
   const toggleSidenav = () => setSidenavOpen(!sidenavOpen);
 
@@ -59,7 +58,7 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
     <Badge badgeContent={state.cart.length} color="primary">
       <Box
         component={IconButton}
-        ml={2.5}
+        ml={0.5}
         bgcolor="grey.200"
         p={1.25}
         onClick={toggleSidenav}
@@ -126,10 +125,12 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
             display: {
               xs: "none",
               md: "flex",
+              gap: "2px !important",
             },
           }}
         >
           <Box
+            style={{ marginLeft: "15px" }}
             component={IconButton}
             p={1.25}
             bgcolor="grey.200"
@@ -142,7 +143,6 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
         </FlexBox>
 
         <Dialog
-          ref={loginRef}
           open={dialogOpen}
           fullWidth={isMobile}
           scroll="body"

@@ -45,7 +45,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
   const cartList = state.cart;
   const [cart, setCart] = useState(state.cart);
 
-  const [buyNow, setBuyNow] = useState(true);
+  const [buyNow, setBuyNow] = useState(false);
   const cartItem = cartList.find(
     (item) => item.id === id || item.id === routerId
   );
@@ -97,6 +97,30 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
     [state.cart]
   );
 
+  const handleCartAmountChangeBuyNow = useCallback(
+    (amount, product) => () => {
+      let duplicate;
+      let replaceItem = localStorage.setItem(
+        "product",
+        JSON.stringify({ product, amount })
+      );
+      setBuyNow(true);
+      state.cart.map((item) => {
+        item.mainId != product.mainId ? (duplicate = true) : "";
+      });
+
+      duplicate
+        ? setOpen(true)
+        : (dispatch({
+            type: "CHANGE_CART_AMOUNT",
+            payload: { ...product, qty: amount },
+          }),
+          router.push("/cart", "/cart", { locale: route.locale }));
+    },
+
+    [state.cart]
+  );
+
   // useEffect(()=>{
   //   buyNow && router.push("/cart","/cart",{locale:route.locale})
   //   },[buyNow])
@@ -119,6 +143,8 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
       type: "CHANGE_CART_AMOUNT",
       payload: { ...item.product, qty: item.amount },
     });
+
+    buyNow && router.push("/cart", "/cart", { locale: route.locale });
   };
   const handleClose = () => {
     setOpen(false);
@@ -280,7 +306,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
               className="add"
               color="primary"
               variant="contained"
-              onClick={handleCartAmountChange(amount, dataObjects, buyNow)}
+              onClick={handleCartAmountChangeBuyNow(amount, dataObjects)}
               sx={{
                 mt: 1.1,
                 ml: 1.1,

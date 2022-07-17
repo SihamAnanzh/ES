@@ -19,6 +19,12 @@
     .MuiBox-root {
         margin: 5px;
     }
+    .appLinks .MuiBox-root {
+        margin: 0;
+    }
+    .appLinks .links{
+        margin: 4px;
+    }
 
     .simplebar-content {
         height: 5.6rem;
