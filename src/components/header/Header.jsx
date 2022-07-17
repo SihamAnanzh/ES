@@ -55,7 +55,7 @@ const Header = ({ isFixed, className, csrfToken, providers, list }) => {
 
   const clickOutside = (e) => {
     if (loginRef.current && loginRef.current.contains(e.target)) {
-      setDialogOpen(!dialogOpen);
+      setDialogOpen(false);
     }
   };
   useEffect(() => {

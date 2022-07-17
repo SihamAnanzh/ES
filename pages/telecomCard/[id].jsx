@@ -23,6 +23,7 @@ const ProductDetails = ({ data }) => {
     <NavbarLayout>
       {data && (
         <TelecomIntro
+          serviceCode={data.serviceCode}
           imgGroup={data.imageUrl}
           title={data.serviceName}
           id={data.serviceID}

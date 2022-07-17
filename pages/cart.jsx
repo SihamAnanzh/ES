@@ -50,6 +50,21 @@ const Cart = ({ userInfo }) => {
     let cartItem = [];
 
     if (session.data) {
+      if ((userInfo.email == "", userInfo.phone == "")) {
+        return toast.warn(
+          "The profile is not complete, you need to enter all your information",
+          {
+            position: "top-center",
+            autoClose: 5005,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            autoClose: false,
+          }
+        );
+      }
       if (state.cart.length > 0) {
         let items = state.cart.map((item) => {
           cartItem.push({
@@ -96,7 +111,7 @@ const Cart = ({ userInfo }) => {
                 taxes: null,
               },
               // `${process.env.NEXTAUTH_URL}${route.locale}`
-              // `http://localhost:3000/orders`
+              // `http://localhost:3000/${route.locale}/orders`
               `https://xpresstors.herokuapp.com/${route.locale}/orders`
             );
             goSell.openLightBox();

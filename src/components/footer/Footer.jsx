@@ -188,6 +188,7 @@ const Footer = () => {
                       bgcolor="#fff"
                       borderRadius="5px"
                       alignItems="center"
+                      justifyContent="center"
                     >
                       <div className="">
                         {" "}

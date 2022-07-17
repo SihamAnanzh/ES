@@ -20,7 +20,7 @@ export default NextAuth({
           },
         });
         if (res) {
-          console.log("RESPONSE IS : ", res.data);
+          // console.log("RESPONSE IS : ", res.data);
           if (res.data.status.code !== 200) {
             return null;
           } else {
@@ -72,12 +72,13 @@ export default NextAuth({
         user.account.provider === "facebook"
       ) {
         const endpoint = process.env.endPoint + "/user/login";
+        console.log("account", user.account.user);
         const response = await axios({
           method: "post",
           url: endpoint,
           data: {
             social_media_id: user.account.providerAccountId,
-            social_media_type_id: user.account.provider == "facebook" ? 1 : 2,
+            social_media_type_id: 1,
           },
           headers: { "Content-Type": "application/json" },
         });

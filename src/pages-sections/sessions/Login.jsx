@@ -56,7 +56,6 @@ const Login = ({ csrfToken, providers, setDialogOpen, dialogOpen }) => {
   const { t } = useTranslation();
   const { callbackurl } = route.query;
   const handleFormSubmit = async (values) => {
-    console.log(callbackurl);
     const res = await signIn("xpress-login-auth", {
       redirect: false,
       username: values.email,
@@ -64,7 +63,6 @@ const Login = ({ csrfToken, providers, setDialogOpen, dialogOpen }) => {
       callbackUrl: callbackurl,
     });
     if (res?.error) {
-      console.log(res);
       toast.warn(getTrans("wrongemailorpassword"), {
         position: "top-center",
         autoClose: 5005,
@@ -76,6 +74,7 @@ const Login = ({ csrfToken, providers, setDialogOpen, dialogOpen }) => {
         autoClose: false,
       });
     } else {
+      console.log("ress", res);
       toast.success(getTrans("Loggedin") + "...", {
         position: "top-center",
         autoClose: 5005,
@@ -85,14 +84,9 @@ const Login = ({ csrfToken, providers, setDialogOpen, dialogOpen }) => {
         draggable: true,
         progress: undefined,
       });
-
-      if (res.url) {
-        // route.push(route.asPath, route.asPath, { locale: route.locale });
-
-        if (callbackurl)
-          route.push(callbackurl, callbackurl, { locale: route.locale });
-        else route.push("/profile", { locale: route.locale });
-      }
+      if (callbackurl)
+        route.push(callbackurl, callbackurl, { locale: route.locale });
+      else route.push("/profile", { locale: route.locale });
     }
   };
 
@@ -116,6 +110,7 @@ const Login = ({ csrfToken, providers, setDialogOpen, dialogOpen }) => {
 
   return (
     <div>
+      <ToastContainer />
       <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
         <form
           method="post"

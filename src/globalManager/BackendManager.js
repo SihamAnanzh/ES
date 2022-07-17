@@ -193,22 +193,31 @@ BackendManager.getServicByid = async (id, lang) => {
   return res.data.results;
 };
 
-BackendManager.getOgLinkCheckout = async (dataObjects, phoneNumner) => {
+BackendManager.getOgCehckout = async (
+  dataObjects,
+  phoneNumner,
+  token,
+  lang
+) => {
+  console.log(phoneNumner);
   const res = await axios({
     method: "post",
-    url: url + "/og/payment/get_link",
+    url: url + "/user/orders/og_money/add",
     headers: {
-      lang: "en",
+      lang: lang,
+      Authorization: token,
     },
     data: {
-      amount: dataObjects.value,
-      msisdn: phoneNumner,
-      timestamp: "20211212",
-      description: "description",
-      description2: "description2",
+      category_id: "600",
+      serviceID: dataObjects.serviceID,
+      mobileNo: phoneNumner,
+      serviceCode: dataObjects.serviceCode,
+      amount: Number(dataObjects.value),
+      denominationId: dataObjects.id,
     },
   });
-  return res.data.results;
+  console.log(res);
+  return res.data;
 };
 
 BackendManager.PurchasePackageTap = async (data, token) => {

@@ -15,6 +15,7 @@ const Index = ({ data, singleCategoryData }) => {
   const [productList, setProductList] = useState([]);
   const [singleCategory, setSingleCategory] = useState([singleCategoryData]);
   const handlePageChange = (_, page) => setPage(page);
+
   return (
     <SaleLayout2 list={data}>
       <Container

@@ -1,22 +1,46 @@
-.textAmount:focus,.textAmount:hover{
+.textAmount:focus,
+.textAmount:hover {
     border-color: #000 !important;
     border: none;
 
 }
-    
+
 .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
     border-color: #000 !important;
     border: none !important;
 }
 
-.css-1o79yss-MuiGrid-root{
+.css-1o79yss-MuiGrid-root {
     height: max-content;
-    padding-bottom: 63px; 
+    padding-bottom: 63px;
 }
 
 @media (max-width:1060px) {
-    .MuiBox-root{
+    .MuiBox-root {
         margin: 5px;
     }
-    
+
+    .simplebar-content {
+        height: 5.6rem;
+    }
+}
+
+.MuiContainer-root.MuiContainer-maxWidthLg {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-bottom: -63px;
+}
+
+.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12 {
+    padding-bottom: 12px;
+}
+
+.MuiGrid-root.MuiGrid-container{
+    justify-content: center;
+}
+@media (min-width:1700px) {
+    .MuiContainer-root.MuiContainer-maxWidthLg {
+        max-width: 1274px;
+    }
+
 }

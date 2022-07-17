@@ -72,7 +72,7 @@ const SaleNavbar = ({ saleCategoryList, onChange }) => {
                 alt=""
               />
               <Title
-                sx={{ fontSize: "10px", fontWeight: "600" }}
+                sx={{ fontSize: "12px", fontWeight: "600" }}
                 selected={ind === selected}
               >
                 {item.title}

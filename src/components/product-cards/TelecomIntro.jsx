@@ -37,7 +37,7 @@ const TelecomIntro = ({
   id,
   mainCatigory,
   items,
-  serviceType,
+  serviceCode,
 }) => {
   const router = useRouter();
   const routerId = router.query.id;
@@ -51,30 +51,36 @@ const TelecomIntro = ({
   const [phoneNumner, setPhonNumber] = useState("");
   const [denominationValue, setDenominationValue] = useState();
   const [aciveClass, setAddClass] = useState(false);
+  const [userInfo, setUserInfo] = useState();
   const session = useSession();
 
   useEffect(() => {
-    items.length > 0 &&
-      (setObjects({
-        price: items[0].sellingPrice,
-        id: items[0].denominationID,
-        value: items[0].denominationValue,
-      }),
-      setPrice(items[0].sellingPrice),
-      setDenominationValue(items[0].denominationValue),
-      handleCartAmountChange(dataObjects, amount));
+    items.length > 0
+      ? (setObjects({
+          price: items[0].sellingPrice,
+          id: items[0].denominationID,
+          value: items[0].denominationValue,
+          serviceID: router.query.id,
+          serviceCode,
+        }),
+        setPrice(items[0].sellingPrice),
+        setDenominationValue(items[0].denominationValue))
+      : setObjects({
+          price: amount,
+          id: "",
+          value: amount,
+          serviceID: router.query.id,
+          serviceCode,
+        });
   }, []);
 
   useEffect(() => {
-    let phone;
     if (session.data) {
       BackendManager.getUserProfile(session.data.user, router.locale).then(
         (res) => {
-          res.phone.length == 12
-            ? ((phone = res.phone.slice(0, 4)), setPhonNumber(phone))
-            : res.phone.length == 8
-            ? setPhonNumber(phone)
-            : "";
+          setUserInfo(res);
+
+          setPhonNumber(res.phone);
         }
       );
     }
@@ -86,25 +92,6 @@ const TelecomIntro = ({
     return t(`common:${key}`);
   };
 
-  const handleCartAmountChange = useCallback(
-    (amount, product, buyNow) => () => {
-      let duplicate;
-
-      state.cart.map((item) => {
-        item.mainId != product.mainId ? (duplicate = true) : "";
-      });
-
-      duplicate
-        ? setOpen(true)
-        : (dispatch({
-            type: "CHANGE_CART_AMOUNT",
-            payload: { ...product, qty: amount },
-          }),
-          buyNow && router.push("/cart"));
-    },
-
-    [state.cart]
-  );
   const [open, setOpen] = React.useState(false);
   const handleClearCart = (product) => {
     dispatch({
@@ -123,7 +110,6 @@ const TelecomIntro = ({
   };
 
   const handleOgPayment = async () => {
-    console.log("trigger");
     if (state.cart.length > 0) {
       setOpen(true);
     } else if (!session.data) {
@@ -134,43 +120,56 @@ const TelecomIntro = ({
           locale: router.locale,
         }
       );
-      // toast.warn(getTrans("needLogin"), {
-      //   position: "top-center",
-      //   autoClose: 5005,
-      //   hideProgressBar: false,
-      //   closeOnClick: true,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      //   autoClose: false,
-      // });
     } else {
-      dataObjects.length == 0
-        ? alert("pick one")
-        : (phoneNumner.length === 8 || phoneNumner != ""
-            ? await BackendManager.getOgLinkCheckout(
-                dataObjects,
-                phoneNumner
-              ).then((res) => {
-                router.push(res);
-              })
-            : toast.warn(
-                router.locale == "ar"
-                  ? "يجب أن يتكون رقم الهاتف من 8 أحرف"
-                  : "phone Number should be 8 character !"
-              ),
+      if ((userInfo.email == "", userInfo.phone == "")) {
+        return toast.warn(
+          "The profile is not complete, you need to enter all your information",
           {
             position: "top-center",
-
+            autoClose: 5005,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
             autoClose: false,
-          });
+          }
+        );
+      } else {
+        await BackendManager.getOgCehckout(
+          dataObjects,
+          phoneNumner,
+          session.data.user,
+          router.locale
+        ).then((res) => {
+          if (res.status.code == 400) {
+            toast.warn(res.status.message, {
+              position: "top-center",
+              autoClose: 5005,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              autoClose: false,
+            });
+          } else {
+            toast.warn(res.status.message, {
+              position: "top-center",
+              autoClose: 5005,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              autoClose: false,
+            });
+          }
+        });
+      }
     }
   };
+
   let message = getTrans("clearCart");
   return (
     <Box width="100%">
@@ -251,11 +250,12 @@ const TelecomIntro = ({
                     onChange={(e) => {
                       setAmount(e.target.value),
                         setObjects({
+                          amount: e.target.value,
                           price: amount,
                           id: id,
                           value: amount,
-                          currency: "KWD",
-                          date: Date().toLocaleString(),
+                          serviceCode,
+                          serviceID: router.query.id,
                         });
                       setPrice(e.target.value);
                     }}
@@ -325,11 +325,12 @@ const TelecomIntro = ({
                   );
                   e.target.classList.add("selected");
                   setObjects({
+                    serviceCode,
+                    serviceID: router.query.id,
                     price: item.sellingPrice,
                     id: item.denominationID,
                     value: item.denominationValue,
                     currency: item.sellingCurrency,
-                    date: Date().toLocaleString(),
                   });
 
                   setPrice(item.sellingPrice);

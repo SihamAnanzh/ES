@@ -21,60 +21,71 @@ const Orders = ({ orderList }) => {
   };
 
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem("order")) !== null) {
+    console.log("trgger");
+    if (route.query.tap_id) {
       if (goSell) {
         goSell.showResult({
           callback: async (response) => {
-            if (response.callback.status === "CAPTURED") {
-              console.log(response);
-              let orderDetails = JSON.parse(localStorage.getItem("order"));
-              localStorage.setItem("order", JSON.stringify(null));
-              console.log(orderDetails);
-              if (session.data) {
-                let res = await BackendManager.PurchasePackageTap(
-                  orderDetails,
-                  session.data.user,
-                  route.locale
-                );
-                console.log(res);
-                if (res.status.code == 400) {
-                  toast.warn(res.status.message, {
-                    position: "top-center",
-                    autoClose: 5005,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    autoClose: false,
-                  });
-                }
-                if (res.status.code == 200) {
-                  toast.success(res.status.message, {
-                    position: "top-center",
-                    autoClose: 5005,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    autoClose: false,
-                  });
-                }
-              } else {
-                toast.warn(getTrans("Somethingwrongtrylater"), {
-                  position: "top-center",
-                  autoClose: 5005,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  autoClose: false,
-                });
-              }
+            console.log(response);
+            if (response.callback.response.code == "000") {
+              localStorage.setItem(
+                "transaction",
+                JSON.stringify(response.callback.response.code)
+              );
+            } else if (response.callback.response.code == "401") {
+              toast.warn("transaction failed try again", {
+                position: "top-center",
+                autoClose: 5005,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                autoClose: false,
+              });
             }
           },
+        });
+      }
+    }
+
+    let res = JSON.parse(localStorage.getItem("transaction"));
+    if (res == "000") {
+      if (session.data) {
+        let orderDetails = JSON.parse(localStorage.getItem("order"));
+
+        let res = BackendManager.PurchasePackageTap(
+          orderDetails,
+          session.data.user,
+          route.locale
+        ).then((res) => {
+          localStorage.setItem("transaction", null);
+
+          if (res.status.code == 400) {
+            localStorage.setItem("order", JSON.stringify(null));
+            toast.warn(res.status.message, {
+              position: "top-center",
+              autoClose: 5005,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              autoClose: false,
+            });
+          } else if (res.status.code == 200) {
+            localStorage.setItem("order", JSON.stringify(null));
+            toast.success(res.results, {
+              position: "top-center",
+              autoClose: 5005,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              autoClose: false,
+            });
+          }
         });
       }
     }

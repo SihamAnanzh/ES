@@ -25,9 +25,7 @@ const ProfileEditor = ({ res }) => {
   const [emailRquired, setEmailRqueired] = useState(false);
 
   const session = useSession();
-  const [email, setEmail] = useState(
-    res.username == "" ? setEmailRqueired(true) : res.username
-  );
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState(res.phone);
   const [lastName, setLastName] = useState(res.last_name);
   const [firstName, setFirstName] = useState(res.first_name);
@@ -74,7 +72,9 @@ const ProfileEditor = ({ res }) => {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    res.username == "" ? setEmailRqueired(true) : res.username;
+  }, [res]);
 
   return (
     <CustomerDashboardLayout>
