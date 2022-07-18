@@ -9,6 +9,7 @@ const CustomerDashboardLayout = ({ children }) => (
     <Container
       sx={{
         my: "2rem",
+        minHeight: "100vh",
       }}
     >
       <Grid container spacing={3}>
