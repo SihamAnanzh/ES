@@ -15,12 +15,27 @@
     padding-bottom: 63px;
 }
 
+
+.card-contanier{
+    justify-content: flex-start !important;
+
+
+}
+
+
+.hidLogo{
+    display: none;}
+
+
+
 @media (max-width:1060px) {
-    .MuiBox-root {
-        margin: 5px;
-    }
-    .appLinks .MuiBox-root {
+
+    .appLinks .MuiBox-root ,.MuiBox-root .mobileNave {
         margin: 0;
+ 
+    }
+.mobileNave{
+        height: 80px;
     }
     .appLinks .links{
         margin: 4px;
@@ -54,5 +69,65 @@
     .MuiContainer-root.MuiContainer-maxWidthLg {
         max-width: 1274px;
     }
+
+}
+
+@media (max-width:970px) {
+    .showLogo{
+        display: none !important;
+    }
+    .logo.hideLogo{
+        display: unset !;
+    }
+
+ 
+    
+}
+
+
+
+@media (max-width:700px) {
+    .footContainer ,.itmes{
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+  .about{
+    margin-top: 5px;
+  }
+  .appLinks{
+    display: flex;
+    flex-direction: column !important;
+    margin: 0;
+    margin-top: 30px;
+
+  }
+  .appLinks .items,.appLinks .links{
+    margin: 5px; 
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;}
+
+    .appLinks .items >div{padding-left: 0;}
+    .appLinks .links a{
+        width: 160px;
+    }
+
+.cart-container{
+    height: auto;
+    min-height: 966px;
+  
+}
+.cart-container .itemsCart{
+
+padding-top: 0 !important;
+}
+.titlePopUp{
+    font-size: 15px !important;
+}
+
 
 }

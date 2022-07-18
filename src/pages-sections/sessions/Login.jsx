@@ -72,10 +72,8 @@ const Login = ({ csrfToken, providers, setDialogOpen, dialogOpen }) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        autoClose: false,
       });
     } else {
-      console.log("ress", res);
       toast.success(getTrans("Loggedin") + "...", {
         position: "top-center",
         autoClose: 5005,
@@ -113,10 +111,13 @@ const Login = ({ csrfToken, providers, setDialogOpen, dialogOpen }) => {
     <div>
       <ToastContainer />
       <Wrapper elevation={3} passwordVisibility={passwordVisibility}>
-        <CloseOutlined
-          onClick={() => setDialogOpen(false)}
-          sx={{ cursor: "pointer" }}
-        />
+        {route.asPath != "/login" && (
+          <CloseOutlined
+            onClick={() => setDialogOpen(false)}
+            sx={{ cursor: "pointer" }}
+          />
+        )}
+
         <form
           method="post"
           action="/api/auth/callback/xpress-login-auth"

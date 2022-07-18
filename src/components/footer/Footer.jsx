@@ -54,7 +54,7 @@ const Footer = () => {
   };
 
   return (
-    <footer style={{ marginTop: "40px" }}>
+    <footer>
       <Box bgcolor="#A8123E">
         <Container
           sx={{
@@ -63,9 +63,13 @@ const Footer = () => {
           }}
         >
           <Box py={10} overflow="hidden">
-            <Grid container spacing={1}>
+            <Grid container spacing={1} className="footContainer">
               <Grid item lg={3} md={6} sm={6} xs={12}>
-                <Link style={{ width: "fit-content" }} href="/">
+                <Link
+                  style={{ width: "fit-content" }}
+                  href="/"
+                  className="itmes"
+                >
                   <a>
                     <Image
                       src="/assets/images/logoFooter.svg"
@@ -82,8 +86,9 @@ const Footer = () => {
                 </Link>
               </Grid>
 
-              <Grid item lg={2} md={6} sm={6} xs={12}>
+              <Grid item lg={2} md={6} sm={6} xs={12} className="itmes">
                 <Box
+                  className="about"
                   fontSize="25px"
                   fontWeight="600"
                   mb={2.5}
@@ -102,8 +107,9 @@ const Footer = () => {
                 </div>
               </Grid>
 
-              <Grid item lg={2} md={6} sm={6} xs={12}>
+              <Grid item lg={2} md={6} sm={6} xs={12} className="itmes">
                 <Box
+                  className="about"
                   fontSize="25px"
                   fontWeight="600"
                   mb={2.5}
@@ -169,7 +175,7 @@ const Footer = () => {
                   ))}
                 </FlexBox> */}
               </Grid>
-              <Grid item lg={3} md={6} sm={6} xs={6} className="appLinks">
+              <Grid item lg={3} md={6} sm={6} xs={6} className="appLinks items">
                 <AppStore />
                 <FlexBox flexWrap="wrap" className="links">
                   <a

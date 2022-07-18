@@ -48,16 +48,18 @@ const ProfileEditor = ({ res }) => {
     );
 
     if (response.data.status.code == 200) {
-      toast.success(response.data.status.message, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        autoClose: false,
-      });
+      toast.success(
+        route.locale == "/ar" ? "تم التحديث بنجاح" : "Updated Successfully",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }
+      );
     } else {
       toast.warn(response.data.status.message, {
         position: "top-center",

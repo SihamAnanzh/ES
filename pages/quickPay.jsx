@@ -177,7 +177,7 @@ const quickPay = ({ quickList, userInfo }) => {
                     <Box ml={2.5}>
                       <H6 my="0px">{item.title}</H6>
                       <Typography fontSize="14px" color="grey.600">
-                        ${item.price} x 1
+                        KWD {item.price} x 1
                       </Typography>
                     </Box>
                   </FlexBox>

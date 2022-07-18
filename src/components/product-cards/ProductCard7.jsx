@@ -98,7 +98,6 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl }) => {
               marginRight: "5px",
             }}
             variant="outlined"
-            disabled={qty === 1}
             onClick={handleCartAmountChange(qty - 1)}
           >
             <Remove fontSize="small" />

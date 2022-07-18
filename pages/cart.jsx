@@ -152,20 +152,14 @@ const Cart = ({ userInfo }) => {
       <Head>
         <title>Cart</title>
       </Head>
-      <Grid
-        style={{
-          height: "100vh",
-        }}
-        container
-        spacing={3}
-      >
-        <Grid item md={8} xs={12}>
+      <Grid className="cart-container" container spacing={2}>
+        <Grid item md={8} xs={12} className="itemsCart">
           {cartList.map((item, ind) => (
             <ProductCard7 id={item.id} key={ind} {...item} />
           ))}
         </Grid>
 
-        <Grid item md={4} xs={12}>
+        <Grid item md={4} xs={12} className="toatalSummary" mb={12}>
           <Card
             sx={{
               padding: 3,

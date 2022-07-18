@@ -46,7 +46,16 @@ export default ProductDetails;
 export async function getServerSideProps(context) {
   const id = context.query.id;
   const { locale } = context;
+  const { cookies } = context.req;
   let data = await BackendManager.getOgCatgeroyById(id, locale);
+  if (cookies.countryId != 1) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/" + locale,
+      },
+    };
+  }
 
   return {
     props: { data, ...(await serverSideTranslations(locale, ["common"])) },

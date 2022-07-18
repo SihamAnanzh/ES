@@ -9,8 +9,38 @@ import {
 } from "components/layouts/DashboardStyle";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
+import { useTranslation } from "next-i18next";
 
 const Navigations = () => {
+  const { t } = useTranslation();
+
+  const getTrans = (key) => {
+    return t(`common:${key}`);
+  };
+
+  const linkList = [
+    {
+      title: getTrans("DASHBOARD"),
+      list: [
+        {
+          href: "/profile",
+          title: getTrans("ProfileInfo"),
+          icon: Person,
+        },
+        {
+          href: "/orders",
+          title: getTrans("Orders"),
+          icon: ShoppingBagOutlined,
+        },
+        {
+          href: "/quickPay",
+          title: getTrans("QuickPay"),
+          icon: ShoppingBagOutlined,
+        },
+      ],
+    },
+  ];
+
   const { pathname } = useRouter();
   return (
     <DashboardNavigationWrapper
@@ -53,26 +83,4 @@ const Navigations = () => {
   );
 };
 
-const linkList = [
-  {
-    title: "DASHBOARD",
-    list: [
-      {
-        href: "/profile",
-        title: "Profile Info",
-        icon: Person,
-      },
-      {
-        href: "/orders",
-        title: "Orders",
-        icon: ShoppingBagOutlined,
-      },
-      {
-        href: "/quickPay",
-        title: "Quick Pay",
-        icon: ShoppingBagOutlined,
-      },
-    ],
-  },
-];
 export default Navigations;

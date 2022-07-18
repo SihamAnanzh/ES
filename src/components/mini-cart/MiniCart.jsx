@@ -122,7 +122,6 @@ const MiniCart = ({ toggleSidenav }) => {
                   color: "#FF8236",
                 }}
                 onClick={handleCartAmountChange(item.qty - 1, item)}
-                disabled={item.qty === 1}
               >
                 <Remove fontSize="small" />
               </BazarButton>

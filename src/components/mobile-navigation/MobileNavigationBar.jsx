@@ -46,7 +46,7 @@ const MobileNavigationBar = () => {
     alignItems: "center",
   };
   return width <= 900 ? (
-    <Wrapper>
+    <Wrapper className="mobileNave" style={{ margin: "0" }}>
       {list.map((item) => (
         <StyledNavLink
           href={

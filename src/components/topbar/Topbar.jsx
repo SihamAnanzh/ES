@@ -176,7 +176,17 @@ const Topbar = () => {
         }}
       >
         <FlexBox className="topbarLeft" alignItems="center">
-          <div className="logo">
+          <div className="logo hideLogo">
+            <Link href="/" passHref>
+              <Image
+                display="block"
+                height="28px"
+                src="/assets/images/logoFooter.svg"
+                alt="logo"
+              />
+            </Link>
+          </div>
+          <div className="logo showLogo">
             <Link href="/" passHref>
               <Image
                 display="block"
@@ -186,7 +196,6 @@ const Topbar = () => {
               />
             </Link>
           </div>
-
           <FlexBox alignItems="center">
             <WhatsApp fontSize="small" />
             <Span color="#fff" className="title">

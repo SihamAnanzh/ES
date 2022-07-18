@@ -29,7 +29,7 @@ const Index = ({ data, singleCategoryData, mainID }) => {
           mt: 4,
         }}
       >
-        <Grid container spacing={3} minHeight={500}>
+        <Grid container spacing={3} minHeight={500} className="card-contanier">
           {singleCategoryData && singleCategoryData.has_subcategories ? (
             singleCategoryData.subcategories.map((item, ind) => (
               <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>

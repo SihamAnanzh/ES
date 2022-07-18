@@ -161,7 +161,9 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
           onClose={handleClose}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle fontSize={8}>{message}</DialogTitle>
+          <DialogTitle fontSize={8} className="titlePopUp">
+            {message}
+          </DialogTitle>
 
           <DialogActions>
             <Button onClick={handleClose}>{getTrans("cancel")}</Button>

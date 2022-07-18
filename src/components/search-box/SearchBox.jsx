@@ -32,10 +32,11 @@ export const SearchResultCard = styled(Card)(() => ({
   paddingBottom: "0.5rem",
 }));
 
-const SearchBox = () => {
+const SearchBox = ({}) => {
   const [category, setCategory] = useState("All Categories");
   const [categoryId, setCategoryId] = useState(0);
   const [resultList, setResultList] = useState([]);
+  const [showList, setShowList] = useState(false);
   const parentRef = useRef();
   const [searchContent, setSearchContent] = useState("");
   const session = useSession();
@@ -53,6 +54,14 @@ const SearchBox = () => {
       setCategories(res);
     });
   }, []);
+  const handelCheange = () => {
+    searchContent.length > 2
+      ? BackendManager.searchResult(searchContent, "").then((res) => {
+          setResultList(res.results);
+          console.log("resultList", resultList);
+        })
+      : "";
+  };
 
   // const search = debounce((event) => {
   //   if (searchContent != "") {
@@ -62,6 +71,7 @@ const SearchBox = () => {
   // }, 2000);
 
   const handleSearch = async () => {
+    console.log(searchContent);
     if (searchContent != "") {
       router.push(`/product/search/${categoryId}?f=${searchContent}`);
     } else {
@@ -83,19 +93,52 @@ const SearchBox = () => {
     }
   };
 
-  const handleDocumentClick = () => {
-    setResultList([]);
-  };
+  useEffect(() => {
+    setSearchContent(searchContent);
+    console.log(searchContent);
+  }, [searchContent]);
+
+  // const handleDocumentClick = () => {
+  //   setResultList([]);
+  // };
   const StyledButton = styled(BazarButton)(() => ({
     marginTop: "2rem",
     padding: "11px 24px",
   }));
 
+  // useEffect(() => {
+  //   window.addEventListener("click", handleDocumentClick);
+  //   return () => {
+  //     window.removeEventListener("click", handleDocumentClick);
+  //   };
+  // }, []);
+
   useEffect(() => {
-    window.addEventListener("click", handleDocumentClick);
-    return () => {
-      window.removeEventListener("click", handleDocumentClick);
-    };
+    document.getElementById("searchBtn");
+    searchBtn.addEventListener("keypress", function (event) {
+      // If the user presses the "Enter" key on the keyboard
+      if (event.key === "Enter") {
+        if (event.target.value != "") {
+          router.push(`/product/search/${categoryId}?f=${event.target.value}`);
+        } else {
+          toast.warn(
+            router.locale == "ar"
+              ? "املأ حقل البحث من فضلك"
+              : "Fill in the search field please",
+            {
+              position: "top-center",
+              autoClose: 5005,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              autoClose: false,
+            }
+          );
+        }
+      }
+    });
   }, []);
 
   return (
@@ -110,10 +153,19 @@ const SearchBox = () => {
     >
       <ToastContainer />
       <TextField
+        id="searchBtn"
         variant="outlined"
         placeholder={router.locale == "ar" ? "...البحث عن" : "Searching for..."}
         fullWidth
-        onChange={(e) => setSearchContent(e.target.value)}
+        onChange={(e) => {
+          e.target.value.length > 2
+            ? BackendManager.searchResult(searchContent, "").then((res) => {
+                setResultList(res);
+                setShowList(true);
+              })
+            : "",
+            setSearchContent(e.target.value);
+        }}
         InputProps={{
           sx: {
             height: 44,
@@ -154,20 +206,25 @@ const SearchBox = () => {
         }}
       />
 
-      {!!resultList.length && (
+      {!!showList && (
         <SearchResultCard elevation={2}>
-          {/* {resultList.map((item) => (
-            <Link
-              href={{
-                pathname: `/product/search/${categoryId}`,
-                query: { resultList },
+          {resultList.map((item) => (
+            <div
+              onClick={(e) => {
+                setShowList(false);
+                router.push(
+                  "/card/details/" + item.category.id,
+                  "/card/details/" + item.category.id,
+                  { locale: router.locale }
+                );
               }}
-              key={item}
               passHref
             >
-              <MenuItem key={item}>{item}</MenuItem>
-            </Link>
-          ))} */}
+              <MenuItem id={item.id} key={item.id}>
+                {item.title}
+              </MenuItem>
+            </div>
+          ))}
         </SearchResultCard>
       )}
     </Box>

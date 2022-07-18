@@ -6,7 +6,7 @@ import PlayStore from "./icons/PlayStore";
 
 const AppStore = () => {
   return (
-    <FlexBox style={{ width: "max-content" }}>
+    <FlexBox style={{ width: "max-content" }} className="appLinks">
       {" "}
       <FlexBox flexWrap="wrap" className="links">
         <a

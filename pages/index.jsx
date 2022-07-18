@@ -45,9 +45,10 @@ const SalePage2 = ({ categoryList, product, csrfToken, providers, games }) => {
       <Container
         sx={{
           mt: 4,
+          height: "auto",
         }}
       >
-        <Grid container spacing={3} minHeight={500}>
+        <Grid container spacing={3} minHeight={500} className="card-contanier">
           {games.has_subcategories
             ? games.subcategories.map((item) => (
                 <Grid item lg={3} md={4} sm={6} xs={12} key={item}>

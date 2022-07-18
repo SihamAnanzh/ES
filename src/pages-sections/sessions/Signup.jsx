@@ -57,7 +57,6 @@ const Signup = ({ providers }) => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                autoClose: false,
               });
             } else {
               toast.success(getTrans("WelcometoXpressStore"), {
@@ -68,7 +67,6 @@ const Signup = ({ providers }) => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                autoClose: false,
               });
               route.push("/profile", "/profile", { locale: route.locale });
             }
@@ -81,7 +79,6 @@ const Signup = ({ providers }) => {
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
-              autoClose: false,
             });
           }
         });
@@ -94,7 +91,6 @@ const Signup = ({ providers }) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        autoClose: false,
       });
     }
   };

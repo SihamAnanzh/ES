@@ -74,9 +74,9 @@ const Index = ({ data, singleCategoryData }) => {
         </Grid>
 
         <FlexBetween flexWrap="wrap" my={8}>
-          <Span>
+          {/* <Span>
             {renderProductCount(page, productPerPage, productPerPage.length)}
-          </Span>
+          </Span> */}
 
           {/* <Pagination
             page={page}
@@ -105,6 +105,15 @@ export async function getServerSideProps(context) {
     ),
     BackendManager.getCategoryById(id, locale),
   ]);
+
+  if (cookies.countryId != 1) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/" + locale,
+      },
+    };
+  }
 
   return {
     props: {

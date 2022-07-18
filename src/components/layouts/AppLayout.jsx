@@ -33,7 +33,7 @@ const AppLayout = ({
       </Sticky>
 
       {children}
-      {/* <MobileNavigationBar /> */}
+      <MobileNavigationBar />
       <Footer />
     </Fragment>
   );

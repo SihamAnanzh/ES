@@ -132,7 +132,6 @@ const TelecomIntro = ({
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            autoClose: false,
           }
         );
       } else {
