@@ -3,7 +3,7 @@ import CustomerDashboardLayout from "components/layouts/customer-dashboard";
 import CustomerDashboardNavigation from "components/layouts/customer-dashboard/Navigations";
 import DashboardPageHeader from "components/layouts/DashboardPageHeader";
 import OrderList from "pages-sections/orders/OrderList";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { getSession, useSession } from "next-auth/react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { toast, ToastContainer } from "react-toastify";
@@ -18,6 +18,7 @@ const Orders = ({ orderList }) => {
   const session = useSession();
   const { state, dispatch } = useAppContext();
   const { t } = useTranslation();
+  const [listOrders, setListOrders] = useState(orderList);
   const getTrans = (key) => {
     return t(`common:${key}`);
   };
@@ -104,7 +105,9 @@ const Orders = ({ orderList }) => {
         });
       }
     }
-  }, [route, session]);
+
+    setListOrders(orderList);
+  }, [session]);
 
   return (
     <CustomerDashboardLayout>
@@ -116,7 +119,7 @@ const Orders = ({ orderList }) => {
         icon={ShoppingBag}
         navigation={<CustomerDashboardNavigation />}
       />
-      <OrderList orderList={orderList} />
+      <OrderList orderList={listOrders} />
     </CustomerDashboardLayout>
   );
 };
@@ -137,7 +140,6 @@ export async function getServerSideProps(context) {
     };
   }
   const lists = await BackEndManager.getUserOrders(session.user, locale);
-  console.log("list", lists[0].details);
   lists.map((list, ind) => {
     orderList.push({
       currency: list.currency_id == "1" ? "USD" : list.currency_id,

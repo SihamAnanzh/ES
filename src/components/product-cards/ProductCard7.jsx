@@ -82,7 +82,7 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl, currency }) => {
 
         <FlexBox gap={1} flexWrap="wrap" alignItems="center">
           <Span color="grey.600">
-            {currency == "1" ? "$" : currency} {price.toFixed(2)} x {qty}
+            {currency == "1" ? "$" : currency} {price.toFixed(2)} x {qty} =
           </Span>
 
           <Span fontWeight={600} color="#595959">
