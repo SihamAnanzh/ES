@@ -54,13 +54,25 @@ const quickPay = ({ quickList, userInfo }) => {
         navigation={<CustomerDashboardNavigation />}
       />
 
-      <Box py={1} sx={{ height: "max-content", pb: 20 }}>
+      <Box
+        py={1}
+        sx={{
+          height: "max-content",
+          pb: 20,
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+        }}
+      >
         {quickList &&
           quickList.map((item) => (
             <Card
               sx={{
                 pb: "20px",
                 mb: "30px",
+                width: "430px",
+                marginRight: "10px",
               }}
             >
               <TableRow
@@ -73,9 +85,16 @@ const quickPay = ({ quickList, userInfo }) => {
               >
                 <FlexBox className="pre" m={0.75} alignItems="center">
                   <Typography fontSize={14} color="grey.600" mr={0.5}>
-                    {getTrans("OrderID")}
+                    {getTrans("OrderID")} :
                   </Typography>
                   <Typography fontSize={14}>{item.id}</Typography>
+                </FlexBox>
+                <FlexBox className="pre" m={0.75} alignItems="center">
+                  <Typography fontSize={14} color="grey.600" mr={0.5}>
+                    {getTrans("Total")} :
+                  </Typography>
+                  {console.log(item)}
+                  <Typography fontSize={14}> KWD {item.total}</Typography>
                 </FlexBox>
                 <FlexBox className="pre" m={0.75} alignItems="center">
                   <Typography

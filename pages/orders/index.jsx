@@ -89,7 +89,6 @@ const Orders = ({ orderList }) => {
           } else if (res.status.code == 200) {
             clearCart();
             localStorage.setItem("order", JSON.stringify(null));
-
             toast.success(res.results, {
               position: "top-center",
               autoClose: 5005,

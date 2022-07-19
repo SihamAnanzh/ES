@@ -145,8 +145,7 @@ const Topbar = () => {
           name: res.title,
           qty: data.qty,
           price: res.price,
-          imgUrl:
-            res.images && res.images.length > 0 ? res.images[0].image_url : "",
+          imgUrl: res.category.logo_url,
           id: res.id,
           mainId: data.mainId,
         };

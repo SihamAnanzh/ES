@@ -65,7 +65,7 @@ const App = ({ Component, pageProps }) => {
     items &&
       items.map(async (data) => {
         let res = await BackendManager.getItemById(data.id);
-
+        console.log("logoUrl", res);
         let product = {
           name: res.title,
           qty: data.qty,

@@ -54,7 +54,7 @@
 .MuiContainer-root.MuiContainer-maxWidthLg {
     padding-top: 6px;
     padding-bottom: 6px;
-    margin-bottom: -63px;
+    /* margin-bottom: -63px; */
 }
 
 .MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12 {
