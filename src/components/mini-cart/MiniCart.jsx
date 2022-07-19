@@ -144,7 +144,8 @@ const MiniCart = ({ toggleSidenav }) => {
                 {/* ${item.price.toFixed(2)} x {item.qty} */}
               </Tiny>
               <Box fontWeight={600} fontSize="14px" color="#FF8236" mt={0.5}>
-                KWD {(item.qty * item.price).toFixed(2)}
+                {item.currency == "1" ? "$" : item.currency}{" "}
+                {(item.qty * item.price).toFixed(2)}
               </Box>
             </Box>
 
@@ -173,7 +174,9 @@ const MiniCart = ({ toggleSidenav }) => {
               fullWidth
               onClick={toggleSidenav}
             >
-              {getTrans("CheckoutNow")} (KWD {getTotalPrice().toFixed(2)})
+              {getTrans("CheckoutNow")} (
+              {cartList[0].currency == "1" ? "$" : cartList[0].currency}{" "}
+              {getTotalPrice().toFixed(2)})
             </BazarButton>
           </Link>
         </Box>

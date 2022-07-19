@@ -27,7 +27,7 @@ const Wrapper = styled(Card)(({ theme }) => ({
 })); // =========================================================
 
 // =========================================================
-const ProductCard7 = ({ id, name, qty, price, imgUrl }) => {
+const ProductCard7 = ({ id, name, qty, price, imgUrl, currency }) => {
   const { dispatch } = useAppContext(); // handle change cart
 
   const handleCartAmountChange = useCallback(
@@ -82,11 +82,11 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl }) => {
 
         <FlexBox gap={1} flexWrap="wrap" alignItems="center">
           <Span color="grey.600">
-            KWD {price.toFixed(2)} x {qty}
+            {currency == "1" ? "$" : currency} {price.toFixed(2)} x {qty}
           </Span>
 
           <Span fontWeight={600} color="#595959">
-            KWD {(price * qty).toFixed(2)}
+            {currency == "1" ? "$" : currency} {(price * qty).toFixed(2)}
           </Span>
         </FlexBox>
 

@@ -102,10 +102,10 @@ const Cart = ({ userInfo }) => {
               },
               {
                 amount: getTotalPrice(),
-                currency: "KWD",
+                currency: "USD",
                 order: {
                   amount: getTotalPrice(),
-                  currency: "KWD",
+                  currency: "USD",
                   items: [],
                 },
                 shipping: null,
@@ -146,6 +146,8 @@ const Cart = ({ userInfo }) => {
       });
     }
   };
+
+  console.log(cartList);
 
   return (
     <CheckoutNavLayout>
@@ -239,7 +241,10 @@ const Cart = ({ userInfo }) => {
                 fontWeight={600}
                 lineHeight="1"
               >
-                KWD {getTotalPrice().toFixed(2)}
+                {cartList.length > 0 && cartList[0].currency == "1"
+                  ? "$"
+                  : cartList.length > 0 && cartList[0].currency}
+                {getTotalPrice().toFixed(2)}
               </Span>
             </FlexBetween>
 

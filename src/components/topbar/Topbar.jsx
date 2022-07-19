@@ -141,6 +141,7 @@ const Topbar = () => {
     items &&
       items.map(async (data) => {
         let res = await BackendManager.getItemById(data.id, route.locale);
+
         let product = {
           name: res.title,
           qty: data.qty,
@@ -148,6 +149,7 @@ const Topbar = () => {
           imgUrl: res.category.logo_url,
           id: res.id,
           mainId: data.mainId,
+          currency: res.currency.id,
         };
         dispatch({
           type: "CHANGE_CART_AMOUNT",

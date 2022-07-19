@@ -72,7 +72,7 @@ const quickPay = ({ quickList, userInfo }) => {
                 pb: "20px",
                 mb: "30px",
                 width: "430px",
-                marginRight: "10px",
+                marginRight: "20px",
               }}
             >
               <TableRow

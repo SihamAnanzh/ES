@@ -4,133 +4,133 @@
 // const Footer = () => {
 //   return (
 //     <h1></h1>
-//     // <footer bgcolor="#A8123E">
-//     //   <Box bgcolor="#A8123E">
-//     //     <Container
-//     //       sx={{
-//     //         p: "1rem",
-//     //         color: "white",
-//     //       }}
-//     //     >
-//     //       <Box py={10} overflow="hidden">
-//     //         <Grid container spacing={1} className="footContainer">
-//     //           <Grid item lg={3} md={6} sm={6} xs={12}>
-//     //             <Link
-//     //               style={{ width: "fit-content" }}
-//     //               href="/"
-//     //               className="itmes"
-//     //             >
-//     //               <a>
-//     //                 <Image
-//     //                   src="/assets/images/logoFooter.svg"
-//     //                   alt="logo"
-//     //                   mb={3.5}
-//     //                   sx={{
-//     //                     margin: "0",
-//     //                     padding: "20",
-//     //                     width: "220px",
-//     //                     marginBottom: "20px",
-//     //                   }}
-//     //                 />
-//     //               </a>
-//     //             </Link>
-//     //           </Grid>
+//     <footer bgcolor="#A8123E">
+//       <Box bgcolor="#A8123E">
+//         <Container
+//           sx={{
+//             p: "1rem",
+//             color: "white",
+//           }}
+//         >
+//           <Box py={10} overflow="hidden">
+//             <Grid container spacing={1} className="footContainer">
+//               <Grid item lg={3} md={6} sm={6} xs={12}>
+//                 <Link
+//                   style={{ width: "fit-content" }}
+//                   href="/"
+//                   className="itmes"
+//                 >
+//                   <a>
+//                     <Image
+//                       src="/assets/images/logoFooter.svg"
+//                       alt="logo"
+//                       mb={3.5}
+//                       sx={{
+//                         margin: "0",
+//                         padding: "20",
+//                         width: "220px",
+//                         marginBottom: "20px",
+//                       }}
+//                     />
+//                   </a>
+//                 </Link>
+//               </Grid>
 
-//     //           <Grid item lg={2} md={6} sm={6} xs={12} className="itmes">
-//     //             <Box
-//     //               className="about"
-//     //               fontSize="25px"
-//     //               fontWeight="600"
-//     //               mb={2.5}
-//     //               lineHeight="1"
-//     //               color="#fff"
-//     //             >
-//     //               {getTrans("AboutUs")}
-//     //             </Box>
+//               <Grid item lg={2} md={6} sm={6} xs={12} className="itmes">
+//                 <Box
+//                   className="about"
+//                   fontSize="25px"
+//                   fontWeight="600"
+//                   mb={2.5}
+//                   lineHeight="1"
+//                   color="#fff"
+//                 >
+//                   {getTrans("AboutUs")}
+//                 </Box>
 
-//     //             <div>
-//     //               {aboutLinks.map((item, ind) => (
-//     //                 <Link href="/" key={ind} passHref>
-//     //                   <StyledLink>{item}</StyledLink>
-//     //                 </Link>
-//     //               ))}
-//     //             </div>
-//     //           </Grid>
+//                 <div>
+//                   {aboutLinks.map((item, ind) => (
+//                     <Link href="/" key={ind} passHref>
+//                       <StyledLink>{item}</StyledLink>
+//                     </Link>
+//                   ))}
+//                 </div>
+//               </Grid>
 
-//     //           <Grid item lg={2} md={6} sm={6} xs={12} className="itmes">
-//     //             <Box
-//     //               className="about"
-//     //               fontSize="25px"
-//     //               fontWeight="600"
-//     //               mb={2.5}
-//     //               lineHeight="1"
-//     //               color="#fff"
-//     //             >
-//     //               {getTrans("ContactUs")}
-//     //             </Box>
-//     //           </Grid>
-//     //           <Grid item lg={3} md={6} sm={6} xs={6} className="appLinks items">
-//     //             <AppStore />
-//     //             <FlexBox flexWrap="wrap" className="links">
-//     //               <a
-//     //                 href="https://appgallery.huawei.com/app/C105992195"
-//     //                 key="AppleStore"
-//     //                 target="_blank"
-//     //                 style={{ display: "inline-block", width: "160px" }}
-//     //               >
-//     //                 <Box
-//     //                   m={1}
-//     //                   gap={1}
-//     //                   p="5px 8px"
-//     //                   pt="8px"
-//     //                   color="white"
-//     //                   display="flex"
-//     //                   bgcolor="#fff"
-//     //                   borderRadius="5px"
-//     //                   alignItems="center"
-//     //                   justifyContent="center"
-//     //                 >
-//     //                   <div className="">
-//     //                     {" "}
-//     //                     <img
-//     //                       style={{ width: "28px", height: "27px" }}
-//     //                       src="/assets/images/huawei.webp"
-//     //                       alt=""
-//     //                     />
-//     //                   </div>
+//               <Grid item lg={2} md={6} sm={6} xs={12} className="itmes">
+//                 <Box
+//                   className="about"
+//                   fontSize="25px"
+//                   fontWeight="600"
+//                   mb={2.5}
+//                   lineHeight="1"
+//                   color="#fff"
+//                 >
+//                   {getTrans("ContactUs")}
+//                 </Box>
+//               </Grid>
+//               <Grid item lg={3} md={6} sm={6} xs={6} className="appLinks items">
+//                 <AppStore />
+//                 <FlexBox flexWrap="wrap" className="links">
+//                   <a
+//                     href="https://appgallery.huawei.com/app/C105992195"
+//                     key="AppleStore"
+//                     target="_blank"
+//                     style={{ display: "inline-block", width: "160px" }}
+//                   >
+//                     <Box
+//                       m={1}
+//                       gap={1}
+//                       p="5px 8px"
+//                       pt="8px"
+//                       color="white"
+//                       display="flex"
+//                       bgcolor="#fff"
+//                       borderRadius="5px"
+//                       alignItems="center"
+//                       justifyContent="center"
+//                     >
+//                       <div className="">
+//                         {" "}
+//                         <img
+//                           style={{ width: "28px", height: "27px" }}
+//                           src="/assets/images/huawei.webp"
+//                           alt=""
+//                         />
+//                       </div>
 
-//     //                   <Box>
-//     //                     <Box
-//     //                       color="#595959"
-//     //                       fontSize="8px"
-//     //                       fontWeight="600"
-//     //                       lineHeight="1"
-//     //                     >
-//     //                       Download on the
-//     //                     </Box>
+//                       <Box>
+//                         <Box
+//                           color="#595959"
+//                           fontSize="8px"
+//                           fontWeight="600"
+//                           lineHeight="1"
+//                         >
+//                           Download on the
+//                         </Box>
 
-//     //                     <Box color="#595959" fontSize="14px" fontWeight="900">
-//     //                       huawei store
-//     //                     </Box>
-//     //                   </Box>
-//     //                 </Box>
-//     //               </a>
-//     //             </FlexBox>
-//     //           </Grid>
-//     //         </Grid>
-//     //       </Box>
-//     //     </Container>
-//     //   </Box>
-//     // </footer>
+//                         <Box color="#595959" fontSize="14px" fontWeight="900">
+//                           huawei store
+//                         </Box>
+//                       </Box>
+//                     </Box>
+//                   </a>
+//                 </FlexBox>
+//               </Grid>
+//             </Grid>
+//           </Box>
+//         </Container>
+//       </Box>
+//     </footer>
 //   );
 // };
 
 // export default Footer;
 
-import React from "react";
+// import React from "react";
 
-const Footerr = () => {
-  return <div>r</div>;
-};
+// const Footerr = () => {
+//   return <div>r</div>;
+// };
 
-export default Footerr;
+// export default Footerr;

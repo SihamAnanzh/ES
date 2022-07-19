@@ -30,7 +30,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 // ================================================================
-const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
+const CardIntro = ({ imgGroup, title, id, mainCatigory, items, currency }) => {
   const router = useRouter();
   const routerId = router.query.id;
   const [selectedImage, setSelectedImage] = useState(0);
@@ -49,6 +49,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
   const cartItem = cartList.find(
     (item) => item.id === id || item.id === routerId
   );
+  console.log(currency);
 
   let { t, i18n } = useTranslation();
 
@@ -67,6 +68,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
           id: data.id,
           imgUrl: imgGroup,
           mainId: data.main_category.id,
+          currency: currency,
         });
       setPrice(data.price);
     });
@@ -229,6 +231,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
                       id: item.id,
                       imgUrl: imgGroup,
                       mainId: mainId,
+                      currency: item.currency.id,
                     });
                     setPrice(item.price);
                   }}
@@ -284,7 +287,8 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, price }) => {
               {getTrans("Total")} :{" "}
             </H2>
             <H3 fontSize="22px" color="#FF8236" style={{ display: "inline" }}>
-              {`KWD ${itemPrice} * ${amount}`} = KWD {itemPrice * amount}
+              {`${currency == "1" ? "$" : currency} ${itemPrice} * ${amount}`} ={" "}
+              {currency == "1" ? "$" : currency} {itemPrice * amount}
             </H3>
           </Box>
           <Box mb={3}>

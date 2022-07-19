@@ -7,14 +7,8 @@ import { renderProductCount } from "lib";
 import { useCallback, useEffect, useState } from "react";
 import BackendManager from "../src/globalManager/BackendManager";
 import { useAppContext } from "contexts/AppContext";
-import { signOut, useSession } from "next-auth/react";
-import {
-  getCsrfToken,
-  getSession,
-  getProviders,
-  providers,
-} from "next-auth/react";
-import { getCookie } from "cookies-next";
+import { useSession } from "next-auth/react";
+import { getCsrfToken, getProviders } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 const SalePage2 = ({ categoryList, product, csrfToken, providers, games }) => {

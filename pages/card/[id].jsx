@@ -16,7 +16,6 @@ const Index = ({ data, singleCategoryData }) => {
   const [singleCategory, setSingleCategory] = useState([singleCategoryData]);
   const handlePageChange = (_, page) => setPage(page);
 
-  console.log(singleCategory);
   return (
     <SaleLayout2
       sx={{
@@ -50,30 +49,12 @@ const Index = ({ data, singleCategoryData }) => {
               </Grid>;
             }
           })}
-          {/* {singleCategory.items.map((item, ind) => (
-            <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
-              <Card
-                id={item.id}
-                title={item.title}
-                imgUrl={item.logo_url}
-                items={item.items}
-              />
-            </Grid>
-          ))} */}
         </Grid>
 
         <FlexBetween flexWrap="wrap" my={8}>
           <Span>
             {renderProductCount(page, productPerPage, productPerPage.length)}
           </Span>
-
-          {/* <Pagination
-            page={page}
-            color="primary"
-            variant="outlined"
-            onChange={handlePageChange}
-            count={Math.ceil(productPerPage.length / productPerPage)}
-          /> */}
         </FlexBetween>
       </Container>
     </SaleLayout2>

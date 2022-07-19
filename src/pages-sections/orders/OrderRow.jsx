@@ -27,7 +27,7 @@ const OrderRow = ({ item, quick }) => {
             {item.purchaseDate}
           </Typography>
           <Typography m={0.75} textAlign="left">
-            ${item.price.toFixed(2)}
+            {item.currency == "1" ? "$" : item.currency} {item.price.toFixed(2)}
           </Typography>
 
           <Typography

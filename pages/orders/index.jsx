@@ -73,9 +73,23 @@ const Orders = ({ orderList }) => {
           route.locale
         ).then((res) => {
           localStorage.setItem("transaction", null);
+          localStorage.setItem("order", JSON.stringify(null));
+          console.log(res);
 
-          if (res.status.code == 400) {
-            localStorage.setItem("order", JSON.stringify(null));
+          if (res.status.code == 200) {
+            clearCart();
+            toast.success(res.results, {
+              position: "top-center",
+              autoClose: 5005,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              autoClose: false,
+            }),
+              location.reload();
+          } else if (res.status.code == 400) {
             toast.warn(res.status.message, {
               position: "top-center",
               autoClose: 5005,
@@ -86,25 +100,11 @@ const Orders = ({ orderList }) => {
               progress: undefined,
               autoClose: false,
             });
-          } else if (res.status.code == 200) {
-            clearCart();
-            localStorage.setItem("order", JSON.stringify(null));
-            toast.success(res.results, {
-              position: "top-center",
-              autoClose: 5005,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              autoClose: false,
-            });
-            route.reload();
           }
         });
       }
     }
-  }, [route]);
+  }, [route, session]);
 
   return (
     <CustomerDashboardLayout>
@@ -137,8 +137,10 @@ export async function getServerSideProps(context) {
     };
   }
   const lists = await BackEndManager.getUserOrders(session.user, locale);
+  console.log("list", lists[0].details);
   lists.map((list, ind) => {
     orderList.push({
+      currency: list.currency_id == "1" ? "USD" : list.currency_id,
       orderNo: list.id,
       status: list.order_status.title,
       purchaseDate: list.date_string,

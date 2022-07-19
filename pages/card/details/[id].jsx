@@ -21,6 +21,7 @@ const ProductDetails = ({ data, list, relatedProducts }) => {
     setSelectedOption(newValue);
   };
 
+  console.log(data.items[0].currency);
   return (
     <NavbarLayout list={list}>
       <Head>
@@ -33,6 +34,7 @@ const ProductDetails = ({ data, list, relatedProducts }) => {
           id={data.id}
           mainCatigory={data.title}
           items={data.items}
+          currency={data.items[0].currency.id}
         />
       )}
 

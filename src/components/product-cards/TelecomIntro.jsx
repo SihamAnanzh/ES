@@ -152,6 +152,18 @@ const TelecomIntro = ({
               progress: undefined,
               autoClose: false,
             });
+          }
+          if (res.status.code == 200) {
+            toast.warn(res.status.message, {
+              position: "top-center",
+              autoClose: 5005,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              autoClose: false,
+            });
           } else {
             toast.warn(res.status.message, {
               position: "top-center",

@@ -23,6 +23,7 @@ import { useEffect } from "react";
 import BackendManager from "globalManager/BackendManager";
 import { Span } from "components/Typography";
 import { MobileDatePicker } from "@mui/lab";
+import PlayStore from "components/icons/PlayStore";
 
 const StyledLink = styled("a")(({ theme }) => ({
   position: "relative",
@@ -106,12 +107,12 @@ const Footer = () => {
             </div>
             <div className="footerLInks imgLink">
               <div className="twoImg items">
-                <img width={120} src="/assets/images/stors.png" alt="" />
-                <img width={120} src="/assets/images/stors.png" alt="" />
+                <img width={120} src="/assets/images/google.svg" alt="" />
+                <img width={120} src="/assets/images/apple.svg" alt="" />
               </div>
               <img
                 width={120}
-                src="/assets/images/stors.png"
+                src="/assets/images/huawei.svg"
                 alt=""
                 className="items"
               />
