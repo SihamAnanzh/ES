@@ -94,7 +94,7 @@ const quickPay = ({ quickList, userInfo }) => {
                     {getTrans("Total")} :
                   </Typography>
                   {console.log(item)}
-                  <Typography fontSize={14}> KWD {item.total}</Typography>
+                  <Typography fontSize={14}> $ {item.total}</Typography>
                 </FlexBox>
                 <FlexBox className="pre" m={0.75} alignItems="center">
                   <Typography
@@ -140,18 +140,18 @@ const quickPay = ({ quickList, userInfo }) => {
                               },
                               {
                                 amount: getTotalPrice(),
-                                currency: "KWD",
+                                currency: "USD",
                                 order: {
                                   amount: getTotalPrice(),
-                                  currency: "KWD",
+                                  currency: "USD",
                                   items: [],
                                 },
                                 shipping: null,
                                 taxes: null,
                               },
                               // `${process.env.NEXTAUTH_URL}${route.locale}`
-                              `http://localhost:3000/${route.locale}/orders`
-                              // `https://xpresstors.herokuapp.com/${route.locale}/orders`
+                              // `http://localhost:3000/${route.locale}/orders`
+                              `https://xpresswebsite.herokuapp.com/${route.locale}/orders`
                             );
                             goSell.openLightBox();
                           } else
@@ -196,7 +196,7 @@ const quickPay = ({ quickList, userInfo }) => {
                     <Box ml={2.5}>
                       <H6 my="0px">{item.title}</H6>
                       <Typography fontSize="14px" color="grey.600">
-                        KWD {item.price} x 1
+                        $ {item.price} x {item.quantity}
                       </Typography>
                     </Box>
                   </FlexBox>

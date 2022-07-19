@@ -22,18 +22,6 @@ const Orders = ({ orderList }) => {
   const getTrans = (key) => {
     return t(`common:${key}`);
   };
-  const handleClearCart = (product) => {
-    dispatch({
-      type: "CHANGE_CART_AMOUNT",
-      payload: { ...product, qty: 0 },
-    });
-  };
-
-  const clearCart = () => {
-    state.cart.map((item) => {
-      handleClearCart(item);
-    });
-  };
 
   useEffect(() => {
     console.log("trgger");
@@ -78,7 +66,6 @@ const Orders = ({ orderList }) => {
           console.log(res);
 
           if (res.status.code == 200) {
-            clearCart();
             toast.success(res.results, {
               position: "top-center",
               autoClose: 5005,
@@ -88,8 +75,7 @@ const Orders = ({ orderList }) => {
               draggable: true,
               progress: undefined,
               autoClose: false,
-            }),
-              location.reload();
+            });
           } else if (res.status.code == 400) {
             toast.warn(res.status.message, {
               position: "top-center",

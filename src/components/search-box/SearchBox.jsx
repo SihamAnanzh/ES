@@ -153,6 +153,7 @@ const SearchBox = ({}) => {
     >
       <ToastContainer />
       <TextField
+        autoComplete="off"
         id="searchBtn"
         variant="outlined"
         placeholder={router.locale == "ar" ? "...البحث عن" : "Searching for..."}
@@ -172,7 +173,6 @@ const SearchBox = ({}) => {
             borderRadius: 300,
             paddingRight: 0,
             color: "grey.700",
-
             overflow: "hidden",
             "&:hover .MuiOutlinedInput-notchedOutline": {
               borderColor: "grey.700",

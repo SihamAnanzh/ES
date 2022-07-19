@@ -28,7 +28,7 @@ const Wrapper = styled(Card)(({ theme }) => ({
 
 // =========================================================
 const ProductCard7 = ({ id, name, qty, price, imgUrl, currency }) => {
-  const { dispatch } = useAppContext(); // handle change cart
+  const { state, dispatch } = useAppContext(); // handle change cart
 
   const handleCartAmountChange = useCallback(
     (amount) => () => {
@@ -49,7 +49,7 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl, currency }) => {
         },
       });
     },
-    []
+    [state.cart]
   );
   return (
     <Wrapper>

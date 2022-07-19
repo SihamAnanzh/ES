@@ -47,6 +47,18 @@ const Cart = ({ userInfo }) => {
     return t(`common:${key}`);
   };
 
+  const handleClearCart = (product) => {
+    dispatch({
+      type: "CHANGE_CART_AMOUNT",
+      payload: { ...product, qty: 0 },
+    });
+  };
+
+  const clearCart = () => {
+    state.cart.map((item) => {
+      handleClearCart(item);
+    });
+  };
   const paymentCheckout = async () => {
     let cartItem = [];
 
@@ -87,6 +99,7 @@ const Cart = ({ userInfo }) => {
           session.data.user
         ).then(async (res) => {
           if (res.status.code == 200) {
+            clearCart();
             Checkout(
               {
                 id: null,

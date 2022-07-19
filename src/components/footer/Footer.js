@@ -107,15 +107,27 @@ const Footer = () => {
             </div>
             <div className="footerLInks imgLink">
               <div className="twoImg items">
-                <img width={120} src="/assets/images/google.svg" alt="" />
-                <img width={120} src="/assets/images/apple.svg" alt="" />
+                <a href="https://play.google.com/store/apps/details?id=com.dominate.express">
+                  {" "}
+                  <img width={120} src="/assets/images/google.svg" alt="" />
+                </a>
+
+                <a href="https://apps.apple.com/jo/app/xprestores-%D8%A7%D9%83%D8%B3%D8%A8%D8%B1%D8%B3-%D8%B3%D8%AA%D9%88%D8%B1%D8%B2/id1597251061">
+                  {" "}
+                  <img width={120} src="/assets/images/apple.svg" alt="" />
+                </a>
               </div>
-              <img
-                width={120}
-                src="/assets/images/huawei.svg"
-                alt=""
-                className="items"
-              />
+              <a
+                href="https://appgallery.huawei.com/app/C105992195"
+                target="_balank"
+              >
+                <img
+                  width={120}
+                  src="/assets/images/huawei.svg"
+                  alt=""
+                  className="items"
+                />
+              </a>
             </div>
           </div>
         </Container>

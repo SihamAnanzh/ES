@@ -106,13 +106,17 @@ export async function getServerSideProps(context) {
     BackendManager.getCategoryById(id, locale),
   ]);
 
-  if (cookies.countryId != 1) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/" + locale,
-      },
-    };
+  if (cookies.countryId) {
+    if (cookies.countryId != 1) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/" + locale,
+        },
+      };
+    }
+  } else {
+    cookies.countryId == "1";
   }
 
   return {

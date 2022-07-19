@@ -69,6 +69,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, currency }) => {
           imgUrl: imgGroup,
           mainId: data.main_category.id,
           currency: currency,
+          qty: amount,
         });
       setPrice(data.price);
     });
@@ -226,13 +227,14 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, currency }) => {
                     e.target.classList.add("selected");
                     setObjects({
                       price: item.price,
-                      qty: item.qty,
+                      qty: amount,
                       name: item.title,
                       id: item.id,
                       imgUrl: imgGroup,
                       mainId: mainId,
                       currency: item.currency.id,
                     });
+
                     setPrice(item.price);
                   }}
                   sx={{
@@ -288,7 +290,8 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, currency }) => {
             </H2>
             <H3 fontSize="22px" color="#FF8236" style={{ display: "inline" }}>
               {`${currency == "1" ? "$" : currency} ${itemPrice} * ${amount}`} ={" "}
-              {currency == "1" ? "$" : currency} {itemPrice * amount}
+              {currency == "1" ? "$" : currency}{" "}
+              {parseFloat(itemPrice * amount, 3)}
             </H3>
           </Box>
           <Box mb={3}>
