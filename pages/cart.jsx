@@ -112,8 +112,9 @@ const Cart = ({ userInfo }) => {
                 taxes: null,
               },
               // `${process.env.NEXTAUTH_URL}${route.locale}`
-              `http://localhost:3000/${route.locale}/orders`
+              // `http://localhost:3000/${route.locale}/orders`
               // `https://xpresstors.herokuapp.com/${route.locale}/orders`
+              `https://xp-stors.herokuapp.com/${route.locale}/orders`
             );
             goSell.openLightBox();
           } else
