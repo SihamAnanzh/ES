@@ -16,10 +16,16 @@ const RelatedProducts = ({ productsData }) => {
       <H3 mb={3} p={2}>
         {getTrans("RelatedProducts")}
       </H3>
-      <Grid container spacing={2}>
+      <Grid
+        container
+        spacing={1}
+        minHeight={500}
+        className="card-contanier"
+        rowSpacing={2}
+      >
         {productsData &&
           productsData.map((item, ind) => (
-            <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
+            <Grid item lg={3} md={4} sm={6} xs={6} key={ind}>
               <ProductCard1
                 imgUrl={item.category.logo_url}
                 id={item.category.id}
