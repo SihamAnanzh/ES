@@ -28,13 +28,14 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { toast, ToastContainer } from "react-toastify";
 import Head from "next/head";
+import { useState } from "react";
 
 const quickPay = ({ quickList, userInfo }) => {
   const { t } = useTranslation();
   const session = useSession();
   const route = useRouter();
   const { state, dispatch } = useAppContext();
-
+  const [price, setPrice] = useState();
   const cartList = state.cart;
   const getTrans = (key) => {
     return t(`common:${key}`);
@@ -42,6 +43,11 @@ const quickPay = ({ quickList, userInfo }) => {
   const getTotalPrice = () => {
     return cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
   };
+
+  useEffect(() => {
+    console.log(price);
+  }, [price]);
+
   return (
     <CustomerDashboardLayout>
       <ToastContainer />
@@ -94,7 +100,13 @@ const quickPay = ({ quickList, userInfo }) => {
                     {getTrans("Total")} :
                   </Typography>
                   {console.log(item)}
-                  <Typography fontSize={14}> $ {item.total}</Typography>
+                  <Typography fontSize={14}>
+                    {" "}
+                    {item.details[0].currency.id == "1"
+                      ? "$"
+                      : item.currency}{" "}
+                    {item.total}
+                  </Typography>
                 </FlexBox>
                 <FlexBox className="pre" m={0.75} alignItems="center">
                   <Typography
@@ -108,6 +120,7 @@ const quickPay = ({ quickList, userInfo }) => {
                   <Typography>
                     <BazarButton
                       onClick={async () => {
+                        setPrice(item.total);
                         let data = {
                           id: item.main_category.id,
                           quick: false,
@@ -125,6 +138,7 @@ const quickPay = ({ quickList, userInfo }) => {
                           session.data.user
                         ).then(async (res) => {
                           if (res.status.code == 200) {
+                            console.log(item);
                             Checkout(
                               {
                                 id: null,
@@ -139,10 +153,10 @@ const quickPay = ({ quickList, userInfo }) => {
                                 address: "Address",
                               },
                               {
-                                amount: getTotalPrice(),
+                                amount: item.total,
                                 currency: "USD",
                                 order: {
-                                  amount: getTotalPrice(),
+                                  amount: item.total,
                                   currency: "USD",
                                   items: [],
                                 },
@@ -196,7 +210,8 @@ const quickPay = ({ quickList, userInfo }) => {
                     <Box ml={2.5}>
                       <H6 my="0px">{item.title}</H6>
                       <Typography fontSize="14px" color="grey.600">
-                        $ {item.price} x {item.quantity}
+                        {item.currency.id == "1" ? "$" : item.currency}{" "}
+                        {item.price} x {item.quantity}
                       </Typography>
                     </Box>
                   </FlexBox>
