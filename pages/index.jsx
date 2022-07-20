@@ -42,11 +42,19 @@ const SalePage2 = ({ categoryList, product, csrfToken, providers, games }) => {
           height: "auto",
         }}
       >
-        <Grid container spacing={3} minHeight={500} className="card-contanier">
+        <Grid
+          container
+          spacing={1}
+          minHeight={500}
+          className="card-contanier"
+          rowSpacing={2}
+          sx={{ marginBottom: "17px" }}
+        >
           {games.has_subcategories
             ? games.subcategories.map((item) => (
-                <Grid item lg={3} md={4} sm={6} xs={12} key={item}>
+                <Grid item lg={3} md={4} sm={6} xs={6} key={item}>
                   <ProductCard1
+                    home={true}
                     id={item.id}
                     title={item.title}
                     imgUrl={item.logo_url}
@@ -58,20 +66,6 @@ const SalePage2 = ({ categoryList, product, csrfToken, providers, games }) => {
               ))
             : ""}
         </Grid>
-
-        <FlexBetween flexWrap="wrap" my={8}>
-          {/* <Span>
-            {renderProductCount(page, productPerPage, product.length)}
-          </Span> */}
-          {/* 
-          <Pagination
-            page={page}
-            color="primary"
-            variant="outlined"
-            onChange={handlePageChange}
-            count={Math.ceil(product.length / productPerPage)}
-          /> */}
-        </FlexBetween>
       </Container>
     </SaleLayout2>
   );

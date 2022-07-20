@@ -55,6 +55,8 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
   };
   const route = useRouter();
 
+  console.log(orderDetails);
+
   console.log(theme.breakpoints.up("md"));
   return (
     <CustomerDashboardLayout>

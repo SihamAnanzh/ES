@@ -19,6 +19,7 @@ const StyledBazarCard = styled(BazarCard)(() => ({
   flexDirection: "column",
   justifyContent: "space-between",
   transition: "all 250ms ease-in-out",
+  width: "290px",
 }));
 const ImageWrapper = styled(Box)(({ theme }) => ({
   textAlign: "center",
@@ -69,6 +70,7 @@ const ProductCard1 = ({
   sub,
   isCard,
   image = true,
+  home = false,
 }) => {
   const { state, dispatch } = useAppContext();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -92,33 +94,16 @@ const ProductCard1 = ({
   );
 
   return (
-    <StyledBazarCard hoverEffect={hoverEffect}>
+    <StyledBazarCard hoverEffect={hoverEffect} className="cardCategory">
       <ImageWrapper>
-        {!!discount && (
-          <StyledChip color="primary" size="small" label={`${discount}% off`} />
-        )}
-
-        {haveIcon && (
-          <LoveIconWrapper>
-            <IconButton
-              sx={{
-                p: "6px",
-              }}
-              onClick={toggleIsFavorite}
-            >
-              {isFavorite ? (
-                <Favorite color="primary" fontSize="small" />
-              ) : (
-                <FavoriteBorder fontSize="small" />
-              )}
-            </IconButton>
-          </LoveIconWrapper>
-        )}
-
         {image && (
-          <Link href={isCard ? `/card/details/${id}` : `/category/${id}`}>
-            <a>
+          <Link
+            href={isCard ? `/card/details/${id}` : `/category/${id}`}
+            className="linkCards"
+          >
+            <a className="imageCards">
               <LazyImage
+                className="img"
                 src={imgUrl}
                 width="200px"
                 height="200px"
@@ -129,12 +114,13 @@ const ProductCard1 = ({
         )}
       </ImageWrapper>
 
-      <ContentWrapper>
+      <ContentWrapper className="contentCard">
         <FlexBox>
           <Box flex="1 1 0" minWidth="0px" mr={1}>
             <Link href={isCard ? `/card/details/${id}` : `/category/${id}`}>
               <a>
                 <H3
+                  mt={2}
                   mb={1}
                   title={title}
                   fontSize="14px"

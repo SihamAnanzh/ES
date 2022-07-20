@@ -180,9 +180,10 @@ const Topbar = () => {
           <div className="logo hideLogo">
             <Link href="/" passHref>
               <Image
+                width={138}
                 display="block"
                 height="28px"
-                src="/assets/images/logoFooter.svg"
+                src="/assets/images/logoPhone.svg"
                 alt="logo"
               />
             </Link>
