@@ -14,14 +14,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import BazarButton from "components/BazarButton";
 
 import BackendManager from "../src/globalManager/BackendManager";
-import {
-  Checkbox,
-  styled,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-} from "@mui/material";
+import { Checkbox } from "@mui/material";
 import { useState } from "react";
 import { withStyles } from "@mui/material";
 import { useTranslation } from "next-i18next";
@@ -100,6 +93,7 @@ const Cart = ({ userInfo }) => {
         ).then(async (res) => {
           if (res.status.code == 200) {
             clearCart();
+            localStorage.setItem("token", JSON.stringify(session.data.user));
             Checkout(
               {
                 id: null,

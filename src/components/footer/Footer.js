@@ -78,12 +78,18 @@ const Footer = () => {
               </a>
               <div className="footerLInks imgLink">
                 <div className="twoImg items">
-                  <a href="https://play.google.com/store/apps/details?id=com.dominate.express">
+                  <a
+                    target="_balank"
+                    href="https://play.google.com/store/apps/details?id=com.dominate.express"
+                  >
                     {" "}
                     <img width={100} src="/assets/images/google.svg" alt="" />
                   </a>
 
-                  <a href="https://apps.apple.com/jo/app/xprestores-%D8%A7%D9%83%D8%B3%D8%A8%D8%B1%D8%B3-%D8%B3%D8%AA%D9%88%D8%B1%D8%B2/id1597251061">
+                  <a
+                    target="_balank"
+                    href="https://apps.apple.com/jo/app/xprestores-%D8%A7%D9%83%D8%B3%D8%A8%D8%B1%D8%B3-%D8%B3%D8%AA%D9%88%D8%B1%D8%B2/id1597251061"
+                  >
                     {" "}
                     <img width={100} src="/assets/images/apple.svg" alt="" />
                   </a>
@@ -105,7 +111,6 @@ const Footer = () => {
               <div className="aboutus">
                 <h1>{getTrans("AboutUs")}</h1>
                 <div className="items">{getTrans("PrivacyPolicy")}</div>
-                <div className="items">{getTrans("Terms&Conditions")}</div>
               </div>
               <div className="contactus">
                 <h1>{getTrans("ContacttUs")}</h1>
@@ -123,7 +128,10 @@ const Footer = () => {
                   {" "}
                   <WhatsApp className="whatIcon" />
                   <Span color="#fff" className="title">
-                    <a href={`https://api.whatsapp.com/send?phone=${whatsapp}`}>
+                    <a
+                      href={`https://api.whatsapp.com/send?phone=${whatsapp}`}
+                      target="_balank"
+                    >
                       {whatsapp}
                     </a>{" "}
                   </Span>
@@ -133,7 +141,6 @@ const Footer = () => {
             <div className="aboutus aboutShow">
               <h1>{getTrans("AboutUs")}</h1>
               <div className="items">{getTrans("PrivacyPolicy")}</div>
-              <div className="items">{getTrans("Terms&Conditions")}</div>
             </div>
             <div className="contactus aboutShow">
               <h1>{getTrans("ContacttUs")}</h1>

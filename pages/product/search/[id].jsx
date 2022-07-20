@@ -29,14 +29,16 @@ const Index = ({ data, searchResult }) => {
       >
         <Grid
           container
-          spacing={3}
+          spacing={1}
           minHeight={500}
+          className="card-contanier"
+          rowSpacing={2}
           style={{ justifyContent: "flex-start" }}
         >
           {searchResult.length > 0 ? (
             searchResult.map((item, ind) =>
               item.category.id == 600 ? (
-                <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
+                <Grid item lg={3} md={4} sm={6} xs={6} key={ind}>
                   <ServiceCard
                     id={item.id}
                     title={item.title}
@@ -48,7 +50,7 @@ const Index = ({ data, searchResult }) => {
                   />
                 </Grid>
               ) : (
-                <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
+                <Grid item lg={3} md={4} sm={6} xs={6} key={ind}>
                   <ProductCard1
                     id={item.category.id}
                     title={item.title}

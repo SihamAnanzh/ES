@@ -49,51 +49,48 @@ const Orders = ({ orderList }) => {
             }
           },
         });
+        if (JSON.parse(localStorage.getItem("transaction")) == "000") {
+          let orderDetails = JSON.parse(localStorage.getItem("order"));
+
+          let res = BackendManager.PurchasePackageTap(
+            orderDetails,
+            JSON.parse(localStorage.getItem("token")),
+            route.locale
+          ).then((res) => {
+            localStorage.setItem("transaction", null);
+            localStorage.setItem("order", JSON.stringify(null));
+            localStorage.setItem("token", JSON.stringify(null));
+
+            console.log("res", res);
+
+            if (res.status.code == 200) {
+              toast.success(res.results, {
+                position: "top-center",
+                autoClose: 5005,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                autoClose: false,
+              });
+            } else if (res.status.code == 400) {
+              toast.warn(res.status.message, {
+                position: "top-center",
+                autoClose: 5005,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                autoClose: false,
+              });
+            }
+          });
+        }
       }
     }
-
-    if (JSON.parse(localStorage.getItem("transaction")) == "000") {
-      if (session.data) {
-        let orderDetails = JSON.parse(localStorage.getItem("order"));
-
-        let res = BackendManager.PurchasePackageTap(
-          orderDetails,
-          session.data.user,
-          route.locale
-        ).then((res) => {
-          localStorage.setItem("transaction", null);
-          localStorage.setItem("order", JSON.stringify(null));
-          console.log(res);
-
-          if (res.status.code == 200) {
-            toast.success(res.results, {
-              position: "top-center",
-              autoClose: 5005,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              autoClose: false,
-            });
-          } else if (res.status.code == 400) {
-            toast.warn(res.status.message, {
-              position: "top-center",
-              autoClose: 5005,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              autoClose: false,
-            });
-          }
-        });
-      }
-    }
-
-    setListOrders(orderList);
-  }, [session]);
+  }, []);
 
   return (
     <CustomerDashboardLayout>
@@ -105,7 +102,7 @@ const Orders = ({ orderList }) => {
         icon={ShoppingBag}
         navigation={<CustomerDashboardNavigation />}
       />
-      <OrderList orderList={listOrders} />
+      <OrderList orderList={orderList} />
     </CustomerDashboardLayout>
   );
 };

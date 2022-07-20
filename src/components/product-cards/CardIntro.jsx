@@ -60,10 +60,11 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, currency }) => {
   useEffect(() => {
     BackendManager.getItemslistById(id, route.locale).then((res) => {
       let data = res[0];
+      console.log(res);
       setMaiaId(data.main_category.id);
       items &&
         setObjects({
-          price: data.price,
+          price: data.new_price,
           name: data.title,
           id: data.id,
           imgUrl: imgGroup,
@@ -71,7 +72,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, currency }) => {
           currency: currency,
           qty: amount,
         });
-      setPrice(data.price);
+      setPrice(data.new_price);
     });
 
     handleCartAmountChange(dataObjects, amount);
@@ -226,7 +227,7 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, currency }) => {
 
                     e.target.classList.add("selected");
                     setObjects({
-                      price: item.price,
+                      price: item.new_price,
                       qty: amount,
                       name: item.title,
                       id: item.id,
@@ -234,8 +235,8 @@ const CardIntro = ({ imgGroup, title, id, mainCatigory, items, currency }) => {
                       mainId: mainId,
                       currency: item.currency.id,
                     });
-
-                    setPrice(item.price);
+                    console.log(items);
+                    setPrice(item.new_price);
                   }}
                   sx={{
                     m: 1,

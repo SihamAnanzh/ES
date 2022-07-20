@@ -16,6 +16,7 @@ const Wrapper = styled(Card)(({ theme }) => ({
   borderRadius: "10px",
   marginBottom: "1.5rem",
   boxShadow: theme.shadows[2],
+
   backgroundColor: theme.palette.background.paper,
   "@media only screen and (max-width: 425px)": {
     flexWrap: "wrap",
@@ -30,6 +31,7 @@ const Wrapper = styled(Card)(({ theme }) => ({
 const ProductCard7 = ({ id, name, qty, price, imgUrl, currency }) => {
   const { state, dispatch } = useAppContext(); // handle change cart
 
+  console.log(qty);
   const handleCartAmountChange = useCallback(
     (amount) => () => {
       let qty = amount;
@@ -52,7 +54,7 @@ const ProductCard7 = ({ id, name, qty, price, imgUrl, currency }) => {
     [state.cart]
   );
   return (
-    <Wrapper>
+    <Wrapper className="cartCard">
       <Image
         alt={name}
         width={140}

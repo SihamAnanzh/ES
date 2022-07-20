@@ -79,7 +79,7 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
         >
           <FlexBox className="pre" m={0.75} alignItems="center">
             <Typography fontSize={14} color="grey.600" mr={0.5}>
-              {getTrans("OrderID")}
+              {getTrans("OrderID")}:
             </Typography>
             <Typography fontSize={14}>{orderId}</Typography>
           </FlexBox>
@@ -91,12 +91,11 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
 
           <FlexBox className="pre" m={0.75} alignItems="center">
             <Typography fontSize={14} color="grey.600" mr={0.5}>
-              {getTrans("Datepurchased")}
+              {getTrans("Datepurchased")}:
             </Typography>
             <Typography fontSize={14}>{deliverd}</Typography>
           </FlexBox>
         </TableRow>
-
         <Box py={1}>
           {orderDetails.map((item) => (
             <FlexBox
@@ -117,7 +116,7 @@ const OrderDetails = ({ orderDetails, deliverd, orderId, total }) => {
                 <Box ml={2.5}>
                   <H6 my="0px">{item.title}</H6>
                   <Typography fontSize="14px" color="grey.600">
-                    ${item.price} x 1
+                    ${item.price} x {item.quantity}
                   </Typography>
                 </Box>
               </FlexBox>

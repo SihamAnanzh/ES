@@ -51,6 +51,7 @@
 
     .simplebar-content {
         height: 5.6rem;
+
     }
 }
 
@@ -360,6 +361,14 @@
         align-self: flex-start;
         justify-self: flex-start;
     }
+    .simplebar-content {
+  
+       justify-content: flex-start !important;
+        
+    }
+    .simplebar-content:last-child{
+        padding-right: 10px;
+    }
 
 }
 
@@ -370,6 +379,28 @@
         width: 100px;
     }
 
+   .MuiPaper-elevation1.MuiCard-root.cartCard{
+        
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    }
+    .MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.toatalSummary{
+        margin-bottom: 10px !important;
+    }
+    
+   .MuiPaper-elevation1.MuiCard-root.cartCard img{
+    justify-self: center ;
+    align-items: center;
+    min-width: 200px;
+    height: 200px;
+    display: flex;
+   
+
+    }
     
 }
 

@@ -4,14 +4,20 @@ import TableRow from "components/TableRow";
 import { H5 } from "components/Typography";
 import { useTranslation } from "next-i18next";
 import React, { Fragment, useEffect } from "react";
+import { useState } from "react";
 import OrderRow from "./OrderRow"; // ============================================================
 
 // ============================================================
 const OrderList = ({ orderList, quick }) => {
   const { t } = useTranslation();
+  const [listofAllOrder, setListOrders] = useState([]);
   const getTrans = (key) => {
     return t(`common:${key}`);
   };
+
+  useEffect(() => {
+    setListOrders(orderList);
+  }, [orderList]);
   return (
     <Fragment>
       <TableRow
@@ -39,7 +45,7 @@ const OrderList = ({ orderList, quick }) => {
         <H5 flex="0 0 0 !important" color="grey.600" px={2.75} my={0} />
       </TableRow>
 
-      {orderList.map((item, ind) => (
+      {listofAllOrder.map((item, ind) => (
         <OrderRow item={item} key={ind} quick={quick} />
       ))}
 
