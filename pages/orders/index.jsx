@@ -25,7 +25,10 @@ const Orders = ({ orderList }) => {
 
   useEffect(() => {
     console.log("trgger");
-    if (route.query.tap_id) {
+    if (
+      route.query.tap_id &&
+      JSON.parse(localStorage.getItem("order")) != null
+    ) {
       if (goSell) {
         goSell.showResult({
           callback: async (response) => {
@@ -49,6 +52,7 @@ const Orders = ({ orderList }) => {
             }
           },
         });
+
         if (JSON.parse(localStorage.getItem("transaction")) == "000") {
           let orderDetails = JSON.parse(localStorage.getItem("order"));
 
@@ -56,37 +60,39 @@ const Orders = ({ orderList }) => {
             orderDetails,
             JSON.parse(localStorage.getItem("token")),
             route.locale
-          ).then((res) => {
-            localStorage.setItem("transaction", null);
-            localStorage.setItem("order", JSON.stringify(null));
-            localStorage.setItem("token", JSON.stringify(null));
+          )
+            .then((res) => {
+              localStorage.setItem("transaction", null);
+              localStorage.setItem("order", JSON.stringify(null));
+              localStorage.setItem("token", JSON.stringify(null));
 
-            console.log("res", res);
+              console.log("res", res);
 
-            if (res.status.code == 200) {
-              toast.success(res.results, {
-                position: "top-center",
-                autoClose: 5005,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                autoClose: false,
-              });
-            } else if (res.status.code == 400) {
-              toast.warn(res.status.message, {
-                position: "top-center",
-                autoClose: 5005,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                autoClose: false,
-              });
-            }
-          });
+              if (res.status.code == 200) {
+                toast.success(res.results, {
+                  position: "top-center",
+                  autoClose: 5005,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  autoClose: false,
+                });
+              } else if (res.status.code == 400) {
+                toast.warn(res.status.message, {
+                  position: "top-center",
+                  autoClose: 5005,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  autoClose: false,
+                });
+              }
+            })
+            .then(() => {});
         }
       }
     }

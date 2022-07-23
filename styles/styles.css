@@ -178,6 +178,11 @@
     width:500px;
 }
 
+.flag{
+    margin-right: 10px
+
+}
+
 
 @media (min-width:1700px) {
     .MuiContainer-root.MuiContainer-maxWidthLg {
@@ -194,6 +199,14 @@
     .logo.hideLogo {
         display: unset !;
     }
+    .country{
+        display: none;
+    }
+    .flag{
+        margin-right: 2px
+    
+    }
+    
 
 
 

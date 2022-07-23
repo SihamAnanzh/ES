@@ -271,16 +271,16 @@ const Topbar = () => {
                 >
                   {" "}
                   <img
+                    className="flag"
                     style={{
                       objectFit: "contain",
                       width: "20px",
                       height: "20px",
-                      marginRight: "10px",
                     }}
                     src={country.logo_url}
                     alt=""
                   />
-                  {country.title}{" "}
+                  <span className="country">{country.title} </span>
                 </Span>
                 <ExpandMore fontSize="inherit" />
               </TouchRipple>

@@ -74,7 +74,7 @@ const ProfileEditor = ({ res }) => {
   };
 
   useEffect(() => {
-    res.username == "" ? setEmailRqueired(true) : res.username;
+    res.username == "" ? setEmailRqueired(true) : setEmail(res.username);
   }, [res]);
 
   return (
