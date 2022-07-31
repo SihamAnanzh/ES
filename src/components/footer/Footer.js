@@ -140,7 +140,9 @@ const Footer = () => {
             </div>
             <div className="aboutus aboutShow">
               <h1>{getTrans("AboutUs")}</h1>
-              <div className="items">{getTrans("PrivacyPolicy")}</div>
+              <a href="https://admin.xprestores.com/privacy" target="_balank">
+                <div className="items">{getTrans("PrivacyPolicy")}</div>
+              </a>
             </div>
             <div className="contactus aboutShow">
               <h1>{getTrans("ContacttUs")}</h1>
